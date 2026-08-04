@@ -1,0 +1,38 @@
+\chapter[FORMAT DÉFINI PAR L'UTILISATEUR]{Format défini par
+l'utilisateur}\label{format-duxe9fini-par-lutilisateur}
+
+APRS ne peut pas anticiper tous les types de données. Le format
+User-Defined comble ce vide : les auteurs sont libres d'envoyer
+n'importe quel format.
+
+En-tête 3 caractères : - \texttt{\{} : DTI User-Defined. - \texttt{U} :
+User ID (1 caractère). - \texttt{X} : type de paquet défini par
+l'utilisateur (1 caractère).
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{\{} & User ID & User-Defined Packet Type & User-Defined Data \\
+\hline
+\textbf{Octets} & 1 & 1 & 1 & n \\
+\hline
+\end{tabular}
+\end{center}
+
+L'APRS Working Group attribue les User IDs sur demande justifiée. Pool
+limité.
+
+Pour l'expérimentation ou en attendant l'attribution, tout le monde peut
+utiliser \texttt{\{} comme User ID sans notification. Paquets commençant
+par \texttt{\{\{} = expérimentaux.
+
+Recommandé : ASCII 7 bits imprimable.
+
+Exemples : - \texttt{\{Q1qwerty} --- User ID \texttt{Q}, type
+\texttt{1}. - \texttt{\{\{zasdfg} --- User ID \texttt{\{}
+(expérimental), type \texttt{z}.
+
+Ces formats sont tous optionnels. Aucun programme n'est tenu de les
+décoder et doit ignorer ceux qu'il ne comprend pas.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

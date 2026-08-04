@@ -1,0 +1,888 @@
+\chapter*{Annexes}\label{annexes}
+\newcommand{\AnnexeTableHeader}[1]{\centering\arraybackslash\textbf{#1}}
+
+\clearpage
+\section*{Annexe 1 : Formats de données APRS}\label{annexe-1-formats-de-donnuxe9es-aprs}
+\markboth{Annexe 1 : Formats de données APRS}{Annexe 1 : Formats de données APRS}
+\addcontentsline{toc}{subsection}{Annexe 1 : Formats de données APRS}
+
+{\small
+Cette annexe rassemble les formats de données APRS sous forme de tables
+de champs. Les champs optionnels du document original sont indiqués dans
+la description quand le format l'exige. Les caractères littéraux sont
+conservés tels qu'ils apparaissent dans les trames APRS.
+}
+
+{\footnotesize
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.24\linewidth}>{\raggedright\arraybackslash}p{.56\linewidth}>{\raggedright\arraybackslash}p{.16\linewidth}@{}}
+\toprule
+\AnnexeTableHeader{Format} & \AnnexeTableHeader{Champs} & \AnnexeTableHeader{Octets} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+AX.25 UI-frame & Flag ; Destination Address ; Source Address ; Digipeater Addresses (0-8) ; Control Field (UI) ; Protocol ID ; Information Field ; FCS ; Flag & 1 ; 7 ; 7 ; 0-56 ; 1 ; 1 ; 1-256 ; 2 ; 2 \\
+Generic APRS Information Field & Data Type ID ; APRS Data ; APRS Data Extension ; Comment & 1 ; n ; 7 ; n \\
+Lat/Long Position Report, sans timestamp & \lit{!} ou \lit{=} ; Lat ; Symbol Table ID ; Long ; Symbol Code ; Comment & 1 ; 8 ; 1 ; 9 ; 1 ; 0-43 \\
+Lat/Long Position Report, avec timestamp & \lit{/} ou \lit{@} ; Time DHM/HMS ; Lat ; Symbol Table ID ; Long ; Symbol Code ; Comment & 1 ; 7 ; 8 ; 1 ; 9 ; 1 ; 0-43 \\
+Lat/Long Position Report, avec Data Extension, sans timestamp & \lit{!} ou \lit{=} ; Lat ; Symbol Table ID ; Long ; Symbol Code ; Course/Speed ou Power/Height/Gain/Dir ou Radio Range ou DF Signal Strength ; Comment & 1 ; 8 ; 1 ; 9 ; 1 ; 7 ; 0-36 \\
+Lat/Long Position Report, avec Data Extension et timestamp & \lit{/} ou \lit{@} ; Time DHM/HMS ; Lat ; Symbol Table ID ; Long ; Symbol Code ; Course/Speed ou Power/Height/Gain/Dir ou Radio Range ou DF Signal Strength ; Comment & 1 ; 7 ; 8 ; 1 ; 9 ; 1 ; 7 ; 0-36 \\
+Maidenhead Locator Beacon & \lit{[} ; Grid Locator ; \lit{]} ; Comment & 1 ; 4 ou 6 ; 1 ; n \\
+Raw NMEA Position Report & \lit{\$} ; NMEA Received Sentence & 1 ; 25-209 \\
+DF Report, sans timestamp & \lit{!} ou \lit{=} ; Lat ; Symbol Table ID \lit{/} ; Long ; Symbol Code \lit{\textbackslash{}} ; Data Extension ; \lit{/}BRG\lit{/}NRQ ; Comment & 1 ; 8 ; 1 ; 9 ; 1 ; 7 ; 8 ; 0-28 \\
+DF Report, avec timestamp & \lit{/} ou \lit{@} ; Time DHM/HMS ; Lat ; Symbol Table ID \lit{/} ; Long ; Symbol Code \lit{\textbackslash{}} ; Data Extension ; \lit{/}BRG\lit{/}NRQ ; Comment & 1 ; 7 ; 8 ; 1 ; 9 ; 1 ; 7 ; 8 ; 0-28 \\
+Compressed Lat/Long Position Report, sans timestamp & \lit{!} ou \lit{=} ; Symbol Table ID ; Comp Lat YYYY ; Comp Long XXXX ; Symbol Code ; Compressed Course/Speed ou Radio Range ou Altitude ; Comp Type T ; Comment & 1 ; 1 ; 4 ; 4 ; 1 ; 2 ; 1 ; 0-40 \\
+Compressed Lat/Long Position Report, avec timestamp & \lit{/} ou \lit{@} ; Time DHM/HMS ; Symbol Table ID ; Comp Lat YYYY ; Comp Long XXXX ; Symbol Code ; Compressed Course/Speed ou Radio Range ou Altitude ; Comp Type T ; Comment & 1 ; 7 ; 1 ; 4 ; 4 ; 1 ; 2 ; 1 ; 0-40 \\
+Compression Type (T) Byte & bits 7-6 inutilisés ; bit 5 GPS Fix ; bits 4-3 NMEA Source ; bits 2-0 Compression Origin & 1 octet \\
+Mic-E Destination Address Field & Lat digit 1 + Message bit A ; Lat digit 2 + Message bit B ; Lat digit 3 + Message bit C ; Lat digit 4 + N/S ; Lat digit 5 + Longitude Offset ; Lat digit 6 + W/E ; APRS Digi Path Code & 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 \\
+Mic-E Information Field & Data Type ID ; d+28 ; m+28 ; h+28 ; SP+28 ; DC+28 ; SE+28 ; Symbol Code ; Symbol Table ID ; Mic-E Telemetry Data ou Mic-E Status Text & 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; n \\
+Object Report, Lat/Long & \lit{;} ; Object Name ; \lit{*} ou \lit{\_} ; Time DHM/HMS ; Lat ; Symbol Table ID ; Long ; Symbol Code ; Data Extension ou Area Object ; Comment & 1 ; 9 ; 1 ; 7 ; 8 ; 1 ; 9 ; 1 ; 7 ; 0-36/43 \\
+Object Report, Compressed Lat/Long & \lit{;} ; Object Name ; \lit{*} ou \lit{\_} ; Time DHM/HMS ; Compressed Position Data \lit{/}YYYYXXXX\lit{\$}csT ; Comment & 1 ; 9 ; 1 ; 7 ; 13 ; 43 \\
+Item Report, Lat/Long & \lit{)} ; Item Name ; \lit{!} ou \lit{\_} ; Lat ; Symbol Table ID ; Long ; Symbol Code ; Data Extension ou Area Object ; Comment & 1 ; 3-9 ; 1 ; 8 ; 1 ; 9 ; 1 ; 7 ; 0-36/43 \\
+Item Report, Compressed Lat/Long & \lit{)} ; Item Name ; \lit{!} ou \lit{\_} ; Compressed Position Data \lit{/}YYYYXXXX\lit{\$}csT ; Comment & 1 ; 3-9 ; 1 ; 13 ; 43 \\
+Raw Weather Report & \lit{!} ou \lit{\#} ou \lit{\$} ou \lit{*} ; Raw Weather Data & 1 ; n \\
+Positionless Weather Report & \lit{\_} ; Time MDHM ; Positionless Weather Data ; APRS Software S ; WX Unit uuuu & 1 ; 8 ; n ; 1 ; 2-4 \\
+Positionless Weather Data & Wind Direction cccc ; Wind Speed ssss ; Gust gggg ; Temp tttt ; Rain Last Hr rrrr ; Rain Last 24 Hrs pppp ; Rain Since Midnight PPPP ; Humidity hhh ; Barometric Pressure bbbbbb & 4 ; 4 ; 4 ; 4 ; 4 ; 4 ; 4 ; 3 ; 5 \\
+Complete Weather Report, Lat/Long sans timestamp & \lit{!} ou \lit{=} ; Lat ; Symbol Table ID ; Long ; Symbol Code \lit{\_} ; Wind Direction/Speed ; Weather Data ; APRS Software S ; WX Unit uuuu & 1 ; 8 ; 1 ; 9 ; 1 ; 7 ; n ; 1 ; 2-4 \\
+Complete Weather Report, Lat/Long avec timestamp & \lit{/} ou \lit{@} ; Time DHM/HMS ; Lat ; Symbol Table ID ; Long ; Symbol Code \lit{\_} ; Wind Direction/Speed ; Weather Data ; APRS Software S ; WX Unit uuuu & 1 ; 7 ; 8 ; 1 ; 9 ; 1 ; 7 ; n ; 1 ; 2-4 \\
+Complete Weather Report, Compressed sans timestamp & \lit{!} ou \lit{=} ; Symbol Table ID ; Comp Lat YYYY ; Comp Long XXXX ; Symbol Code \lit{\_} ; Comp Wind Direction/Speed ; Comp Type T ; Weather Data ; APRS Software S ; WX Unit uuuu & 1 ; 1 ; 4 ; 4 ; 1 ; 2 ; 1 ; n ; 1 ; 2-4 \\
+Complete Weather Report, Compressed avec timestamp & \lit{/} ou \lit{@} ; Time DHM/HMS ; Symbol Table ID ; Comp Lat YYYY ; Comp Long XXXX ; Symbol Code \lit{\_} ; Comp Wind Direction/Speed ; Comp Type T ; Weather Data ; APRS Software S ; WX Unit uuuu & 1 ; 7 ; 1 ; 4 ; 4 ; 1 ; 2 ; 1 ; n ; 1 ; 2-4 \\
+Complete Weather Report, Object + Lat/Long & \lit{*} ; Object Name ; \lit{*} ; Time DHM/HMS ; Lat ; Symbol Table ID ; Long ; Symbol Code \lit{\_} ; Wind Direction/Speed ; Weather Data ; APRS Software S ; WX Unit uuuu & 1 ; 9 ; 1 ; 7 ; 8 ; 1 ; 9 ; 1 ; 7 ; n ; 1 ; 2-4 \\
+Storm Data & Direction ; \lit{/} ; Speed ; Storm Type \lit{/}ST ; Sustained Wind Speed \lit{/}www ; Peak Wind Gusts \lit{\textasciicircum{}}GGG ; Central Pressure \lit{/}pppp ; Radius Hurricane Winds \lit{\textgreater{}}RRR ; Radius Tropical Storm Winds \lit{\&}rrr ; Radius Whole Gale \lit{\%}ggg & 3 ; 1 ; 3 ; 3 ; 4 ; 4 ; 5 ; 4 ; 4 ; 4 \\
+Telemetry Report & \lit{T} ; Sequence No \lit{\#}nnn\lit{,} ; Analog Values 1-5 aaa\lit{,} ; Digital Value bbbbbbbb ; Comment & 1 ; 5 ; 4 x 5 ; 8 ; n \\
+Telemetry Parameter Name Message Data & PARM. ; A1 N... ; A2 ,N... ; A3 ,N... ; A4 ,N... ; A5 ,N... ; B1-B8 ,N... & 5 ; 1-7 ; 1-7 ; 1-6 ; 1-6 ; 1-5 ; 1-6/1-5/1-4/1-4/1-4/1-3/1-3/1-3 \\
+Telemetry Unit/Label Message Data & UNIT. ; A1 U... ; A2 ,U... ; A3 ,U... ; A4 ,U... ; A5 ,U... ; B1-B8 ,L... & 5 ; 1-7 ; 1-7 ; 1-6 ; 1-6 ; 1-5 ; 1-6/1-5/1-4/1-4/1-4/1-3/1-3/1-3 \\
+Telemetry Equation Coefficients Message Data & EQNS. ; coefficients a,b,c pour A1 à A5 ; Value = a x v\textasciicircum{}2 + b x v + c & 5 ; n x 15 \\
+Telemetry Bit Sense/Project Name Message Data & BITS. ; B1-B8 x ; Project Title & 5 ; 1 x 8 ; 0-23 \\
+Message & \lit{:} ; Addressee ; \lit{:} ; Message Text ; \lit{\{} ; Message No & 1 ; 9 ; 1 ; 0-67 ; 1 ; 1-5 \\
+Message Acknowledgement & \lit{:} ; Addressee ; \lit{:} ; ack ; Message No & 1 ; 9 ; 1 ; 3 ; 1-5 \\
+Message Rejection & \lit{:} ; Addressee ; \lit{:} ; rej ; Message No & 1 ; 9 ; 1 ; 3 ; 1-5 \\
+General Bulletin & \lit{:} ; BLN ; Bulletin ID n ; cinq espaces ; \lit{:} ; Bulletin Text & 1 ; 3 ; 1 ; 5 ; 1 ; 0-67 \\
+Announcement & \lit{:} ; BLN ; Announcement Identifier x ; cinq espaces ; \lit{:} ; Announcement Text & 1 ; 3 ; 1 ; 5 ; 1 ; 0-67 \\
+Group Bulletin & \lit{:} ; BLN ; Group Bulletin ID n ; Group Name ; \lit{:} ; Group Bulletin Text & 1 ; 3 ; 1 ; 5 ; 1 ; 0-67 \\
+National Weather Service Bulletin & \lit{:} ; NWS-xxxxx ; \lit{:} ; NWS Bulletin Text & 1 ; 9 ; 1 ; n \\
+General Query & \lit{?} ; Query Type ; \lit{?} ; Lat ; \lit{,} ; Long ; \lit{,} ; Radius & 1 ; n ; 1 ; n ; 1 ; n ; 1 ; 4 \\
+Directed Station Query & \lit{:} ; Addressee ; \lit{:} ; \lit{?} ; Query Type ; Callsign of Heard Station & 1 ; 9 ; 1 ; 1 ; 5 ; 0-9 \\
+Status Report & \lit{\textgreater{}} ; Time DHM z ; Status Text & 1 ; 7 ; 0-62 ou 0-55 \\
+Status Report avec Maidenhead Locator & \textgreater{} ; GG ; nn ; gg ; Symbol Table ID ; Symbol Code ; espace ; Status Text & 1 ; 2 ; 2 ; 2 ; 1 ; 1 ; 1-54 \\
+Data with Source Path Header & Source Path Header ; Data Type ID ; Rest of the original data & n ; 1 ; n \\
+Source Path Header, TNC-2 & Source Callsign ; \lit{\textgreater{}} ; Destination Callsign ; 0-8 Digipeaters ; \lit{:} & 1-9 ; 1 ; 1-9 ; 0-80 ; 1 \\
+Source Path Header, AEA & Source Callsign ; \lit{\textgreater{}} ; 0-8 Digipeaters ; \lit{\textgreater{}} ; Destination Callsign ; \lit{:} & 1-10 ; 0-80 ; 1 ; 1-9 ; 1 \\
+Third-party Format & \lit{\}} ; Third-Party Header ; Rest of the original data & 1 ; n ; n \\
+Third Party Header, TNC-2 & Source Path Header sans digis inutilisés, \lit{*} ni \lit{:} ; \lit{,} ; Third-Party Network Identifier ; \lit{,} ; Callsign of Receiving Gateway Station ; \lit{*} ; \lit{:} & n ; 1 ; 1-9 ; 1 ; 1-9 ; 1 ; 1 \\
+Third Party Header, AEA & Source Path Header sans digis inutilisés, destination, \lit{*} ni \lit{:} ; Third-Party Network Identifier ; \lit{\textgreater{}} ; Callsign of Receiving Gateway Station ; \lit{*} ; \lit{\textgreater{}} ; Destination Callsign from Source Path Header ; \lit{:} & 2-90 ; 1-9 ; 1 ; 1-9 ; 1 ; 1 ; 1-9 ; 1 \\
+User-Defined Data & \lit{\{} ; User ID U ; User-Defined Packet Type X ; User-defined data & 1 ; 1 ; 1 ; n \\
+Invalid Data / Test Data & \lit{,} ; Invalid Data or Test Data & 1 ; n \\
+Agrelo & \% ; Bearing nnn ; / ; Quality n & 1 ; 3 ; 1 ; 1 \\
+\end{longtable}
+}
+
+\clearpage
+\section*{Annexe 2 : Tables de symboles APRS}\label{annexe-2-tables-de-symboles-aprs}
+\markboth{Annexe 2 : Tables de symboles APRS}{Annexe 2 : Tables de symboles APRS}
+\addcontentsline{toc}{subsection}{Annexe 2 : Tables de symboles APRS}
+
+{\small
+Chaque symbole APRS est défini par un identifiant de table
+(\texttt{/} pour Primary, \texttt{\textbackslash{}} pour Alternate) et
+un Symbol Code. Dans la table Alternate, les entrées marquées
+``avec overlay'' peuvent recevoir un caractère d'overlay.
+}
+
+\subsection*{Primary Symbol Table}
+{\footnotesize
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.12\linewidth}>{\raggedright\arraybackslash}p{.14\linewidth}>{\raggedright\arraybackslash}p{.14\linewidth}>{\raggedright\arraybackslash}p{.54\linewidth}@{}}
+\toprule
+\AnnexeTableHeader{Symbole} & \AnnexeTableHeader{GPS xyz} & \AnnexeTableHeader{GPS Cnn/Enn} & \AnnexeTableHeader{Icône / usage} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{/!} & BBV & 01 & Police, sheriff \\
+\texttt{/"} & BCV & 02 & [reserved] \\
+\texttt{/\#} & BDV & 03 & Digi, étoile verte centre blanc \\
+\texttt{/\$} & BEV & 04 & Téléphone \\
+\texttt{/\%} & BFV & 05 & DX Cluster \\
+\texttt{/\&} & BGV & 06 & HF Gateway \\
+\texttt{/'} & BHV & 07 & Petit aéronef (SSID -7) \\
+\texttt{/(} & BIV & 08 & Station sol mobile satellite \\
+\texttt{/)} & BJV & 09 &  \\
+\texttt{/*} & BKV & 10 & Motoneige \\
+\texttt{/+} & BLV & 11 & Croix-Rouge \\
+\texttt{/,} & BMV & 12 & Boy Scouts \\
+\texttt{/-} & BNV & 13 & Maison QTH VHF \\
+\texttt{/.} & BOV & 14 & X \\
+\texttt{//} & BPV & 15 & Point \\
+\texttt{/0} & P0V & 16 & Cercle numérique 0, obsolète ; utiliser le cercle avec overlay \textbackslash{}0 \\
+\texttt{/1} & P1V & 17 & Cercle numérique 1 \\
+\texttt{/2} & P2V & 18 & Cercle numérique 2 \\
+\texttt{/3} & P3V & 19 & Cercle numérique 3 \\
+\texttt{/4} & P4V & 20 & Cercle numérique 4 \\
+\texttt{/5} & P5V & 21 & Cercle numérique 5 \\
+\texttt{/6} & P6V & 22 & Cercle numérique 6 \\
+\texttt{/7} & P7V & 23 & Cercle numérique 7 \\
+\texttt{/8} & P8V & 24 & Cercle numérique 8 \\
+\texttt{/9} & P9V & 25 & Cercle numérique 9 \\
+\texttt{/:} & MRV & 26 & Feu \\
+\texttt{/;} & MSV & 27 & Campground \\
+\texttt{/\textless{}} & MTV & 28 & Motocyclette (SSID -10) \\
+\texttt{/=} & MUV & 29 & Locomotive \\
+\texttt{/\textgreater{}} & MVV & 30 & Voiture (SSID -9) \\
+\texttt{/?} & MWV & 31 & File Server \\
+\texttt{/@} & MXV & 32 & Prévision future d'ouragan, point \\
+\texttt{/A} & PAV & 33 & Aid Station \\
+\texttt{/B} & PBV & 34 & BBS \\
+\texttt{/C} & PCV & 35 & Canoë \\
+\texttt{/D} & PDV & 36 &  \\
+\texttt{/E} & PEV & 37 & Eyeball \\
+\texttt{/F} & PFV & 38 &  \\
+\texttt{/G} & PGV & 39 & Grid Square 6 caractères \\
+\texttt{/H} & PHV & 40 & Hôtel \\
+\texttt{/I} & PIV & 41 & TCP/IP \\
+\texttt{/J} & PJV & 42 &  \\
+\texttt{/K} & PKV & 43 & École \\
+\texttt{/L} & PLV & 44 &  \\
+\texttt{/M} & PMV & 45 & MacAPRS \\
+\texttt{/N} & PNV & 46 & Station NTS \\
+\texttt{/O} & POV & 47 & Ballon (SSID -11) \\
+\texttt{/P} & PPV & 48 & Police \\
+\texttt{/Q} & PQV & 49 &  \\
+\texttt{/R} & PRV & 50 & Véhicule récréatif (SSID -13) \\
+\texttt{/S} & PSV & 51 & Navette spatiale \\
+\texttt{/T} & PTV & 52 & SSTV \\
+\texttt{/U} & PUV & 53 & Bus (SSID -2) \\
+\texttt{/V} & PVV & 54 & ATV \\
+\texttt{/W} & PWV & 55 & Site National Weather Service \\
+\texttt{/X} & PXV & 56 & Hélicoptère (SSID -6) \\
+\texttt{/Y} & PYV & 57 & Yacht (SSID -5) \\
+\texttt{/Z} & PZV & 58 & WinAPRS \\
+\texttt{/[} & HSV & 59 & Jogger \\
+\texttt{/\textbackslash{}} & HTV & 60 & Triangle DF \\
+\texttt{/]} & HUV & 61 & PBBS \\
+\texttt{/\textasciicircum{}} & HVV & 62 & Grand aéronef \\
+\texttt{/\_} & HWV & 63 & Station météo bleue \\
+\texttt{/`} & HXV & 64 & Antenne parabolique \\
+\texttt{/a} & LAV & 65 & Ambulance (SSID -1) \\
+\texttt{/b} & LBV & 66 & Bicyclette (SSID -4) \\
+\texttt{/c} & LCV & 67 &  \\
+\texttt{/d} & LDV & 68 & Double garage, pompiers \\
+\texttt{/e} & LEV & 69 & Cheval \\
+\texttt{/f} & LFV & 70 & Camion de pompiers (SSID -3) \\
+\texttt{/g} & LGV & 71 & Planeur \\
+\texttt{/h} & LHV & 72 & Hôpital \\
+\texttt{/i} & LIV & 73 & IOTA \\
+\texttt{/j} & LJV & 74 & Jeep (SSID -12) \\
+\texttt{/k} & LKV & 75 & Truck (SSID -14) \\
+\texttt{/l} & LLV & 76 &  \\
+\texttt{/m} & LMV & 77 & Mic-repeater \\
+\texttt{/n} & LNV & 78 & Node \\
+\texttt{/o} & LOV & 79 & Emergency Operations Center \\
+\texttt{/p} & LPV & 80 & Rover \\
+\texttt{/q} & LQV & 81 & Grid Square au-dessus de 128 m \\
+\texttt{/r} & LRV & 82 & Antenne \\
+\texttt{/s} & LSV & 83 & Bateau à moteur (SSID -8) \\
+\texttt{/t} & LTV & 84 & Truck Stop \\
+\texttt{/u} & LUV & 85 & Camion 18 roues \\
+\texttt{/v} & LVV & 86 & Van (SSID -15) \\
+\texttt{/w} & LWV & 87 & Point d'eau \\
+\texttt{/x} & LXV & 88 & X-APRS Unix \\
+\texttt{/y} & LYV & 89 & Yagi at QTH \\
+\texttt{/z} & LZV & 90 &  \\
+\texttt{/\{} & J1V & 91 &  \\
+\texttt{/|} & J2V & 92 & [Reserved — TNC Stream Switch] \\
+\texttt{/\}} & J3V & 93 &  \\
+\texttt{/\textasciitilde{}} & J4V & 94 & [Reserved — TNC Stream Switch] \\
+\end{longtable}
+}
+
+\subsection*{Alternate Symbol Table}
+{\footnotesize
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{.12\linewidth}>{\raggedright\arraybackslash}p{.14\linewidth}>{\raggedright\arraybackslash}p{.14\linewidth}>{\raggedright\arraybackslash}p{.54\linewidth}@{}}
+\toprule
+\AnnexeTableHeader{Symbole} & \AnnexeTableHeader{GPS xyz} & \AnnexeTableHeader{GPS Cnn/Enn} & \AnnexeTableHeader{Icône / usage} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\texttt{\textbackslash{}!} & OBV & 01 & Emergency \\
+\texttt{\textbackslash{}"} & OCV & 02 & [reserved] \\
+\texttt{\textbackslash{}\#} & ODz & 03 & Digi, étoile verte [avec overlay] \\
+\texttt{\textbackslash{}\$} & OEV & 04 & Banque ou ATM \\
+\texttt{\textbackslash{}\%} & OFV & 05 &  \\
+\texttt{\textbackslash{}\&} & OGz & 06 & HF Gateway, diamant [avec overlay] \\
+\texttt{\textbackslash{}'} & OHV & 07 & Crash Site \\
+\texttt{\textbackslash{}(} & OIV & 08 & Nuageux \\
+\texttt{\textbackslash{})} & OJV & 09 &  \\
+\texttt{\textbackslash{}*} & OKV & 10 & Neige \\
+\texttt{\textbackslash{}+} & OLV & 11 & Église \\
+\texttt{\textbackslash{},} & OMV & 12 & Girl Scouts \\
+\texttt{\textbackslash{}-} & ONV & 13 & Maison HF \\
+\texttt{\textbackslash{}.} & OOV & 14 & Position inconnue/indéterminée \\
+\texttt{\textbackslash{}/} & OPV & 15 &  \\
+\texttt{\textbackslash{}0} & A0z & 16 & Cercle [avec overlay] \\
+\texttt{\textbackslash{}1} & A1V & 17 &  \\
+\texttt{\textbackslash{}2} & A2V & 18 &  \\
+\texttt{\textbackslash{}3} & A3V & 19 &  \\
+\texttt{\textbackslash{}4} & A4V & 20 &  \\
+\texttt{\textbackslash{}5} & A5V & 21 &  \\
+\texttt{\textbackslash{}6} & A6V & 22 &  \\
+\texttt{\textbackslash{}7} & A7V & 23 &  \\
+\texttt{\textbackslash{}8} & A8V & 24 &  \\
+\texttt{\textbackslash{}9} & A9V & 25 & Station-service \\
+\texttt{\textbackslash{}:} & NRV & 26 & Grêle \\
+\texttt{\textbackslash{};} & NSV & 27 & Parc / aire de pique-nique \\
+\texttt{\textbackslash{}\textless{}} & NTV & 28 & Avis NWS \\
+\texttt{\textbackslash{}=} & NUV & 29 &  \\
+\texttt{\textbackslash{}\textgreater{}} & NVz & 30 & Voiture [avec overlay] \\
+\texttt{\textbackslash{}?} & NWV & 31 & Kiosque information \\
+\texttt{\textbackslash{}@} & NXV & 32 & Ouragan / tempête tropicale \\
+\texttt{\textbackslash{}A} & AAz & 33 & Boîte [avec overlay] \\
+\texttt{\textbackslash{}B} & ABV & 34 & Neige soufflée \\
+\texttt{\textbackslash{}C} & ACV & 35 & Coastguard \\
+\texttt{\textbackslash{}D} & ADV & 36 & Bruine \\
+\texttt{\textbackslash{}E} & AEV & 37 & Fumée \\
+\texttt{\textbackslash{}F} & AFV & 38 & Pluie verglaçante \\
+\texttt{\textbackslash{}G} & AGV & 39 & Averse de neige \\
+\texttt{\textbackslash{}H} & AHV & 40 & Brume sèche \\
+\texttt{\textbackslash{}I} & AIV & 41 & Averse de pluie \\
+\texttt{\textbackslash{}J} & AJV & 42 & Éclair \\
+\texttt{\textbackslash{}K} & AKV & 43 & Kenwood \\
+\texttt{\textbackslash{}L} & ALV & 44 & Phare \\
+\texttt{\textbackslash{}M} & AMV & 45 &  \\
+\texttt{\textbackslash{}N} & ANV & 46 & Bouée de navigation \\
+\texttt{\textbackslash{}O} & AOV & 47 &  \\
+\texttt{\textbackslash{}P} & APV & 48 & Parking \\
+\texttt{\textbackslash{}Q} & AQV & 49 & Tremblement de terre \\
+\texttt{\textbackslash{}R} & ARV & 50 & Restaurant \\
+\texttt{\textbackslash{}S} & ASV & 51 & Satellite/PACsat \\
+\texttt{\textbackslash{}T} & ATV & 52 & Orage \\
+\texttt{\textbackslash{}U} & AUV & 53 & Soleil \\
+\texttt{\textbackslash{}V} & AVV & 54 & Aide navigation VORTAC \\
+\texttt{\textbackslash{}W} & AWz & 55 & Site NWS [avec overlay] \\
+\texttt{\textbackslash{}X} & AXV & 56 & Pharmacie Rx \\
+\texttt{\textbackslash{}Y} & AYV & 57 &  \\
+\texttt{\textbackslash{}Z} & AZV & 58 &  \\
+\texttt{\textbackslash{}[} & DSV & 59 & Wall Cloud \\
+\texttt{\textbackslash{}\textbackslash{}} & DTV & 60 &  \\
+\texttt{\textbackslash{}]} & DUV & 61 &  \\
+\texttt{\textbackslash{}\textasciicircum{}} & DVz & 62 & Aéronef [avec overlay] \\
+\texttt{\textbackslash{}\_} & DWz & 63 & Station WX avec digi [avec overlay] \\
+\texttt{\textbackslash{}`} & DXV & 64 & Pluie \\
+\texttt{\textbackslash{}a} & SAz & 65 & A=ARRL, R=RACES, etc. [avec overlay] \\
+\texttt{\textbackslash{}b} & SBV & 66 & Poussière/sable soufflé \\
+\texttt{\textbackslash{}c} & SCz & 67 & Civil Defense/RACES [avec overlay] \\
+\texttt{\textbackslash{}d} & SDV & 68 & DX Spot depuis préfixe indicatif \\
+\texttt{\textbackslash{}e} & SEV & 69 & Grésil \\
+\texttt{\textbackslash{}f} & SFV & 70 & Funnel Cloud \\
+\texttt{\textbackslash{}g} & SGV & 71 & Gale Flags \\
+\texttt{\textbackslash{}h} & SHV & 72 & Ham Store \\
+\texttt{\textbackslash{}i} & SIz & 73 & Digi courte portée indoor [avec overlay] \\
+\texttt{\textbackslash{}j} & SJV & 74 & Zone de travaux \\
+\texttt{\textbackslash{}k} & SKV & 75 &  \\
+\texttt{\textbackslash{}l} & SLV & 76 & Area Symbols \\
+\texttt{\textbackslash{}m} & SMV & 77 & Value Signpost, affichage 3 caractères \\
+\texttt{\textbackslash{}n} & SNz & 78 & Triangle [avec overlay] \\
+\texttt{\textbackslash{}o} & SOV & 79 & Petit cercle \\
+\texttt{\textbackslash{}p} & SPV & 80 & Partiellement nuageux \\
+\texttt{\textbackslash{}q} & SQV & 81 &  \\
+\texttt{\textbackslash{}r} & SRV & 82 & Toilettes \\
+\texttt{\textbackslash{}s} & SSz & 83 & Bateau vue dessus [avec overlay] \\
+\texttt{\textbackslash{}t} & STV & 84 & Tornade \\
+\texttt{\textbackslash{}u} & SUz & 85 & Camion [avec overlay] \\
+\texttt{\textbackslash{}v} & SVz & 86 & Van [avec overlay] \\
+\texttt{\textbackslash{}w} & SWV & 87 & Inondation \\
+\texttt{\textbackslash{}x} & SXV & 88 &  \\
+\texttt{\textbackslash{}y} & SYV & 89 &  \\
+\texttt{\textbackslash{}z} & SZV & 90 &  \\
+\texttt{\textbackslash{}\{} & Q1V & 91 & Brouillard \\
+\texttt{\textbackslash{}|} & Q2V & 92 & [Reserved — TNC Stream Switch] \\
+\texttt{\textbackslash{}\}} & Q3V & 93 &  \\
+\texttt{\textbackslash{}\textasciitilde{}} & Q4V & 94 & [Reserved — TNC Stream Switch] \\
+\end{longtable}
+}
+
+\clearpage
+\section*{Annexe 3 : Table des codes ASCII 7
+bits}\label{annexe-3-table-des-codes-ascii-7-bits}
+\markboth{Annexe 3 : Table des codes ASCII 7 bits}{Annexe 3 : Table des codes ASCII 7 bits}
+\addcontentsline{toc}{subsection}{Annexe 3 : Table des codes ASCII 7
+bits}
+
+{\small
+Table décimal / hexadécimal / caractère standard pour ASCII 0-127. Sert
+notamment aux calculs base-91 (lat/long compressée, altitude Mic-E). La
+colonne Shift donne, quand elle est pertinente, les codes hexadécimaux
+obtenus après décalage d'un bit à gauche dans les champs d'adresse
+AX.25. Dans l'original, cette indication est fournie pour l'espace, les
+chiffres 0-9 et les lettres majuscules A-Z.
+}
+
+{\footnotesize
+\begin{longtable}[]{@{}rrrrrrrr@{}}
+\toprule
+\AnnexeTableHeader{Dec} & \AnnexeTableHeader{Hex} & \AnnexeTableHeader{Car.} & \AnnexeTableHeader{Shift}
+& \AnnexeTableHeader{Dec} & \AnnexeTableHeader{Hex} & \AnnexeTableHeader{Car.} & \AnnexeTableHeader{Shift} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+0 & 00 & NUL &  & 64 & 40 & \texttt{@} &  \\
+1 & 01 & SOH &  & 65 & 41 & \texttt{A} & 82/83 \\
+2 & 02 & STX &  & 66 & 42 & \texttt{B} & 84/85 \\
+3 & 03 & ETX &  & 67 & 43 & \texttt{C} & 86/87 \\
+4 & 04 & EOT &  & 68 & 44 & \texttt{D} & 88/89 \\
+5 & 05 & ENQ &  & 69 & 45 & \texttt{E} & 8a/8b \\
+6 & 06 & ACK &  & 70 & 46 & \texttt{F} & 8c/8d \\
+7 & 07 & BEL &  & 71 & 47 & \texttt{G} & 8e/8f \\
+8 & 08 & BS &  & 72 & 48 & \texttt{H} & 90/91 \\
+9 & 09 & HT &  & 73 & 49 & \texttt{I} & 92/93 \\
+10 & 0a & LF &  & 74 & 4a & \texttt{J} & 94/95 \\
+11 & 0b & VT &  & 75 & 4b & \texttt{K} & 96/97 \\
+12 & 0c & FF &  & 76 & 4c & \texttt{L} & 98/99 \\
+13 & 0d & CR &  & 77 & 4d & \texttt{M} & 9a/9b \\
+14 & 0e & SO &  & 78 & 4e & \texttt{N} & 9c/9d \\
+15 & 0f & SI &  & 79 & 4f & \texttt{O} & 9e/9f \\
+16 & 10 & DLE &  & 80 & 50 & \texttt{P} & a0/a1 \\
+17 & 11 & DC1/XON &  & 81 & 51 & \texttt{Q} & a2/a3 \\
+18 & 12 & DC2 &  & 82 & 52 & \texttt{R} & a4/a5 \\
+19 & 13 & DC3/XOFF &  & 83 & 53 & \texttt{S} & a6/a7 \\
+20 & 14 & DC4 &  & 84 & 54 & \texttt{T} & a8/a9 \\
+21 & 15 & NAK &  & 85 & 55 & \texttt{U} & aa/ab \\
+22 & 16 & SYN &  & 86 & 56 & \texttt{V} & ac/ad \\
+23 & 17 & ETB &  & 87 & 57 & \texttt{W} & ae/af \\
+24 & 18 & CAN &  & 88 & 58 & \texttt{X} & b0/b1 \\
+25 & 19 & EM &  & 89 & 59 & \texttt{Y} & b2/b3 \\
+26 & 1a & SUB &  & 90 & 5a & \texttt{Z} & b4/b5 \\
+27 & 1b & ESC &  & 91 & 5b & \texttt{[} &  \\
+28 & 1c & FS &  & 92 & 5c & \texttt{\textbackslash{}} &  \\
+29 & 1d & GS &  & 93 & 5d & \texttt{]} &  \\
+30 & 1e & RS &  & 94 & 5e & \texttt{\textasciicircum{}} &  \\
+31 & 1f & US &  & 95 & 5f & \texttt{\_} &  \\
+32 & 20 & space & 40/41 & 96 & 60 & \texttt{\textasciigrave{}} &  \\
+33 & 21 & \texttt{!} &  & 97 & 61 & \texttt{a} &  \\
+34 & 22 & \texttt{"} &  & 98 & 62 & \texttt{b} &  \\
+35 & 23 & \texttt{\#} &  & 99 & 63 & \texttt{c} &  \\
+36 & 24 & \texttt{\$} &  & 100 & 64 & \texttt{d} &  \\
+37 & 25 & \texttt{\%} &  & 101 & 65 & \texttt{e} &  \\
+38 & 26 & \texttt{\&} &  & 102 & 66 & \texttt{f} &  \\
+39 & 27 & \texttt{'} &  & 103 & 67 & \texttt{g} &  \\
+40 & 28 & \texttt{(} &  & 104 & 68 & \texttt{h} &  \\
+41 & 29 & \texttt{)} &  & 105 & 69 & \texttt{i} &  \\
+42 & 2a & \texttt{*} &  & 106 & 6a & \texttt{j} &  \\
+43 & 2b & \texttt{+} &  & 107 & 6b & \texttt{k} &  \\
+44 & 2c & \texttt{,} &  & 108 & 6c & \texttt{l} &  \\
+45 & 2d & \texttt{-} &  & 109 & 6d & \texttt{m} &  \\
+46 & 2e & \texttt{.} &  & 110 & 6e & \texttt{n} &  \\
+47 & 2f & \texttt{/} &  & 111 & 6f & \texttt{o} &  \\
+48 & 30 & \texttt{0} & 60/61 & 112 & 70 & \texttt{p} &  \\
+49 & 31 & \texttt{1} & 62/63 & 113 & 71 & \texttt{q} &  \\
+50 & 32 & \texttt{2} & 64/65 & 114 & 72 & \texttt{r} &  \\
+51 & 33 & \texttt{3} & 66/67 & 115 & 73 & \texttt{s} &  \\
+52 & 34 & \texttt{4} & 68/69 & 116 & 74 & \texttt{t} &  \\
+53 & 35 & \texttt{5} & 6a/6b & 117 & 75 & \texttt{u} &  \\
+54 & 36 & \texttt{6} & 6c/6d & 118 & 76 & \texttt{v} &  \\
+55 & 37 & \texttt{7} & 6e/6f & 119 & 77 & \texttt{w} &  \\
+56 & 38 & \texttt{8} & 70/71 & 120 & 78 & \texttt{x} &  \\
+57 & 39 & \texttt{9} & 72/73 & 121 & 79 & \texttt{y} &  \\
+58 & 3a & \texttt{:} &  & 122 & 7a & \texttt{z} &  \\
+59 & 3b & \texttt{;} &  & 123 & 7b & \texttt{\{} &  \\
+60 & 3c & \texttt{<} &  & 124 & 7c & \texttt{|} &  \\
+61 & 3d & \texttt{=} &  & 125 & 7d & \texttt{\}} &  \\
+62 & 3e & \texttt{>} &  & 126 & 7e & \texttt{\textasciitilde{}} &  \\
+63 & 3f & \texttt{?} &  & 127 & 7f & DEL &  \\
+\end{longtable}
+}
+
+\clearpage
+\section*{Annexe 4 : Table de conversion
+décimal-hexadécimal}\label{annexe-4-table-de-conversion-duxe9cimal-hexaduxe9cimal}
+\markboth{Annexe 4 : Table de conversion décimal-hexadécimal}{Annexe 4 : Table de conversion décimal-hexadécimal}
+\addcontentsline{toc}{subsection}{Annexe 4 : Table de conversion
+décimal-hexadécimal}
+
+{\small
+Table 128-255 décimal ↔ 80-ff hexadécimal.
+}
+
+{\footnotesize
+\begin{longtable}[]{@{}rrrrrrrr@{}}
+\toprule
+\AnnexeTableHeader{Dec} & \AnnexeTableHeader{Hex} & \AnnexeTableHeader{Dec} & \AnnexeTableHeader{Hex}
+& \AnnexeTableHeader{Dec} & \AnnexeTableHeader{Hex} & \AnnexeTableHeader{Dec} & \AnnexeTableHeader{Hex} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+128 & 80 & 160 & a0 & 192 & c0 & 224 & e0 \\
+129 & 81 & 161 & a1 & 193 & c1 & 225 & e1 \\
+130 & 82 & 162 & a2 & 194 & c2 & 226 & e2 \\
+131 & 83 & 163 & a3 & 195 & c3 & 227 & e3 \\
+132 & 84 & 164 & a4 & 196 & c4 & 228 & e4 \\
+133 & 85 & 165 & a5 & 197 & c5 & 229 & e5 \\
+134 & 86 & 166 & a6 & 198 & c6 & 230 & e6 \\
+135 & 87 & 167 & a7 & 199 & c7 & 231 & e7 \\
+136 & 88 & 168 & a8 & 200 & c8 & 232 & e8 \\
+137 & 89 & 169 & a9 & 201 & c9 & 233 & e9 \\
+138 & 8a & 170 & aa & 202 & ca & 234 & ea \\
+139 & 8b & 171 & ab & 203 & cb & 235 & eb \\
+140 & 8c & 172 & ac & 204 & cc & 236 & ec \\
+141 & 8d & 173 & ad & 205 & cd & 237 & ed \\
+142 & 8e & 174 & ae & 206 & ce & 238 & ee \\
+143 & 8f & 175 & af & 207 & cf & 239 & ef \\
+144 & 90 & 176 & b0 & 208 & d0 & 240 & f0 \\
+145 & 91 & 177 & b1 & 209 & d1 & 241 & f1 \\
+146 & 92 & 178 & b2 & 210 & d2 & 242 & f2 \\
+147 & 93 & 179 & b3 & 211 & d3 & 243 & f3 \\
+148 & 94 & 180 & b4 & 212 & d4 & 244 & f4 \\
+149 & 95 & 181 & b5 & 213 & d5 & 245 & f5 \\
+150 & 96 & 182 & b6 & 214 & d6 & 246 & f6 \\
+151 & 97 & 183 & b7 & 215 & d7 & 247 & f7 \\
+152 & 98 & 184 & b8 & 216 & d8 & 248 & f8 \\
+153 & 99 & 185 & b9 & 217 & d9 & 249 & f9 \\
+154 & 9a & 186 & ba & 218 & da & 250 & fa \\
+155 & 9b & 187 & bb & 219 & db & 251 & fb \\
+156 & 9c & 188 & bc & 220 & dc & 252 & fc \\
+157 & 9d & 189 & bd & 221 & dd & 253 & fd \\
+158 & 9e & 190 & be & 222 & de & 254 & fe \\
+159 & 9f & 191 & bf & 223 & df & 255 & ff \\
+\end{longtable}
+}
+
+\clearpage
+\section*{Annexe 5 : Glossaire}\label{annexe-5-glossaire}
+\markboth{Annexe 5 : Glossaire}{Annexe 5 : Glossaire}
+\addcontentsline{toc}{subsection}{Annexe 5 : Glossaire}
+
+{\small
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\topsep}{2pt}
+\tightlist
+\item
+  \textbf{Altitude} --- en format Mic-E : mètres relatifs à 10 km sous
+  le niveau moyen des mers. En texte de commentaire : pieds au-dessus du
+  niveau moyen des mers.
+\item
+  \textbf{Announcement} --- message APRS répété quelques fois par heure,
+  potentiellement plusieurs jours.
+\item
+  \textbf{Announcement Identifier} --- lettre A-Z unique identifiant une
+  annonce.
+\item
+  \textbf{Antenna Height} --- dans les sentences NMEA, hauteur d'antenne
+  en mètres au-dessus du niveau moyen des mers.
+\item
+  \textbf{APRS} --- Automatic Position Reporting System.
+\item
+  \textbf{APRS Data} --- données suivant le DTI dans le champ
+  Information AX.25.
+\item
+  \textbf{APRS Data Extension} --- extension 7 octets à l'APRS Data
+  (Course/Speed, Wind, PHG, RNG, DFS, Area Object).
+\item
+  \textbf{APRS Digipeater Path} --- chemin de digipeaters via RELAY,
+  WIDE et alias associés.
+\item
+  \textbf{APRS Data Type Identifier (DTI)} --- identifiant 1 octet qui
+  spécifie le type d'info APRS.
+\item
+  \textbf{Area Object} --- objet graphique défini par l'utilisateur
+  (cercle, ellipse, triangle, boîte, ligne).
+\item
+  \textbf{ASCII} --- American Standard Code for Information Interchange.
+  Code caractère 7 bits.
+\item
+  \textbf{AX.25} --- Amateur Packet-Radio Link-Layer Protocol.
+\item
+  \textbf{Base 91} --- base numérique pour transmettre des valeurs en
+  ASCII imprimable. Diviser progressivement par puissances décroissantes
+  de 91, +33 à chaque reste. Caractères \texttt{!..\{}.
+\item
+  \textbf{Bulletin} --- message APRS répété plusieurs fois par heure sur
+  quelques heures.
+\item
+  \textbf{Bulletin Identifier} --- chiffre 0-9 unique.
+\item
+  \textbf{Destination Address field} --- champ AX.25 pouvant contenir un
+  indicatif APRS de destination ou des données Mic-E encodées.
+\item
+  \textbf{DF Report} --- rapport contenant bearing et range DF.
+\item
+  \textbf{DGPS} --- GPS différentiel, corrige les erreurs de Selective
+  Availability.
+\item
+  \textbf{DHM / DHMz} --- timestamps 7 caractères (jour/heure/minute,
+  zulu ou local / zulu seulement).
+\item
+  \textbf{Digipeater} --- station relayant des paquets AX.25. Chaîne de
+  8 max.
+\item
+  \textbf{Directivity} --- direction favorisée d'une antenne. Utilisé
+  dans PHG.
+\item
+  \textbf{ECHO} --- alias digi APRS générique pour digi HF.
+\item
+  \textbf{Effective Antenna Height} --- hauteur d'antenne au-dessus du
+  terrain local (pas de la mer).
+\item
+  \textbf{ERP} --- Effective Radiated Power.
+\item
+  \textbf{FCS} --- Frame Check Sequence 16 bits, intégrité du paquet.
+\item
+  \textbf{GATE} --- gateway HF/VHF APRS.
+\item
+  \textbf{GGA / GLL / RMC / VTG / WPT} --- sentences NMEA supportées.
+\item
+  \textbf{GMT} --- Greenwich Mean Time (= UTC = zulu).
+\item
+  \textbf{GPS} --- Global Positioning System (24 satellites).
+\item
+  \textbf{{\ttfamily \lit{GPS}xyz / \lit{GPS}Cnn / \lit{GPS}Enn}} --- indicatifs de destination
+  spécifiant un symbole d'affichage.
+\item
+  \textbf{HMS} --- timestamp heure/minute/seconde.
+\item
+  \textbf{IGate} --- gateway entre APRS RF et Internet.
+\item
+  \textbf{Item / Item Report} --- voir chapitre 11.
+\item
+  \textbf{Killed Object} --- objet dont un utilisateur APRS a repris le
+  contrôle.
+\item
+  \textbf{knots} --- nœuds internationaux (milles nautiques/h).
+\item
+  \textbf{KPC-3} --- TNC Kantronics.
+\item
+  \textbf{Longitude Offset} --- offset +100° pour longitude (Mic-E).
+\item
+  \textbf{LORAN} --- Long Range Navigation System, précurseur terrestre
+  de GPS.
+\item
+  \textbf{Maidenhead Locator} --- locator grid 4 ou 6 caractères.
+\item
+  \textbf{MDHM} --- timestamp 8 octets mois/jour/heure/minute.
+\item
+  \textbf{Message / Message ACK / Message Group / Message Identifier}
+  --- voir chapitre 14.
+\item
+  \textbf{Mic-E} --- Microphone Encoder. Encode position/course/vitesse
+  en paquet très court.
+\item
+  \textbf{MIM} --- Micro Interface Module. TNC télémétrie complet sur
+  puce.
+\item
+  \textbf{mph} --- miles per hour.
+\item
+  \textbf{Net Cycle Time} --- durée pour obtenir l'image complète de
+  l'activité APRS (10/20/30 min).
+\item
+  \textbf{NMEA} --- National Marine Electronic Association (US), spec
+  0183 v2.0.
+\item
+  \textbf{NRQ} --- Number/Rate/Quality. Confiance dans les bearings DF.
+\item
+  \textbf{Null Position} --- position par défaut si vraie position
+  inconnue : 0° 0' 0'' N, 0° 0' 0'' W.
+\item
+  \textbf{NWS} --- National Weather Service (US).
+\item
+  \textbf{Object / Object Report} --- voir chapitre 11.
+\item
+  \textbf{PHG} --- extension : Power, Effective Antenna
+  Height/Gain/Directivity.
+\item
+  \textbf{PIC / PIC-E} --- Programmable Interface Controller /
+  implémentation PIC de Mic-E.
+\item
+  \textbf{Position Ambiguity} --- réduction de précision position.
+\item
+  \textbf{Position Report} --- rapport lat/long, timestamp et extension
+  optionnels.
+\item
+  \textbf{Pre-Calculated Radio Range} --- estimation de portée omni
+  (miles).
+\item
+  \textbf{Query / Response} --- requête et réponse. Générale ou dirigée.
+\item
+  \textbf{Range Circle} --- portée radio utilisable (miles), calculée
+  depuis PHG.
+\item
+  \textbf{RELAY} --- alias digi APRS générique pour digi VHF/UHF
+  couverture locale limitée.
+\item
+  \textbf{RTCM} --- Radio Technical Commission for Maritime Services.
+  RTCM SC104 = format DGPS.
+\item
+  \textbf{Selective Availability} --- dithering GPS délibéré (retiré en
+  2000).
+\item
+  \textbf{Signpost} --- icône panneau qui affiche une info variable en
+  overlay.
+\item
+  \textbf{Skywarn} --- initiative NWS US de spotters météo.
+\item
+  \textbf{Source Address field} --- champ AX.25 source. SSID non nul →
+  symbole d'affichage.
+\item
+  \textbf{Source Path Header} --- chemin de digipeaters suivi avant
+  qu'un paquet n'entre dans un réseau tiers.
+\item
+  \textbf{{\ttfamily \lit{SPC}L}} --- indicatif de destination générique APRS pour
+  stations spéciales.
+\item
+  \textbf{SSID} --- Secondary Station Identifier (0-15).
+\item
+  \textbf{Station Capabilities} --- liste de caractéristiques envoyée en
+  réponse à une requête.
+\item
+  \textbf{Status Report} --- rapport contenant les infos de statut.
+\item
+  \textbf{Switch Stream Character} --- caractère servant à changer de
+  canal TNC.
+\item
+  \textbf{Symbol / Symbol Code / Symbol Table Identifier} --- voir
+  chapitre 20.
+\item
+  \textbf{Target Footprint} --- zone cible pour requêtes (rayon en miles
+  autour d'une position).
+\item
+  \textbf{TH-D7 / TM-D700} --- radios Kenwood combinées VHF/UHF + TNC
+  APRS.
+\item
+  \textbf{Third Party Network / Third-Party Header} --- réseau non-APRS.
+\item
+  \textbf{TNC} --- Terminal Node Controller. Assembleur/désassembleur
+  AX.25 + modem.
+\item
+  \textbf{Trace} --- requête APRS pour la route prise par un paquet.
+\item
+  \textbf{TRACE} --- alias digi générique pour digi pratiquant la
+  substitution d'indicatif.
+\item
+  \textbf{Tracker} --- récepteur GPS + émetteur radio pour transmettre
+  la position.
+\item
+  \textbf{Tunneling} --- transport de trafic AX.25 APRS via réseau
+  tiers.
+\item
+  \textbf{UI-Frame} --- Unnumbered Information AX.25. APRS n'utilise que
+  celles-ci.
+\item
+  \textbf{UNPROTO Path} --- chemin de digipeaters vers l'indicatif de
+  destination.
+\item
+  \textbf{UTC} --- Coordinated Universal Time (= zulu = GMT).
+\item
+  \textbf{WIDE / WIDEn-N} --- alias digipeater couverture étendue. Pour
+  WIDEn-N, N décrémenté à chaque hop. Le digi garde un checksum pour ne
+  pas rediffuser dans les 28 s.
+\item
+  \textbf{WPT} --- sentence NMEA waypoints.
+\item
+  \textbf{WX} --- Weather.
+\item
+  \textbf{Ziplan} --- LAN twisted-pair pas cher entre PC via ports
+  série.
+\item
+  \textbf{Zulu} --- UTC/GMT.
+\end{itemize}
+
+\textbf{Table de conversion d'unités} :
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+From & To & Multiplier par \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+feet & meters & 0.3048 \\
+meters & feet & ÷ 0.3048 \\
+miles & km & 1.609344 \\
+km & miles & ÷ 1.609344 \\
+miles & nautical miles & 0.8689762 \\
+nautical miles & miles & ÷ 0.8689762 \\
+miles per hour & knots & 0.8689762 \\
+knots & mph & ÷ 0.8689762 \\
+knots & m/s & 0.51444 \\
+m/s & knots & ÷ 0.51444 \\
+mph & m/s & 0.44704 \\
+m/s & mph & ÷ 0.44704 \\
+\end{longtable}
+
+\textbf{Conversion Fahrenheit / Celsius} :
+
+\begin{verbatim}
+F = (C × 1.8) + 32
+C = (F - 32) × 5/9
+\end{verbatim}
+}
+
+\clearpage
+\section*{Annexe 6 : Références}\label{annexe-6-ruxe9fuxe9rences}
+\markboth{Annexe 6 : Références}{Annexe 6 : Références}
+\addcontentsline{toc}{subsection}{Annexe 6 : Références}
+
+{\small
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\topsep}{2pt}
+\tightlist
+\item
+  \href{http://www.tapr.org/tapr/html/ax25.html}{AX.25 Amateur
+  Packet-Radio Link-Layer Protocol Version 2.0, octobre 1984}
+\item
+  \href{http://www.nmea.org/0183.htm}{NMEA 0183 ASCII Interface
+  Specification}
+\item
+  \href{http://www.garmin.com/manuals/spec25.pdf}{NMEA Sentence Formats
+  --- Garmin GPS25 Technical Reference Manual}
+\item
+  \textbf{Maidenhead Locator} in IARU Region 1 VHF Manager's Manual.
+\end{itemize}
+}
+
+\clearpage
+\section*{Annexe 7 : Historique du document}\label{annexe-7-historique-du-document}
+\markboth{Annexe 7 : Historique du document}{Annexe 7 : Historique du document}
+\addcontentsline{toc}{subsection}{Annexe 7 : Historique du document}
+
+{\scriptsize
+\setlength{\tabcolsep}{4pt}
+\setlength{\extrarowheight}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{!{\vrule}>{\raggedright\arraybackslash}p{0.12\linewidth}!{\vrule}>{\raggedright\arraybackslash}p{0.13\linewidth}!{\vrule}>{\raggedright\arraybackslash}p{0.68\linewidth}!{\vrule}}
+\hline
+\rowcolor{gray!20}
+\AnnexeTableHeader{Date} & \AnnexeTableHeader{Version du document} & \AnnexeTableHeader{Statut / changements majeurs}
+\\
+\hline
+10 oct. 1999 & 1.0 (Draft) & Version du protocole 1.0. Première publication publique en brouillon.
+\\
+\hline
+3 déc. 1999 & 1.0.1g & Version du protocole 1.0. Deuxième publication publique en brouillon. Document fortement étendu, incorporant les layouts de formats de paquets, les tables de symboles APRS, le format de données compressées, le format Mic-E et le format de télémétrie.
+\\
+\hline
+30 avr. 2000 & 1.0.1m &
+\begin{minipage}[t]{\linewidth}
+Version du protocole 1.0. Troisième publication publique en brouillon. Principales additions et modifications par rapport au brouillon 1.0.1g : 
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\topsep}{2pt}
+\item ajout d'une section sur les vues cartographiques et l'échelle de portée ; 
+\item modification de la description du SSID de Destination Address spécifiant les chemins digipeater APRS génériques, désormais applicable à tous les paquets et plus seulement aux paquets Mic-E ; 
+\item remplacement du terme ``APRS destination callsigns'' par ``destination addresses'' ; 
+\item ajout de {\ttfamily \lit{TEL}*} à la liste des adresses de destination génériques ; 
+\item ajout d'explications brèves sur l'utilisation de plusieurs adresses de destination génériques ; 
+\item ajout de ``Grid-in-To-Address'', marqué obsolète ; 
+\item extension de la description du champ Comment, avec des pointeurs sur ce qui peut apparaître dans ce champ ; 
+\item ajout d'une explication de la base 91 ; 
+\item ajout d'un paragraphe sur le manque de cohérence des unités utilisées sur l'air et sur le datum GPS par défaut, WGS84 ; 
+\item table APRS Data Type Identifiers : Shelter Data et Space Weather marqués comme DTI réservés ; DTI \texttt{-} marqué inutilisé, alors qu'il était précédemment attribué par erreur aux Killed Objects ; DTI \texttt{'} défini comme Current Mic-E data dans les radios Kenwood TM-D700 ; DTI    \texttt{\textasciigrave{}} marqué non utilisé dans les Kenwood TM-D700 ; 
+\item Position Ambiguity : l'ambiguïté n'a besoin d'être spécifiée que dans la latitude ; la longitude aura le même niveau d'ambiguïté ; 
+\item ajout des formes \texttt{.../...} et \texttt{VVV/VVV} pour exprimer une course/vitesse inconnue ; 
+\item ajout de la table du paramètre DFS ; 
+\item ajout de la table Quality pour les données \texttt{BRG/NRQ} ; 
+\item formats Position, DF et Compressed Report : séparation des diagrammes de format en deux parties, avec et sans timestamp ; 
+\item DF Reports : ajout de notes indiquant que \texttt{BRG/NRQ} n'est valide que lorsque le symbole est \texttt{/\textbackslash{}}, et que \texttt{CSE=000} signifie une station DF fixe alors qu'une valeur non nulle signifie une station mobile ; 
+\item Compressed Position Reports : correction des constantes de multiplication/division pour l'encodage et le décodage ; 
+\item chapitre Mic-E réécrit et étendu ; insistance sur la nécessité de ne pas supprimer les caractères ASCII non imprimables ; correction du format de télémétrie Mic-E ; 
+\item extension de l'introduction des Objects/Items ; tous les Objects doivent avoir un timestamp ; 
+\item ajout du champ Area Object Extended Data aux diagrammes de format Object et Item ; 
+\item ajout des diagrammes Object/Item avec données de position compressées ; 
+\item Killed Objects/Items désormais indiqués par un underscore ;
+\end{itemize}
+\vspace{0.8ex}
+\par{\scriptsize (suite sur la page suivante)}
+\end{minipage}
+\\
+\rule{0pt}{1.6ex} & & \\
+\hline
+\end{longtable}
+\clearpage
+\begin{longtable}{!{\vrule}>{\raggedright\arraybackslash}p{0.12\linewidth}!{\vrule}>{\raggedright\arraybackslash}p{0.13\linewidth}!{\vrule}>{\raggedright\arraybackslash}p{0.68\linewidth}!{\vrule}}
+\hline
+\rowcolor{gray!20}
+\AnnexeTableHeader{Date} & \AnnexeTableHeader{Version du document} & \AnnexeTableHeader{Statut / changements majeurs}
+\\
+\hline
+& 1.0.1m (suite) &
+\begin{minipage}[t]{\linewidth}
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\topsep}{2pt}
+\item recatégorisation des bulletins météo : Raw, Positionless et Complete ;
+\item ajout d'une règle indiquant que les températures négatives sont exprimées sous la forme \texttt{-01} à \texttt{-99} ; 
+\item ajout des formes \texttt{...} et \texttt{VVV} pour exprimer des paramètres météo inconnus ; 
+\item correction du format Storm Data ; la pression centrale devient \texttt{/ppppp}, en dixièmes de millibar ; 
+\item correction des données de paramètres de télémétrie, désormais sous forme de messages APRS au lieu de beacons AX.25 UI ; 
+\item ajout d'un champ Comment optionnel au format Telemetry \texttt{T} ; 
+\item ajout d'une section décrivant le traitement des acquittements de messages multiples ; 
+\item ajout d'une section sur les radiogrammes NTS ; 
+\item ajout de recommandations d'implémentation pour Bulletins et Announcements ; 
+\item Queries and Responses : noms de requêtes en majuscules, par exemple \texttt{APRSD} ; une station interrogée n'a pas à répondre si elle n'a aucune information pertinente ; elle devrait ignorer tout type de requête inconnu ; \texttt{APRSH} exige des indicatifs complétés à 9 caractères ; 
+\item ajout de \texttt{PING} comme synonyme de \texttt{APRST} ; 
+\item extension de l'ERP meteor scatter au-delà de 810 W, avec ajout d'une table de correspondance ; 
+\item Maidenhead Locator : toutes les lettres doivent être transmises en majuscules, mais peuvent être reçues en majuscules ou en minuscules ; 
+\item modification de la définition des paquets non-APRS : ce ne sont pas des APRS Status Messages, mais ils peuvent optionnellement être traités comme tels ; 
+\item réécriture substantielle du chapitre APRS Symbols ; 
+\item ajout d'une section sur la précédence des symboles lorsque plusieurs symboles apparaissent dans un paquet APRS ; 
+\item clarification de certaines descriptions dans les APRS Symbol Tables ; 
+\item ajout de la capacité d'overlay au symbole \texttt{\textbackslash{}a} (ARES/RACES, etc.) ; 
+\item séparation de la table ASCII 7 bits et de la table de conversion Dec/Hex \texttt{0x80-0xff} ; 
+\item ajout de plusieurs nouvelles entrées et d'une table de conversion d'unités au glossaire ; 
+\item ajout de nouvelles références aux formats de sentences NMEA et aux formats Maidenhead Locator.
+\end{itemize}
+\end{minipage}
+\\
+\rule{0pt}{1.6ex} & & \\
+\hline
+\end{longtable}
+\clearpage
+\begin{longtable}{!{\vrule}>{\raggedright\arraybackslash}p{0.12\linewidth}!{\vrule}>{\raggedright\arraybackslash}p{0.13\linewidth}!{\vrule}>{\raggedright\arraybackslash}p{0.68\linewidth}!{\vrule}}
+\hline
+\rowcolor{gray!20}
+\AnnexeTableHeader{Date} & \AnnexeTableHeader{Version du document} & \AnnexeTableHeader{Statut / changements majeurs}
+\\
+\hline
+29 août 2000 & 1.0.1 & 
+\begin{minipage}[t]{\linewidth}
+Version du protocole 1.0. Publication publique approuvée.
+
+Additions et modifications mineures par rapport au brouillon 1.0.1m :
+\begin{itemize}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\topsep}{2pt}
+\item ajout de l'avant-propos ; 
+\item remplacement de la section sur les vues cartographiques et l'échelle de portée ; 
+\item APRS Software Version No : ajout de \texttt{APDxxx}, serveur Linux \texttt{aprsd} ; 
+\item APRS Data Type Identifier : \texttt{[} désigné comme Maidenhead grid locator, avec mention d'obsolescence ; 
+\item Position Ambiguity : ajout d'un exemple de bounding box ; 
+\item Compressed Position Formats : pour Course/Speed, correction de la plage possible de l'octet \texttt{c} à \texttt{0-89} ; 
+\item Mic-E : remplacement de la table d'exemple de latitude pour montrer plus explicitement l'encodage des bits N/S/E/W et Longitude Offset ; 
+\item Mic-E : suppression du paragraphe indiquant qu'un espace doit séparer l'altitude et le texte de commentaire ; aucun espace n'est requis ; 
+\item Mic-E : suppression de la note sur l'inexactitude des données d'altitude, car le GPS Selective Availability a été désactivé ; 
+\item Object Reports : ajout de timestamps à certains exemples, un Object Report devant toujours avoir un timestamp ; 
+\item Signposts : peuvent être des Objects ou des Items ; 
+\item Storm Data : changement du format de pression centrale en \texttt{/pppp}, c'est-à-dire au millibar/hPa le plus proche ; 
+\item Storm Data : exemples Hurricane Brenda, insertion d'un zéro initial dans le champ de pression centrale, qui comporte 4 chiffres ; 
+\item Telemetry Data : ajout de \texttt{MIC} comme forme alternative de Sequence Number ; \texttt{MIC} peut être suivi ou non d'une virgule ; 
+\item Messages : ajout du format de rejet \texttt{rej} ; 
+\item Annexe 1 : format Agrelo, changement du séparateur entre Bearing et Quality en \texttt{/} ; 
+\item Symbol Table : changement du symbole \texttt{/(}, de ``Cloudy'' à ``Mobile Satellite Groundstation'' ; 
+\item reformatage de la table de conversion d'unités. 
+\end{itemize}
+\end{minipage}
+\\
+\rule{0pt}{1.6ex} & & \\
+\hline
+\end{longtable}
+}
+\begin{center}
+\sffamily\bfseries FIN DU DOCUMENT
+\end{center}

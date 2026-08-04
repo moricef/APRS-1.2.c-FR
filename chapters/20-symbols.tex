@@ -1,0 +1,140 @@
+\chapter[SYMBOLES APRS]{Symboles APRS}\label{symboles-aprs}
+
+\section{Trois méthodes}\label{trois-muxe9thodes}
+
+Pour spécifier un symbole (icône d'affichage) : - Dans le champ
+Information AX.25 (préféré). - Dans l'adresse de destination AX.25. -
+Dans le SSID de l'adresse source AX.25.
+
+Les deux dernières pour les trackers autonomes qui ne peuvent pas mettre
+le symbole dans Information.
+
+\section{Les tables}\label{les-tables}
+
+Deux tables : \textbf{Primary} et \textbf{Alternate}. Voir annexe 2 pour
+le listing complet.
+
+Différence : certains symboles de la table alternative peuvent être
+overlaidés d'un caractère alphanumérique (marqués « {[}with overlay{]}
+»). Aucun symbole de la table primaire ne peut l'être.
+
+Chaque symbole codé de 3 manières : - \texttt{/\$} ou
+\texttt{\textbackslash{}\$} --- Information field. - \texttt{GPSxyz} ---
+destination générique. - \texttt{GPSCnn} ou \texttt{GPSEnn} --- autre
+forme de destination générique.
+
+15 symboles de la table primaire ont un SSID associé (ex : petit avion =
+\texttt{-7}), pour les trackers autonomes.
+
+\section{Symboles dans le champ
+Information}\label{symboles-dans-le-champ-information}
+
+Symbole = Symbol Table Identifier (1 char) + Symbol Code (1 char).
+
+Ex : \texttt{@092345z4903.50N/07201.75W\textgreater{}088/036…} ---
+\texttt{/} = Sym Table ID (primary), \texttt{\textgreater{}} = Symbol
+Code (voiture).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+ID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Signification
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{/} & Table primaire (surtout stations) \\
+\texttt{\textbackslash{}} & Table alternative (surtout objets) \\
+\texttt{0-9} & Overlay numérique, table alternative (uncompressed
+lat/long) \\
+\texttt{a-j} & Overlay numérique, table alternative (compressed
+lat/long) --- \texttt{a-j} → \texttt{0-9} \\
+\texttt{A-Z} & Overlay alpha, table alternative \\
+\end{longtable}
+
+\section{Overlays dans le champ
+Information}\label{overlays-dans-le-champ-information}
+
+Si Sym Table ID = \texttt{0-9} ou \texttt{A-Z} (ou \texttt{a-j} en
+compressed), le symbole vient de la table alternative avec le caractère
+d'overlay.
+
+Ex uncompressed : \texttt{@092345z4903.50N307201.75W\textgreater{}…} ---
+chiffre \texttt{3} overlaidé sur icône voiture.
+
+Ex compressed avec lettre :
+\texttt{=BL!!\textless{}*e7\ \textgreater{}7P{[}} --- voiture overlaidée
+\texttt{B}.
+
+\textbf{Attention} : en compressed, Sym Table ID numérique interdit (les
+positions compressées ne commencent jamais par un chiffre). Utiliser
+\texttt{a-j} mappée à \texttt{0-9}.
+
+Ex : \texttt{=d5L!!\textless{}*e7\ \textgreater{}7P{[}} --- \texttt{d}
+mappe à overlay \texttt{3}.
+
+Un symbole overlay-capable n'est pas obligé d'avoir un overlay.
+
+\section{Symboles dans l'adresse de
+destination}\label{symboles-dans-ladresse-de-destination}
+
+Destinations génériques : {\ttfamily \lit{GPS}xyz}, {\ttfamily \lit{GPS}Cnn},
+{\ttfamily \lit{GPS}Enn}, {\ttfamily \lit{SPC}xyz}, {\ttfamily \lit{SYM}xyz}. - \texttt{xy} /
+\texttt{nn} = entrées des tables. - \texttt{z} = overlay (si permis) ou
+espace filler.
+
+{\ttfamily \lit{GPS}/\lit{SPC}/\lit{SYM}xy} et {\ttfamily \lit{GPS}Cnn/\lit{GPS}Enn} interchangeables. Ex :
+{\ttfamily \lit{GPS}BM}, {\ttfamily \lit{SPC}BM}, {\ttfamily \lit{SYM}BM}, {\ttfamily \lit{GPS}C12}
+désignent tous « Boy Scouts » (primary).
+
+\section{Overlays dans la
+destination}\label{overlays-dans-la-destination}
+
+Si \texttt{z} non espace dans {\ttfamily \lit{GPS}xyz} = overlay \texttt{0-9} ou
+\texttt{A-Z}. Seuls les symboles alternate marqués « {[}with overlay{]}
+». Ex : voiture overlaidée \texttt{3} → {\ttfamily \lit{GPS}N\ 3}.
+{\ttfamily \lit{GPS}Cnn} et {\ttfamily \lit{GPS}Enn} ne peuvent pas être overlaidés.
+
+\section{Symbole dans le SSID
+Source}\label{symbole-dans-le-ssid-source}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+SSID & Icône & SSID & Icône \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{-0} & {[}pas d'icône{]} & \texttt{-8} & Ship (power boat) \\
+\texttt{-1} & Ambulance & \texttt{-9} & Car \\
+\texttt{-2} & Bus & \texttt{-10} & Motorcycle \\
+\texttt{-3} & Fire Truck & \texttt{-11} & Balloon \\
+\texttt{-4} & Bicycle & \texttt{-12} & Jeep \\
+\texttt{-5} & Yacht & \texttt{-13} & Recreational Vehicle \\
+\texttt{-6} & Helicopter & \texttt{-14} & Truck \\
+\texttt{-7} & Small Aircraft & \texttt{-15} & Van \\
+\end{longtable}
+
+\section{Précédence des
+symboles}\label{pruxe9cuxe9dence-des-symboles}
+
+Un paquet APRS ne devrait pas contenir plus d'un symbole. Si erreur,
+précédence :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Symbole dans Information field (le plus prioritaire).
+\item
+  Sinon symbole dans destination.
+\item
+  Sinon SSID source.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

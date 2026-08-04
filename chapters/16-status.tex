@@ -1,0 +1,69 @@
+\chapter[RAPPORTS DE STATUT]{Rapports de statut}\label{rapports-de-statut}
+
+Un Status Report annonce à tous la mission actuelle de la station ou
+tout autre statut sur une ligne. DTI \texttt{\textgreater{}}.
+
+Timestamp optionnel, uniquement en format DHM zulu.
+
+Texte : jusqu'à 62 caractères sans timestamp, 55 avec. ASCII imprimable
+sauf \texttt{\textbar{}} et \texttt{\textasciitilde{}}.
+
+\begin{verbatim}
+> | [Time DHMz (7)] | Status Text (≤62 sans timestamp / ≤55 avec)
+\end{verbatim}
+
+Exemples : - \texttt{\textgreater{}Net\ Control\ Center} (sans
+timestamp) - \texttt{\textgreater{}092345zNet\ Control\ Center} (avec)
+
+Deux cas particuliers de contenu décodable : - Beam Heading + ERP. -
+Locator Maidenhead.
+
+\section{Beam Heading et ERP}\label{beam-heading-et-erp}
+
+Utile en meteor scatter. Encodé en 2 caractères : - \texttt{H} = cap /
+10. \texttt{0-9} = 0-90°, \texttt{A-Z} = 100-350°. - \texttt{P} = code
+ERP.
+
+Table ERP (extraits) :
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+P & ERP (W) & P & ERP (W) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 10 & \texttt{:} & 1000 \\
+2 & 40 & \texttt{;} & 1210 \\
+3 & 90 & \texttt{\textless{}} & 1440 \\
+4 & 160 & \texttt{=} & 1690 \\
+5 & 250 & \texttt{\textgreater{}} & 1960 \\
+6 & 360 & \texttt{?} & 2250 \\
+7 & 490 & \texttt{@} & 2560 \\
+8 & 640 & \texttt{A} & 2890 \\
+9 & 810 & \texttt{K} & 7290 \\
+\end{longtable}
+
+\texttt{HP} en fin de status text, précédé de \texttt{\^{}}. Ex :
+\texttt{\^{}B7} = cap 110°, ERP 490 W.
+
+\section{Locator Maidenhead}\label{locator-maidenhead}
+
+4 ou 6 caractères juste après le \texttt{\textgreater{}}. Toujours
+transmis en majuscules (peut être reçu en minuscules). Symbol Table
+Identifier + Symbol Code suivent. Si suivi de texte, premier caractère =
+espace. Pas de timestamp possible avec Maidenhead.
+
+Exemples : - \texttt{\textgreater{}IO91SX/G} -
+\texttt{\textgreater{}IO91/G} -
+\texttt{\textgreater{}IO91SX/-\ My\ house} (noter l'espace initial du
+texte). - \texttt{\textgreater{}IO91SX/-\ \^{}B7} --- meteor scatter cap
+110°, ERP 490 W.
+
+\section{Émission des Status
+Reports}\label{uxe9mission-des-status-reports}
+
+Une seule émission par net cycle time (10/20/30 minutes) ou en réponse à
+une requête.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

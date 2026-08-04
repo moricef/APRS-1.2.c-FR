@@ -1,0 +1,236 @@
+\chapter[RAPPORTS MÉTÉO]{Rapports météo}\label{rapports-muxe9tuxe9o}
+
+APRS supporte Peet Brothers, Ultimeter et Davis. Idéal pour Skywarn.
+
+\section{Trois types}\label{trois-types}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Raw Weather Report}
+\item
+  \textbf{Positionless Weather Report}
+\item
+  \textbf{Complete Weather Report} (avec position et timestamp)
+\end{itemize}
+
+\section{DTIs des Weather Reports}\label{dtis-des-weather-reports}
+
+Pour données brutes :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{!} : Ultimeter 2000
+\item
+  \texttt{\#} : Peet Bros U-II
+\item
+  \texttt{\$} : Ultimeter 2000
+\item
+  \texttt{*} : Peet Bros U-II
+\item
+  \texttt{\_} : Positionless weather data
+\end{itemize}
+
+Après post-traitement (insertion position), on peut utiliser \texttt{!},
+\texttt{=}, \texttt{/}, \texttt{@} classiques. Le rapport est alors
+identifié par le symbole weather \texttt{/\_} ou
+\texttt{\textbackslash{}\_} dans les APRS Data.
+
+\section{Raw Weather Report}\label{raw-weather-report}
+
+\begin{verbatim}
+! ou # ou $ ou * | Raw Weather Data (n octets)
+\end{verbatim}
+
+Exemples : -
+\texttt{!!006B005803500000-\/-\/-\/-03E9-\/-\/-\/-\/-\/-\/-\/-002105140000005D}
+(Ultimeter 2000) - \texttt{\#50B7500820082} (Peet Bros U-II) -
+\texttt{\$ULTW0031003702CE0069-\/-\/-\/-000086A00001-\/-\/-\/-011901CC00000005}
+(Ultimeter 2000) - \texttt{*7007600000000} (Peet Bros U-II)
+
+\section{Positionless Weather
+Report}\label{positionless-weather-report}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{\_} & Time MDHM & Positionless Weather Data & APRS Software (S) & WX Unit (uuuu) \\
+\hline
+\textbf{Octets} & 1 & 8 & n & 1 & 2-4 \\
+\hline
+\end{tabular}
+\end{center}
+
+Ex : \texttt{\_10090556c220s004g005t077r000p000P000h50b09900wRSW}.
+
+Codes logiciel : \texttt{d} APRSdos, \texttt{M} MacAPRS, \texttt{P}
+pocketAPRS, \texttt{S} APRS+SA, \texttt{W} WinAPRS, \texttt{X} X-APRS.
+
+Codes unité (2-4 chars) : \texttt{Dvs}, \texttt{HKT}, \texttt{PIC},
+\texttt{RSW}, \texttt{U-II}, \texttt{U2R}, \texttt{U2k}, \texttt{U2kr},
+\texttt{U5}, \texttt{Upkm}. Codes libres possibles.
+
+\section{Format des données météo
+positionless}\label{format-des-donnuxe9es-muxe9tuxe9o-positionless}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & Wind dir & Wind speed & Gust & Temp & Rain hr & Rain 24h & Rain midnight & Humidity \\
+\textbf{Code} & \texttt{cccc} & \texttt{ssss} & \texttt{gggg} & \texttt{tttt} & \texttt{rrrr} & \texttt{pppp} & \texttt{PPPP} & \texttt{hhh} \\
+\textbf{Octets} & 4 & 4 & 4 & 4 & 4 & 4 & 4 & 3 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Barometric Pressure (\texttt{bbbbbb}, 5 octets)
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{cccc} = direction vent en degrés.
+\item
+  \texttt{ssss} = vitesse soutenue 1 min en mph.
+\item
+  \texttt{gggg} = pic de rafale (5 min) en mph.
+\item
+  \texttt{tttt} = température en °F. En dessous de zéro : \texttt{-01} à
+  \texttt{-99}.
+\item
+  \texttt{rrrr}, \texttt{pppp}, \texttt{PPPP} = pluie en 1/100 pouce
+  (dernière heure, 24 h, depuis minuit).
+\item
+  \texttt{hhh} = humidité en \% (00 = 100 \%).
+\item
+  \texttt{bbbbbb} = pression barométrique en 1/10 millibars.
+\end{itemize}
+
+Paramètres additionnels : - \texttt{L} : luminosité W/m² (≤ 999). -
+\texttt{l} : luminosité ≥ 1000 (remplace un champ de pluie). -
+\texttt{s} : neige 24 h (pouces). - \texttt{\#} : compteur brut de
+pluie.
+
+Note : au minimum MDHM + wind dir + speed + gust + temp doivent être
+présents (même invalides). Reste dans un ordre libre ou absent. Valeur
+inconnue = points ou espaces (\texttt{c...s...g...} ou
+\texttt{cVVVsVVVgVVV}).
+
+Ex pluie seule : \texttt{\_10090556c...s...g...t...P012Jim}.
+
+\section{Localisation d'un
+raw/positionless}\label{localisation-dun-rawpositionless}
+
+Le rapport n'a pas de position. La station doit occasionnellement
+émettre un paquet séparé avec sa position.
+
+\section{Symbole d'un
+raw/positionless}\label{symbole-dun-rawpositionless}
+
+Le raw/positionless n'a pas de Symbol Code dans l'info. Spécifier via
+une adresse de destination APRS générique (ex \texttt{GPSHW} ou
+\texttt{GPSE63}) ou, sur ballon, via SSID \texttt{-11} sur l'adresse
+source. Voir chapitre 20.
+
+\section{Complete Weather Report}\label{complete-weather-report}
+
+Symbol Code toujours \texttt{\_}. Le 7-byte Wind Direction/Speed
+extension remplace \texttt{cccc/ssss} du positionless.
+
+\textbf{Avec lat/long, sans timestamp} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{!} ou \lit{=} & Lat & Sym Tbl ID & Long & \lit{\_} & Wind dir/speed & Weather Data & S & uuuu \\
+\hline
+\textbf{Octets} & 1 & 8 & 1 & 9 & 1 & 7 & n & 1 & 2-4 \\
+\hline
+\end{tabular}
+\end{center}
+
+Ex :
+\texttt{!4903.50N/07201.75W\_220/004g005t077r000p000P000h50b09900wRSW}.
+
+\textbf{Avec lat/long et timestamp} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{/} ou \lit{@} & Time & Lat & Sym Tbl ID & Long & \lit{\_} & Wind & Weather Data & S & uuuu \\
+\hline
+\textbf{Octets} & 1 & 7 & 8 & 1 & 9 & 1 & 7 & n & 1 & 2-4 \\
+\hline
+\end{tabular}
+\end{center}
+
+Ex :
+\texttt{@092345z4903.50N/07201.75W\_220/004g005t-07r000p000P000h50b09900wRSW}.
+
+\textbf{Avec position compressée} : variantes équivalentes.
+
+\textbf{Weather via Object Report} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{;} & Object Name & \lit{*} & Time & Lat & Sym Tbl ID & Long & \lit{\_} & Wind + Weather Data \\
+\hline
+\textbf{Octets} & 1 & 9 & 1 & 7 & 8 & 1 & 9 & 1 & 7 + n \\
+\hline
+\end{tabular}
+\end{center}
+
+Ex :
+\texttt{;BRENDA\ \ \ *4903.50N/07201.75W\_220/004g005t077r000p000P000h50b09900wRSW}.
+
+\section{Storm Data}\label{storm-data}
+
+Format des données de tempête :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & Direction & Storm Type & Sustained wind & Peak gust & Central pressure & Hurricane radius & TS radius \\
+\textbf{Séparateur} &  & \texttt{/ST} & \texttt{/www} & \texttt{\^{}GGG} & \texttt{/pppp} & \texttt{>RRR} & \texttt{\&rrr} \\
+\textbf{Octets} & 3 & 3 & 4 & 4 & 5 & 4 & 4 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Whole Gale radius (\texttt{\%ggg}, 4 octets, optionnel)
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{ST} : TS = Tropical Storm, HC = Hurricane, TD = Tropical
+  Depression.
+\item
+  \texttt{www} : vent soutenu en knots.
+\item
+  \texttt{GGG} : pic de rafale en knots.
+\item
+  \texttt{pppp} : pression centrale en millibars.
+\item
+  \texttt{RRR} : rayon vents ouragan en milles nautiques.
+\item
+  \texttt{rrr} : rayon vents tempête tropicale en milles nautiques.
+\item
+  \texttt{ggg} : rayon vents « whole gale » (50 knots) en milles
+  nautiques. Optionnel.
+\end{itemize}
+
+Symboles : - \texttt{\textbackslash{}@} : Hurricane/Tropical Storm
+(position actuelle). - \texttt{/@} : position future prédite.
+
+Ex progression Hurricane Brenda :
+
+\begin{verbatim}
+;BRENDA   *092345z4903.50N\07202.75W@088/036/HC/150^200/0980>090&030%040
+;BRENDA   *100045z4905.50N/07201.75W@101/047/HC/104^123/0980>065&020%040
+\end{verbatim}
+
+\section{Bulletins NWS}\label{bulletins-nws}
+
+APRS supporte la diffusion des bulletins National Weather Service. Voir
+chapitre 14.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

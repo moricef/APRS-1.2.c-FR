@@ -1,0 +1,250 @@
+\chapter[DONNÉES APRS DANS LE CHAMP INFORMATION AX.25]{Données APRS dans le champ Information
+AX.25}\label{donnuxe9es-aprs-dans-le-champ-information-ax.25}
+
+Le champ Information peut contenir tout ou partie de :
+
+\begin{itemize}
+\tightlist
+\item
+  APRS Data Type Identifier
+\item
+  APRS Data
+\item
+  APRS Data Extension
+\item
+  Comment
+\end{itemize}
+
+\section*{Format générique}\label{format-guxe9nuxe9rique}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Champ & Data Type ID & APRS Data & APRS Data Extension & Comment \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & n & 7 & n \\
+\end{longtable}
+
+\section*{APRS Data Type Identifier}\label{aprs-data-type-identifier}
+
+Chaque paquet APRS contient un DTI qui détermine le format du reste de
+l'Information field.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Ident
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Type de données
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Ident
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Type de données
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{0x1c} & Current Mic-E Data (Rev 0 beta) & \lit{\textless{}} &
+Station Capabilities \\
+\texttt{0x1d} & Old Mic-E Data (Rev 0 beta) & \lit{=} & Position sans
+timestamp (avec messagerie APRS) \\
+\lit{!} & Position sans timestamp (sans messagerie), ou Ultimeter
+2000 WX & \lit{\textgreater{}} & Status \\
+\lit{"} & {[}Inutilisé{]} & \lit{?} & Query \\
+\lit{\#} & Peet Bros U-II Weather Station & \lit{@} & Position
+avec timestamp (avec messagerie APRS) \\
+\lit{\$} & Raw GPS data ou Ultimeter 2000 & \texttt{A–S} & {[}Ne pas
+utiliser{]} \\
+\lit{\%} & Agrelo DFJr / MicroFinder & \lit{T} & Telemetry data \\
+\lit{\&} & {[}Réservé --- Map Feature{]} & \texttt{U–Z} & {[}Ne pas
+utiliser{]} \\
+\lit{\textquotesingle{}} & Old Mic-E Data (mais Current pour TM-D700)
+& \lit{{[}} & Maidenhead grid locator beacon (obsolète) \\
+\lit{(} & {[}Inutilisé{]} & \lit{\textbackslash{}} &
+{[}Inutilisé{]} \\
+\texttt{)} & Item & \texttt{{]}} & {[}Inutilisé{]} \\
+\texttt{*} & Peet Bros U-II Weather Station & \texttt{\^{}} &
+{[}Inutilisé{]} \\
+\texttt{+} & {[}Réservé --- Shelter data with time{]} & \texttt{\_} &
+Weather Report (sans position) \\
+\texttt{,} & Invalid data ou test data & \texttt{\textasciigrave{}} &
+Current Mic-E Data (pas TM-D700) \\
+\texttt{-} & {[}Inutilisé{]} & \texttt{a–z} & {[}Ne pas utiliser{]} \\
+\texttt{.} & {[}Réservé --- Space weather{]} & \texttt{\{} &
+User-Defined APRS packet format \\
+\texttt{/} & Position avec timestamp (sans messagerie) &
+\texttt{\textbackslash{}\textbar{}} & {[}Ne pas utiliser --- TNC stream
+switch{]} \\
+\texttt{0–9} & {[}Ne pas utiliser{]} & \texttt{\}} & Third-party
+traffic \\
+\texttt{:} & Message & \texttt{\textasciitilde{}} & {[}Ne pas utiliser
+--- TNC stream switch{]} \\
+\texttt{;} & Object & & \\
+\end{longtable}
+
+\textbf{Notes} : - Exception au « DTI en premier caractère » : Position
+sans timestamp (\texttt{!}). Le \texttt{!} peut apparaître jusqu'à la
+40ᵉ position du champ Information. Support des digipeaters X1J TNC qui
+ont une chaîne non modifiable en début de champ. - La radio Kenwood
+TM-D700 utilise \texttt{\textquotesingle{}} pour du courant Mic-E, pas
+\texttt{\textasciigrave{}}.
+
+\section*{APRS Data et Data
+Extension}\label{aprs-data-et-data-extension}
+
+10 types principaux de données :
+
+\begin{itemize}
+\tightlist
+\item
+  Position
+\item
+  Direction Finding
+\item
+  Objects et Items
+\item
+  Weather
+\item
+  Telemetry
+\item
+  Messages, Bulletins et Announcements
+\item
+  Queries
+\item
+  Responses
+\item
+  Status
+\item
+  Other
+\end{itemize}
+
+Certaines données peuvent aussi porter une APRS Data Extension. Data +
+extension suivent le DTI.
+
+Tableau récapitulatif des combinaisons possibles :
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+APRS Data possible
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+APRS Data Extension possible
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Position & Time (DHM ou HMS), Lat/long, Compressed
+lat/long/course/speed/range/altitude, Symbol Table ID + Symbol Code,
+Mic-E longitude/speed/course/telemetry/status, NMEA brute, Raw weather &
+Course \& Speed, Power/Height/Gain/Directivity, Pre-Calculated Radio
+Range, Omni DF Signal Strength, Storm Data (in Comment) \\
+Direction Finding & Time (DHM ou HMS), Lat/long, Compressed
+lat/long/course/speed/range/altitude, Symbol Table ID + Symbol Code &
+Course \& Speed, PHG, PCR Range, Omni DF Signal Strength, Bearing +
+Number/Range/Quality (in Comment) \\
+Objects \& Items & Nom d'objet ou d'item, Time, Lat/long,
+Compressed\ldots, Symbol, Raw weather & Course \& Speed, PHG, PCR Range,
+Omni DF Signal Strength, Area Object, Storm Data (in Comment), Wind
+Direction \& Speed \\
+Weather & Time (MDHM), Lat/long, Compressed\ldots, Symbol, Raw weather &
+Course \& Speed, PHG, PCR Range, Omni DF, Area Object, Wind Direction \&
+Speed \\
+Telemetry & Telemetry (non Mic-E) & --- \\
+Messages / Bulletins & Addressee, Message Text, Message Identifier,
+Message Acknowledgement, Bulletin ID, Announcement ID, Group Bulletin ID
+& --- \\
+Queries & Query Type, Query Target Footprint, Addressee (Directed Query)
+& --- \\
+Responses & Position, Object/Item, Weather, Status, Message, Digipeater
+Trace, Stations Heard, Heard Statistics, Station Capabilities & --- \\
+Status & Time (DHM zulu), Status text, Meteor Scatter Beam
+Heading/Power, Maidenhead Locator, Altitude (Mic-E), E-mail message &
+--- \\
+Other & Third-Party forwarding, Invalid Data / Test Data & --- \\
+\end{longtable}
+
+\section*{Comment Field}\label{comment-field}
+
+En général, tout paquet APRS peut contenir un texte libre (par ex.
+message beacon) dans l'Information field, immédiatement après les APRS
+Data ou l'extension. Pas de séparateur sauf mention contraire.
+
+Le commentaire peut contenir n'importe quels caractères ASCII
+imprimables sauf \texttt{\textbar{}} et \texttt{\textasciitilde{}}
+(réservés au TNC channel switching).
+
+Longueur max dépendante du type de rapport --- détails dans la
+description de chaque rapport.
+
+Dans certains cas, le champ Comment peut contenir des données APRS
+supplémentaires :
+
+\begin{itemize}
+\tightlist
+\item
+  Altitude en texte de commentaire (chapitre 6), ou dans le texte de
+  statut Mic-E (chapitre 10).
+\item
+  Maidenhead Locator en Mic-E status (chapitre 10) ou Status Report
+  (chapitre 16).
+\item
+  Bearing + Number/Range/Quality (\texttt{/BRG/NRQ}), dans les DF
+  reports (chapitre 7).
+\item
+  Area Object Line Widths (chapitre 11).
+\item
+  Signpost Objects (chapitre 11).
+\item
+  Weather et Storm Data (chapitre 12).
+\item
+  Beam Heading \& Power dans les Status Reports (chapitre 16).
+\end{itemize}
+
+\section*{Notation Base-91}\label{notation-base-91}
+
+Deux formats APRS utilisent la notation base-91 : lat/long compressées
+(chapitre 9) et altitude Mic-E (chapitre 10).
+
+Les données base-91 sont compressées en une courte chaîne de caractères
+ASCII imprimables, codes 33--124 décimal (\texttt{!} à
+\texttt{\textbar{}}).
+
+Pour calculer la chaîne base-91 d'une valeur, on divise par des
+puissances décroissantes de 91 jusqu'à ce que le reste soit \textless{}
+91. À chaque étape, ajouter 33 au modulo pour obtenir le code ASCII.
+
+Exemple pour 12345678 :
+
+\begin{verbatim}
+12345678 / 91³ = modulo 16, reste 288542
+288542   / 91² = modulo 34, reste 6988
+6988     / 91¹ = modulo 76, reste 72
+\end{verbatim}
+
+Codes ASCII : 49 (=16+33), 67 (=34+33), 109 (=76+33), 105 (=72+33) →
+chaîne \texttt{1Cmi}.
+
+\section*{Unités de données APRS}\label{unituxe9s-de-donnuxe9es-aprs}
+
+Pour des raisons historiques, il y a un manque de cohérence dans les
+unités : certaines vitesses en knots, d'autres en miles/h ; altitudes en
+pieds ou en mètres, etc. Cette spécification décrit les unités
+\emph{telles qu'elles sont transmises on-air}. Il incombe aux
+applications APRS de les convertir si besoin.
+
+Le datum GPS par défaut est WGS 1984.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

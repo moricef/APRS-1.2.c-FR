@@ -1,0 +1,282 @@
+\chapter[EXTENSIONS DE DONNÉES APRS]{Extensions de données
+APRS}\label{extensions-de-donnuxe9es-aprs}
+
+Un champ fixe de 7 octets peut suivre les données de position APRS.
+Types d'extension :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{CSE/SPD} --- Course and Speed (peut être suivi de 8 octets
+  supplémentaires : bearing DF + NRQ).
+\item
+  \texttt{DIR/SPD} --- Wind Direction and Wind Speed.
+\item
+  \texttt{PHGphgd} --- Power + Height/Gain/Directivity.
+\item
+  \texttt{RNGrrrr} --- Pre-Calculated Radio Range.
+\item
+  \texttt{DFSshgd} --- DF Signal Strength + Height/Gain.
+\item
+  \texttt{Tyy/Cxx} --- Area Object Descriptor.
+\end{itemize}
+
+\section*{Course and Speed}\label{course-and-speed}
+
+Course en degrés 001-360 (nord = 360, sens horaire). Vitesse en knots.
+Séparateur \texttt{/}.
+
+Ex : \texttt{088/036} = cap 88°, 36 knots.
+
+Si inconnu : \texttt{000/000}, \texttt{.../...} ou \texttt{VVV/VVV}.
+
+\textbf{Cas DF} : \texttt{000} = station DF fixe ; non nul = mobile.
+
+\section*{Wind Direction and Wind
+Speed}\label{wind-direction-and-wind-speed}
+
+Direction du vent en degrés 001-360. Vitesse en knots. Séparateur
+\texttt{/}. Vitesse soutenue sur 1 minute.
+
+Ex : \texttt{220/004} = vent de 220° à 4 knots.
+
+\section*{Power, Effective Antenna
+Height/Gain/Directivity}\label{power-effective-antenna-heightgaindirectivity}
+
+Format \texttt{PHGphgd} --- 7 caractères. Sert à tracer un cercle de
+portée radio autour de la station.
+
+\begin{itemize}
+\tightlist
+\item
+  Caractères 1-3 : \texttt{PHG} fixe.
+\item
+  Char 4 : \texttt{p} code puissance.
+\item
+  Char 5 : \texttt{h} code hauteur.
+\item
+  Char 6 : \texttt{g} code gain antenne.
+\item
+  Char 7 : \texttt{d} code directivité.
+\end{itemize}
+
+Codes PHG :
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+7
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+8
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+9
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Unités
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Power & 0 & 1 & 4 & 9 & 16 & 25 & 36 & 49 & 64 & 81 & watts \\
+Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 &
+feet \\
+Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & dB \\
+Directivity & omni & 45 NE & 90 E & 135 SE & 180 S & 225 SW & 270 W &
+315 NW & 360 N & & deg \\
+\end{longtable}
+
+Le code Height représente la \textbf{hauteur effective au-dessus du
+terrain moyen local}, pas au-dessus du sol ni du niveau de la mer. Le
+code peut être n'importe quel ASCII à partir de \texttt{0} --- pour
+ballons, avions, satellites : - \texttt{:} = 10240 pieds
+(\textasciitilde1.9 miles). - \texttt{;} = 20480 pieds
+(\textasciitilde3.9 miles), etc.
+
+Le code Directivity décale le cercle PHG d'un tiers dans la direction
+indiquée (front-to-back 2:1). Utilisé pour signaler une direction
+favorisée ou un null, même sur antenne omni.
+
+Ex : \texttt{PHG5132} = 25 W, 20 ft d'antenne au-dessus du terrain moyen
+local, 3 dB de gain, gain max plein est.
+
+\section*{Range Circle Plot}\label{range-circle-plot}
+
+APRS calcule la portée radio utilisable (en miles) pour tracer le cercle
+:
+
+\begin{verbatim}
+power = p²
+haat = 10 × 2^h                            (feet)
+gain = 10^(g/10)
+range = √(2 × haat × √((power/10) × (gain/2)))
+\end{verbatim}
+
+Ex \texttt{PHG5132} :
+
+\begin{verbatim}
+power = 5² = 25 W
+haat = 10 × 2¹ = 20 ft
+gain = 10^(3/10) = 1.995262
+range = √(2 × 20 × √((25/10) × (1.995262/2))) ≈ 7.9 miles
+\end{verbatim}
+
+Comme le gain max est plein est, APRS trace un cercle de rayon 8 miles,
+décalé de 2.7 miles (1/3 de 8) vers l'est.
+
+\textbf{En l'absence de données PHG}, les stations sont supposées 10 W,
+3 dB omni, 20 ft → cercle 6 miles centré sur la station.
+
+\section*{Pre-Calculated Radio
+Range}\label{pre-calculated-radio-range}
+
+Format \texttt{RNGrrrr} --- 7 octets. \texttt{rrrr} = portée en miles
+avec zéros de tête.
+
+Ex : \texttt{RNG0050} = 50 miles. APRS trace un cercle correspondant.
+
+\section*{Omni-DF Signal Strength}\label{omni-df-signal-strength}
+
+Format \texttt{DFSshgd} --- 7 octets. Permet à APRS de localiser un
+brouilleur en traçant les contours de force de signal des stations qui
+l'entendent. Remplace \texttt{PHG} : la puissance est remplacée par la
+force relative \texttt{s} (0 à 9).
+
+Codes DFS :
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+7
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+8
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+9
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Unités
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Strength & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & S-points \\
+Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 &
+feet \\
+Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & dB \\
+Directivity & omni & 45 NE & 90 E & 135 SE & 180 S & 225 SW & 270 W &
+315 NW & 360 N & & deg \\
+\end{longtable}
+
+Ex : \texttt{DFS2360} = signal S2 sur antenne omni 6 dB à 80 pieds.
+
+Une force \texttt{0} est particulièrement significative : APRS s'en sert
+pour tracer (souvent en noir) des cercles où le brouilleur n'est
+\textbf{pas} entendu. Beaucoup de valeur : bien plus de stations
+n'entendent pas le brouilleur que le contraire.
+
+\section*{Bearing / Number / Range / Quality
+(BRG/NRQ)}\label{bearing-number-range-quality-brgnrq}
+
+Champ 8 octets \texttt{/BRG/NRQ} suivant l'extension \texttt{CSE/SPD}.
+Spécifie course, vitesse, bearing et NRQ (Number/Range/Quality).
+
+Ex : \texttt{…088/036/270/729…} --- course=88°, vitesse=36 knots,
+bearing=270°, N=7, R=2, Q=9.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{N=0} → NRQ non significatif.
+\item
+  \texttt{N=1..8} → nombre de hits par période relatif à la longueur de
+  la période (8 = 100 \%).
+\item
+  \texttt{N=9} → rapport manuel.
+\item
+  N n'est pas traité, c'est juste un indicateur des unités DF
+  automatiques.
+\end{itemize}
+
+Range = \texttt{2\^{}R} (miles). Ex \texttt{R=4} → 16 miles.
+
+Q (0-9) donne la précision du bearing :
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Q & Précision & Q & Précision \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & Inutile & 5 & \textless{} 16° \\
+1 & \textless{} 240° & 6 & \textless{} 8° \\
+2 & \textless{} 120° & 7 & \textless{} 4° \\
+3 & \textless{} 64° & 8 & \textless{} 2° \\
+4 & \textless{} 32° & 9 & \textless{} 1° (meilleur) \\
+\end{longtable}
+
+Si course/speed non pertinents : \texttt{000/000}, \texttt{.../...} ou
+\texttt{VVV/VVV}.
+
+\section*{Area Object Descriptor}\label{area-object-descriptor}
+
+Format \texttt{Tyy/Cxx} --- 7 octets. \texttt{T} = type d'objet (carré,
+cercle, triangle, etc.), \texttt{/C} = couleur de remplissage. Voir
+chapitre 11.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

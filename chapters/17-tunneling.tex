@@ -1,0 +1,94 @@
+\chapter[TUNNELING RÉSEAU ET DIGIPEATING TIERS]{Tunneling réseau et digipeating
+tiers}\label{tunneling-ruxe9seau-et-digipeating-tiers}
+
+\section{Réseaux tiers}\label{ruxe9seaux-tiers}
+
+APRS fournit un mécanisme pour tunneliser des paquets à travers des
+réseaux non-AX.25 (Internet, LAN Ethernet, câble direct). Ces réseaux ne
+comprennent pas les adresses AX.25, il faut les transmettre comme
+données avec la charge utile originale.
+
+\section{Source Path Header}\label{source-path-header}
+
+Avant d'envoyer un paquet dans le réseau tiers, on préfixe l'adresse
+APRS au DTI et au reste de la data. C'est le \textbf{Source Path Header}
+--- source, destination et digipeaters avec SSIDs. But : permettre au
+récepteur distant d'identifier l'émetteur (nécessaire pour ACK, utile
+pour diagnostic).
+
+Deux formats en usage : \textbf{TNC-2} et \textbf{AEA}. L'APRS Working
+Group a acté la standardisation sur TNC-2 pour l'avenir. Les TNCs AEA
+produisent du TNC-2 quand \texttt{BBSMSGS} est ON.
+
+\textbf{TNC-2} --- astérisque après le digi qui a effectivement entendu
+:
+
+\begin{verbatim}
+Source(-SSID) > Destination(-SSID) , [Digi(-SSID)(*),]... :
+\end{verbatim}
+
+Ex : \texttt{WB4APR-14\textgreater{}APRS,RELAY*,WIDE:} (le WIDE est «
+inutilisé »).
+
+\textbf{AEA} --- astérisque après la source ou le digi qui a
+effectivement entendu :
+
+\begin{verbatim}
+Source(-SSID)(*) > [Digi(-SSID)(*)>]... Destination(-SSID) :
+\end{verbatim}
+
+Ex :
+\texttt{WB4APR-14\textgreater{}RELAY*\textgreater{}WIDE\textgreater{}APRS:}.
+
+Dans les deux formats, SSID omis si \texttt{-0}. Les digipeaters après
+l'astérisque sont dits « unused » --- supprimés lors de la construction
+du Third-Party Header.
+
+\section{Third-Party Header}\label{third-party-header}
+
+Après émergence d'un paquet du réseau tiers, la gateway réceptrice
+insère un DTI \texttt{\}} et modifie le Source Path Header pour former
+le \textbf{Third-Party Header}, avant retransmission sur l'APRS local.
+
+\begin{verbatim}
+} | Third-Party Header | Rest of original data
+\end{verbatim}
+
+\textbf{TNC-2} :
+
+\begin{verbatim}
+Source Path Header (sans digi unused, sans *, sans :) , Third-Party Network ID , Receiving Gateway(-SSID) * :
+\end{verbatim}
+
+Ex : \texttt{\}WB4APR-14\textgreater{}APRS,RELAY,TCPIP,G9RXG*:...}
+
+Suppression des digis inutilisés et de l'astérisque. Puis insertion de 2
+indicatifs supplémentaires : Third-Party Network Identifier (ex :
+\texttt{TCPIP}) et indicatif de la gateway réceptrice suivi d'un
+\texttt{*}.
+
+\section{Action à la réception}\label{action-uxe0-la-ruxe9ception}
+
+La station peut extraire l'indicatif de l'émetteur d'origine (pour ACK)
+et connaît les autres adresses (diagnostic réseau).
+
+\section{Exemple : message via
+Internet}\label{exemple-message-via-internet}
+
+Scénario : - WB4APR-14 veut envoyer à G3NRW via Internet. - Gateway la
+plus proche de WB4APR-14 : K4HG (accessible via \texttt{RELAY,WIDE}). -
+Gateway la plus proche de G3NRW : G9RXG.
+
+Processus : 1. WB4APR-14 construit \texttt{:G3NRW\ \ \ \ :Hi\ Ian\{001}
+et le transmet via UNPROTO \texttt{RELAY,WIDE}. 2. K4HG reçoit via RELAY
+et construit
+\texttt{WB4APR-14\textgreater{}APRS,RELAY*,WIDE::G3NRW\ \ \ \ :Hi\ Ian\{001}.
+3. K4HG envoie ce paquet en telnet à un APRServer. 4. Toutes les
+gateways Internet APRServe (dont G9RXG) reçoivent le paquet. 5. G9RXG
+convertit :
+\texttt{\}WB4APR-14\textgreater{}APRS,RELAY,TCPIP,G9RXG*::G3NRW\ \ \ \ :Hi\ Ian\{001}
+(le WIDE inutilisé est supprimé). 6. G9RXG transmet sur l'APRS local. 7.
+G3NRW reçoit, strippe le Third-Party Header, décode le message pour lui,
+ACK routé vers WB4APR-14.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

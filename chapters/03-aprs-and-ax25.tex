@@ -1,0 +1,73 @@
+\chapter[APRS ET AX.25]{APRS et AX.25}\label{aprs-et-ax.25}
+
+\begin{aprssideblock}{Protocoles}
+\phantomsection\addcontentsline{toc}{section}{Protocoles}\label{protocoles}
+
+Au niveau lien, APRS utilise le protocole AX.25 (voir référence
+\emph{Amateur Packet-Radio Link-Layer Protocol} en annexe 6),
+exclusivement en trames UI (Unnumbered Information). Cela signifie
+qu'APRS tourne en mode sans connexion : les trames sont émises sans
+attendre de réponse, et la réception à l'autre bout n'est pas garantie.
+
+À un niveau plus haut, APRS supporte un protocole de messagerie
+permettant aux utilisateurs d'envoyer des messages courts (une ligne) à
+des stations nommées, avec accusé de réception attendu.
+\end{aprssideblock}
+
+\begin{aprssideblock}{La trame\\AX.25}
+\phantomsection\addcontentsline{toc}{section}{La trame AX.25}\label{la-trame-ax.25}
+
+Toutes les transmissions APRS utilisent des trames AX.25 UI avec 9
+champs :
+\end{aprssideblock}
+
+\begin{center}
+{\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.45}
+\makebox[0.11\textwidth][r]{\vphantom{\begin{tabular}{|c|}\hline X\\\hline X\\\hline X\\\hline\end{tabular}}}%
+\begin{tabular*}{0.89\textwidth}{@{\extracolsep{\fill}}|c|c|c|c|c|c|c|c|c|}
+\multicolumn{9}{|>{\columncolor{black}}l|}{\textcolor{white}{\bfseries AX.25 UI-FRAME FORMAT}}\\
+\hline
+\bfseries Flag & \bfseries Destination & \bfseries Source & \bfseries Digipeater & \bfseries Control & \bfseries Protocol & \bfseries INFORMATION & \bfseries FCS & \bfseries Flag \\
+               & \bfseries Address     & \bfseries Address& \bfseries Addresses  & \bfseries Field   & \bfseries ID       & \bfseries FIELD       &              &              \\
+               &                       &                  & \bfseries (0--8)     & \bfseries (UI)    &                    &                       &              &              \\
+\hline
+\makebox[0pt][r]{Octets :\hspace{1.6em}}1 & 7 & 7 & 0--56 & 1 & 1 & 1--256 & 2 & 1 \\
+\hline
+\end{tabular*}
+}
+\end{center}
+
+\begin{aprssideblock}{}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Flag} --- bit sequence \texttt{0x7e} séparant chaque trame, à
+  chaque extrémité.
+\item
+  \textbf{Destination Address} --- peut contenir un indicatif de
+  destination APRS ou des données APRS encodées pour respecter le format
+  AX.25 standard (6 alphanumériques + SSID). SSID non nul = chemin
+  digipeater APRS générique.
+\item
+  \textbf{Source Address} --- indicatif et SSID de la station émettrice.
+  Dans certains cas, un SSID non nul spécifie un code de symbole
+  d'affichage.
+\item
+  \textbf{Digipeater Addresses} --- 0 à 8 indicatifs de digipeaters.
+  Peuvent être remplacés par un chemin APRS générique spécifié dans le
+  SSID de destination.
+\item
+  \textbf{Control Field} --- mis à \texttt{0x03} (UI-frame).
+\item
+  \textbf{Protocol ID} --- mis à \texttt{0xf0} (pas de protocole de
+  couche 3).
+\item
+  \textbf{Information Field} --- données APRS. Le premier caractère est
+  le Data Type Identifier qui précise la nature du contenu.
+\item
+  \textbf{FCS} --- Frame Check Sequence sur 16 bits pour intégrité de la
+  trame.
+\end{itemize}
+\end{aprssideblock}

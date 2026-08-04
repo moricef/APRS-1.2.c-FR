@@ -1,0 +1,169 @@
+\chapter[LA PHILOSOPHIE DE CONCEPTION APRS]{La philosophie de conception
+APRS}\label{la-philosophie-de-conception-aprs}
+
+\begin{aprssideblock}{Net Cycle Time}
+\phantomsection\addcontentsline{toc}{section}{Net Cycle Time}\label{net-cycle-time}
+
+APRS est avant tout un outil de communication tactique temps réel,
+destiné à faciliter le flux d'information lors d'événements spéciaux,
+urgences, Skywarn, centre d'opérations d'urgence, ou simplement usage
+terrain sous stress. Mais comme dans le monde réel, 99 \% du temps il
+fonctionne en routine, en attente de l'événement sérieux improbable.
+
+Toute évolution d'APRS doit préserver sa capacité à fonctionner
+localement sous stress. Détails de cette philosophie :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  APRS utilise le concept de « net cycle time » --- durée dans laquelle
+  un utilisateur doit avoir entendu (au moins une fois) toutes les
+  stations APRS à portée, pour obtenir une image plus ou moins complète
+  de l'activité. Le net cycle time varie avec les conditions locales et
+  le nombre de digipeaters traversés.
+\item
+  Objectif : 10 minutes de net cycle time en usage local. En 10 minutes
+  après l'arrivée sur les lieux, on doit avoir capturé toute la
+  situation tactique.
+\item
+  Toutes les stations, même fixes, doivent beaconer leur position au
+  rythme du net cycle time. En situation de stress, les stations vont et
+  viennent en permanence. Les rapports de position montrent où elles
+  sont sans qu'on ait à demander, et signalent qu'elles sont toujours
+  actives.
+\item
+  On ne peut pas supposer que tous les utilisateurs APRS répondant à un
+  événement comprennent les ramifications d'APRS et les statistiques du
+  canal --- les réglages utilisateurs ne suffisent pas pour éviter de
+  tuer un réseau sous stress. Pour anticiper une saturation, APRS ajuste
+  automatiquement son net cycle time selon le nombre de digipeaters dans
+  le chemin UNPROTO :
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Opération directe (aucun digipeater) : 10 minutes (probablement un
+    événement).
+  \item
+    1 hop : 10 minutes (probablement un événement).
+  \item
+    2 hops : 20 minutes.
+  \item
+    3 hops ou plus : 30 minutes.
+  \end{itemize}
+\item
+  Comme quasiment toutes les stations fixes règlent leur chemin sur 3
+  digis ou plus, le net cycle time par défaut en usage quotidien routine
+  est de 30 minutes. Standard universel : allume la radio et APRS, ne
+  fais rien d'autre, en 30 minutes tu as l'image complète de toutes les
+  stations APRS à portée.
+\item
+  Comme la connaissance de la localisation des digipeaters est
+  fondamentale, les digipeaters devraient utiliser plusieurs commandes
+  de beacon pour transmettre à différents rythmes et sur différents
+  chemins --- par ex. 10 min localement, 30 min via 3 digis (et d'autres
+  selon besoin).
+\item
+  Si le net cycle time est trop long, les utilisateurs seront tentés
+  d'envoyer des requêtes de stations, ce qui augmentera inutilement le
+  trafic. Extrêmes recommandés : 10 et 30 minutes --- ça donne aux
+  concepteurs de réseau les hypothèses de charge canal nécessaires à une
+  bonne ingénierie.
+\end{enumerate}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Packet Timing}
+\phantomsection\addcontentsline{toc}{section}{Packet Timing}\label{packet-timing}
+
+Les paquets APRS sont sans erreur (grâce à la FCS AX.25) mais sans
+livraison garantie. APRS transmet donc l'information de façon
+redondante. Pour assurer une livraison rapide des données nouvelles ou
+changeantes, et préserver la capacité canal en réduisant les
+interférences avec les données anciennes, APRS doit transmettre les
+données récentes plus souvent que les anciennes.
+
+Plusieurs algorithmes en usage :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Decay Algorithm} --- transmettre un nouveau paquet une fois,
+  puis n secondes plus tard. Doubler n à chaque nouvelle transmission.
+  Quand n atteint le net cycle time, rester à ce rythme. D'autres
+  facteurs que « doubler » sont possibles selon le contexte.
+\item
+  \textbf{Fixed Rate} --- transmettre une fois, puis n secondes plus
+  tard. Répéter x fois puis s'arrêter.
+\item
+  \textbf{Message-on-Heard} --- transmettre selon l'un des algorithmes
+  ci-dessus. Si le paquet est toujours valide et n'a pas été acquitté,
+  et si le net cycle time est atteint, le destinataire est probablement
+  absent. Cependant si un paquet du destinataire est ensuite entendu,
+  réessayer une fois de transmettre.
+\item
+  \textbf{Time-Out} --- période au-delà de laquelle on peut
+  raisonnablement considérer qu'une station n'existe plus ou est off-air
+  si aucun paquet n'a été entendu. Défaut nominal : 2 heures. Ce
+  time-out n'est pas utilisé dans les algorithmes de transmission mais
+  sert à décider quand cesser d'afficher une station comme « active ».
+  Sur HF, les signaux vont et viennent --- décisions plus flexibles.
+\end{itemize}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Digipeating\\générique}
+\phantomsection\addcontentsline{toc}{section}{Digipeating générique}\label{digipeating-guxe9nuxe9rique}
+
+La puissance d'APRS sur le terrain vient de l'usage du digipeating
+générique : les paquets se propagent sans connaissance a priori du
+réseau. Six techniques ont évolué depuis 1992 :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{RELAY} --- tout TNC APRS VHF est supposé avoir l'alias
+  \texttt{RELAY}, utilisable comme digipeater par n'importe qui.
+\item
+  \textbf{ECHO} --- les stations HF utilisent l'alias \texttt{ECHO}
+  comme alternative à \texttt{RELAY}. Attention à la propagation HF qui
+  peut causer des interférences sur une vaste zone --- usage
+  parcimonieux.
+\item
+  \textbf{WIDE} --- tout digipeater en hauteur est supposé avoir l'alias
+  \texttt{WIDE} pour couvrir plus loin.
+\item
+  \textbf{TRACE} --- tout digipeater en hauteur pratiquant la
+  substitution d'indicatif est supposé avoir l'alias \texttt{TRACE}. Ces
+  digipeaters s'auto-identifient dans les paquets qu'ils digipeatent en
+  substituant leur indicatif à \texttt{RELAY}, \texttt{WIDE} ou
+  \texttt{TRACE}.
+\item
+  \textbf{WIDEn-N} --- un digipeater supportant WIDEn-N digipeatera tout
+  paquet WIDEn-N « nouveau » et décrémentera le SSID jusqu'à ce qu'il
+  atteigne \texttt{-0}. Le digipeater garde une copie ou un checksum et
+  ne re-digipeatera pas le même paquet dans un intervalle typique de 28
+  s. Réduit considérablement les doublons dans les zones où plusieurs
+  digipeaters s'entendent.
+\item
+  \textbf{GATE} --- indicatif générique pour les gateways HF-VHF. Tout
+  paquet entendu en HF via \texttt{GATE} est digipeaté localement en
+  VHF. Les réseaux locaux gardent un œil sur l'échelle
+  nationale/internationale.
+\end{enumerate}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Vues\\cartographiques}
+\phantomsection\addcontentsline{toc}{section}{Communiquer des vues cartographiques sans ambiguïté}\label{communiquer-des-vues-cartographiques-sans-ambiguuxeftuxe9}
+
+APRS est un système géographique tactique. Pour maximiser son efficacité
+opérationnelle et minimiser la confusion entre opérateurs, il faut une
+manière non ambiguë de communiquer la « localisation » et la « taille »
+(aire de couverture) d'une vue.
+
+La convention APRS : référence à un \emph{centre} et à un \emph{range}
+qui spécifient le centre géographique et le rayon approximatif d'un
+cercle inscrit dans la vue, indépendant de l'aspect ratio. Ce rayon (en
+milles nautiques, milles terrestres ou km) est le « range scale ». Base
+commune simple pour décrire n'importe quelle vue à d'autres, quel que
+soit le médium ou le programme.
+\end{aprssideblock}

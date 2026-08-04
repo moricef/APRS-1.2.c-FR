@@ -1,0 +1,213 @@
+\chapter[RAPPORTS D'OBJETS ET D'ITEMS]{Rapports d'Objets et d'Items}\label{rapports-dobjets-et-ditems}
+
+\section{Objets et Items}\label{objets-et-items}
+
+Toute station APRS peut reporter manuellement la position d'une entité
+APRS (autre station, phénomène météo, etc.), pour les cas où l'entité ne
+peut pas reporter sa propre position.
+
+Deux types :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Object Reports} --- position, timestamp optionnel, extensions
+  possibles. Prévu pour tracer des objets mobiles (spatial, orages,
+  coureurs marathon sans tracker).
+\item
+  \textbf{Item Reports} --- position, pas de timestamp. Extensions
+  possibles. Prévu pour des choses inanimées ponctuellement postées
+  (checkpoints marathon, postes de secours). Traitement similaire aux
+  Objects sinon.
+\end{itemize}
+
+Objets et items distincts par leurs noms. Recommandation : afficher
+l'indicatif de la station émettrice à côté.
+
+\section{Remplacer un Object / Item}\label{remplacer-un-object-item}
+
+N'importe quelle station peut reprendre la responsabilité en émettant un
+nouveau rapport avec le même nom. La station d'origine cessera d'émettre
+quand elle verra un rapport entrant d'une autre station avec le même
+nom.
+
+\section{Tuer un Object / Item}\label{tuer-un-object-item}
+
+Émettre un nouveau rapport avec un caractère de « kill » suivant le nom.
+Retirer l'affichage, conserver les données en interne.
+
+\section{Format Object Report}\label{format-object-report}
+
+Nom fixe 9 caractères, ASCII imprimable, sensible à la casse.
+
+\begin{itemize}
+\tightlist
+\item
+  DTI \texttt{;} = Object Report.
+\item
+  Après le nom : \texttt{*} (live) ou \texttt{\_} (killed).
+\item
+  Un Object a toujours un timestamp.
+\end{itemize}
+
+\textbf{Avec lat/long} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{;} & Object Name & \lit{*} ou \lit{\_} & Time DHM/HMS & Lat & Sym Tbl ID & Long & Symbol Code \\
+\hline
+\textbf{Octets} & 1 & 9 & 1 & 7 & 8 & 1 & 9 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Data Extension (0 ou 7 octets) + Comment (0-43 sans ext, 0-36 avec)
+
+Exemples : -
+\texttt{;LEADER\ \ \ *092345z4903.50N/07201.75W\textgreater{}088/036}
+--- live Object, à 2345z le 9, « Leader » en voiture à
+49°3'30''N/72°1'45''W, cap 88°, 36 knots. -
+\texttt{;LEADER\ \ \ \_092345z4903.50N/07201.75W\textgreater{}088/036}
+--- même Object, killed.
+
+\textbf{Avec position compressée} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{;} & Object Name & \lit{*} ou \lit{\_} & Time & Compressed Position \\
+\hline
+\textbf{Octets} & 1 & 9 & 1 & 7 & 13 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Comment
+
+Ex :
+\texttt{;LEADER\ \ \ *092345z/5L!!\textless{}*e7\textgreater{}7P{[}} ---
+49°30'00''N / 72°45'00''W, 88°, 36.2 knots.
+
+\section{Format Item Report}\label{format-item-report}
+
+Nom variable 3-9 caractères, ASCII imprimable sauf \texttt{!} ou
+\texttt{\_}. Sensible à la casse.
+
+\begin{itemize}
+\tightlist
+\item
+  DTI \texttt{)} = Item Report.
+\item
+  Après le nom : \texttt{!} (live) ou \texttt{\_} (killed).
+\item
+  Pas de timestamp.
+\end{itemize}
+
+\textbf{Avec lat/long} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{)} & Item Name & \lit{!} ou \lit{\_} & Lat & Sym Tbl ID & Long & Symbol Code \\
+\hline
+\textbf{Octets} & 1 & 3-9 & 1 & 8 & 1 & 9 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Data Extension (0 ou 7 octets) + Comment (0-43 sans ext, 0-36 avec)
+
+Exemples : - \texttt{)AID\ \#2!4903.50N/07201.75WA} --- First Aid
+Station \#2 à 49°3'30''N/72°1'45''W (\texttt{/A} = Aid Station). -
+\texttt{)G/WB4APR!53VV.VVN\textbackslash{}002VV.VVWd} --- rare DX
+(\texttt{\textbackslash{}d} = DX Spot). -
+\texttt{)AID\ \#2\_4903.50N/07201.75WA} --- station fermée.
+
+\textbf{Avec position compressée} :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{)} & Item Name & \lit{!} ou \lit{\_} & Compressed Position \\
+\hline
+\textbf{Octets} & 1 & 3-9 & 1 & 13 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Comment
+
+Ex : \texttt{)MOBIL!\textbackslash{}5L!!\textless{}*e79\ sT} --- Mobil
+Gas Station (\texttt{\textbackslash{}9} = Gas Station).
+
+\section{Area Objects}\label{area-objects}
+
+Avec le symbole \texttt{\textbackslash{}l} (« L » minuscule de la table
+alternative), on définit cercles, lignes, ellipses, triangles et boîtes,
+colorés ou non, remplis ou vides, de 60 pieds à 100 miles.
+
+Format : extension 7 caractères \texttt{Tyy/Cxx} juste après le Symbol
+Code \texttt{l}.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{T} = type d'objet (0-9).
+\item
+  \texttt{/C} = code couleur.
+\item
+  \texttt{yy} = √(offset latitude en 1/100 degré).
+\item
+  \texttt{xx} = √(offset longitude en 1/100 degré).
+\end{itemize}
+
+Types :
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+T & Type & T & Type \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0 & Open circle & 5 & Filled circle \\
+1 & Line (down/right) & 6 & Line (down/left) \\
+2 & Open ellipse & 7 & Filled ellipse \\
+3 & Open triangle & 8 & Filled triangle \\
+4 & Open box & 9 & Filled box \\
+\end{longtable}
+
+Couleurs (\texttt{/0}-\texttt{/9} haute intensité,
+\texttt{10}-\texttt{15} basse) : Noir, Bleu, Vert, Cyan, Rouge, Violet,
+Jaune, Gris.
+
+La lat/long est le coin haut-gauche. Offsets vers le bas (yy) et vers la
+droite (xx). Exception Type 6 : bas-gauche.
+
+Exemples (offsets 1 degré = 100/100 → yy=xx=√100=10) : -
+\texttt{;SEARCH\ \ \ *092345z4903.50N\textbackslash{}07201.75Wl710/310}
+--- ellipse cyan haute intensité. -
+\texttt{;SEARCH\ \ \ *092345z4903.50N\textbackslash{}07201.75Wl8101310}
+--- triangle violet basse intensité.
+
+Pour les lignes (Type 1/6), corridor de chaque côté, largeur en miles
+entre \texttt{\{\}} dans le commentaire :
+
+\texttt{;FLIGHTPTH*4903.50N\textbackslash{}07201.75Wl610/310\{100\}} ---
+ligne cyan haute intensité, corridor 100 miles.
+
+Attention : les objets remplis masquent les infos en dessous.
+
+\section{Signpost Objects / Items}\label{signpost-objects-items}
+
+Symbole \texttt{\textbackslash{}m}. Panneau jaune avec overlay 1-3
+caractères entre \texttt{\{\}} dans le commentaire. Ex :
+\texttt{)I91\ 3N!4903.50N\textbackslash{}07201.75Wm\{55\}} → panneau
+\texttt{55}.
+
+Ne pas afficher l'indicatif de la station. Afficher seulement à courte
+portée pour éviter l'encombrement.
+
+\section{Format Object obsolète}\label{format-object-obsoluxe8te}
+
+Certaines stations émettent des Object reports sans DTI \texttt{;}.
+Format obsolète. À interpréter comme Status Report.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

@@ -1,0 +1,317 @@
+\section*{PRÉAMBULE}\label{pruxe9ambule}
+\markboth{Préambule}{Préambule}
+\addcontentsline{toc}{tocmain}{PRÉAMBULE}
+
+\phantomsection\addcontentsline{toc}{section}{APRS Working Group}
+\begin{aprssideblock}{APRS Working\\Group}
+
+L'APRS Working Group est une association non constituée en personne
+morale dont les membres s'engagent à faire progresser l'usage et à
+accroître la valeur des protocoles APRS en : (a) publiant et maintenant
+une spécification formelle du protocole APRS ; (b) publiant des tests de
+validation et d'autres outils permettant la conformité à la
+spécification ; (c) soutenant un programme de certification APRS ; (d)
+travaillant plus généralement à améliorer les capacités d'APRS au sein
+de la communauté radio-amateur.
+
+Bien que le Working Group puisse recevoir un soutien du TAPR et d'autres
+organisations, il s'agit d'un corps indépendant, non affilié à aucune
+organisation. Le groupe n'a pas de budget, ne collecte pas de
+cotisations et ne possède aucun actif.
+
+Membres actuels de l'APRS Working Group :
+
+\begin{tabular}{@{}lll@{}}
+John Ackermann, & N8UR & Administrative Chair \& représentant TAPR \\
+Bob Bruninga, & WB4APR & Technical Chair, fondateur d'APRS \\
+Brent Hildebrand, & KH2Z & Auteur de APRS+SA \\
+Stan Horzepa, & WA1LOU & Secrétaire \\
+Mike Musick, & N0QBF & Auteur de pocketAPRS \\
+Keith Sproul, & WU2Z & Co-auteur de WinAPRS/MacAPRS/X-APRS \\
+Mark Sproul, & KB2ICI & Co-auteur de WinAPRS/MacAPRS/X-APRS \\
+\end{tabular}
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Remerciements}
+\begin{aprssideblock}{Remerciements}
+
+Ce document est le résultat de contributions de nombreuses personnes. Il
+reprend une grande partie du matériel produit par des membres
+individuels du Working Group.
+
+De plus, le document sur le format Mic-E par Alan Crosswell N2YGK et Ron
+Parsons W5RKN a servi de point de départ utile pour expliquer les
+complications de ce format.
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Numéro de version du document}
+\begin{aprssideblock}{Numéro de\\version du\\document}
+
+À l'exception de la toute première version publique en brouillon de la
+référence du protocole APRS, le numéro de version du document est un
+numéro à 3 parties \texttt{P.p.D} (pour une version approuvée) ou à 4
+parties \texttt{P.p.Dd} (pour un brouillon) :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{P} : version majeure du protocole APRS
+\item
+  \texttt{p} : version mineure du protocole APRS
+\item
+  \texttt{D} : release du document
+\item
+  \texttt{d} : lettre du brouillon
+\end{itemize}
+
+Ainsi, par exemple :
+
+\begin{itemize}
+\tightlist
+\item
+  « 1.2.3 » = release 3 du document couvrant la version 1.2 du protocole
+  APRS.
+\item
+  « 1.2.3c » = brouillon « c » de ce document.
+\end{itemize}
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Historique des versions}
+\begin{aprssideblock}{Historique des\\versions}
+
+Voir Annexe 7.
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Conventions du document}
+\begin{aprssideblock}{Conventions\\du document}
+
+\begin{itemize}
+\tightlist
+\item
+  Police \texttt{Courier} : caractères ASCII dans les données APRS.
+\item
+  \texttt{V} : caractère espace ASCII.
+\item
+  \texttt{…} (ellipse) : zéro ou plusieurs caractères.
+\item
+  \texttt{/\$} : symbole de la table de symboles primaire.
+\item
+  \texttt{\textbackslash{}\$} : symbole de la table de symboles
+  alternative.
+\item
+  \texttt{0x} : hexadécimal (ex. \texttt{0x1d}).
+\item
+  Tous les indicatifs sont supposés avoir un SSID \texttt{-0} sauf
+  mention contraire.
+\item
+  \lit{Marqueur jaune} (fond gris clair en impression papier) : signale un
+  texte d'intérêt --- particulièrement utile pour mettre en évidence des
+  caractères ASCII littéraux uniques (par exemple \lit{"}) tels
+  qu'ils apparaissent dans les données APRS.
+\item
+  Zones grisées dans les diagrammes de format de paquet : champs
+  optionnels.
+\end{itemize}
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Retour}
+\begin{aprssideblock}{Retour}
+
+Merci d'adresser retours et commentaires sur ce document à la liste de
+diffusion TAPR \texttt{aprsspec}. Pour s'y inscrire, partir de
+\url{http://www.tapr.org} puis suivre le chemin \emph{Special Interest
+Groups → APRS Specification → Join APRS Spec Discussion List}.
+\end{aprssideblock}
+
+\section*{AVANT-PROPOS DES AUTEURS}\label{avant-propos-des-auteurs}
+\markboth{Avant-propos des auteurs}{Avant-propos des auteurs}
+\addcontentsline{toc}{tocmain}{AVANT-PROPOS DES AUTEURS}
+
+\begin{aprsbodyblock}
+Ce document de référence décrit ce que l'on appelle la Version 1.0 du
+protocole APRS, et constitue essentiellement une description du
+fonctionnement actuel d'APRS.
+
+Il est destiné principalement au programmeur souhaitant développer des
+applications compatibles APRS, mais intéressera aussi l'utilisateur
+ordinaire qui veut en savoir plus sur ce qui se passe « sous le capot ».
+
+Il n'est cependant pas destiné à être une spécification de programmation
+ennuyeuse, pédante, de style RFC, à lire et à comprendre uniquement par
+les Mr Spocks de ce monde. Nous avons inclus de nombreux éléments
+d'information générale qui, bien que ne faisant pas strictement partie
+de la description formelle du protocole, fournissent un contexte utile
+sur la façon dont APRS est réellement utilisé sur les ondes, et sur la
+manière dont il est implémenté dans les logiciels APRS. Nous espérons
+que cela mettra APRS en perspective, rendra le document plus lisible, et
+n'offensera pas trop les puristes.
+
+Il est important de comprendre comment APRS est né, et de saisir la
+philosophie de conception derrière lui. En particulier, nous croyons
+fermement qu'APRS est, et doit rester, un système tactique léger ---
+presque n'importe qui devrait pouvoir l'utiliser dans des situations
+temporaires (urgences, travail mobile, veille météo) avec un minimum de
+formation et d'équipement.
+
+Ce document est le résultat des contributions de nombreuses personnes,
+collationnées et retravaillées par l'APRS Working Group. Nos
+remerciements sincères à tous ceux qui ont contribué à sa mise en forme
+et à sa publication. Si vous découvrez des erreurs, des omissions ou des
+affirmations trompeuses, faites-le nous savoir --- le meilleur moyen est
+la liste de diffusion TAPR \texttt{aprsspec} sur
+\href{http://www.tapr.org}{www.tapr.org}.
+
+Enfin, des utilisateurs du monde entier proposent en permanence de
+nouvelles idées et suggestions pour étendre et améliorer APRS. Nous les
+accueillons volontiers. Là encore, le meilleur endroit pour en discuter
+est la liste \texttt{aprsspec}.
+
+\emph{L'APRS Working Group}
+
+\emph{Août 2000}
+\end{aprsbodyblock}
+
+\phantomsection\addcontentsline{toc}{section}{Avertissement}
+\begin{aprssideblock}{Avertissement}
+
+Comme tout système de navigation, APRS n'est pas infaillible. Nul ne
+devrait s'appuyer aveuglément sur APRS pour naviguer, ou dans des
+situations de vie ou de mort. De même, cette spécification n'est pas
+infaillible.
+
+Les membres de l'APRS Working Group ont fait de leur mieux pour définir
+le protocole APRS, mais cette description peut contenir des erreurs ou
+des omissions. Il est très probable que toutes les implémentations APRS
+n'appliqueront pas pleinement ou correctement cette spécification,
+aujourd'hui ou à l'avenir.
+
+Nous exhortons quiconque utilise ou écrit un programme implémentant
+cette spécification à faire preuve de prudence et de bon sens. L'APRS
+Working Group et l'éditeur de la spécification déclinent toute
+responsabilité pour tout dommage aux personnes ou aux biens qui pourrait
+résulter de l'utilisation de cette spécification ou d'un logiciel
+l'implémentant.
+\end{aprssideblock}
+
+\clearpage
+
+\section*{STRUCTURE DE CETTE
+SPÉCIFICATION}\label{structure-de-cette-spuxe9cification}
+\markboth{STRUCTURE DE CETTE SPÉCIFICATION}{STRUCTURE DE CETTE SPÉCIFICATION}
+\addcontentsline{toc}{tocmain}{STRUCTURE DE CETTE SPÉCIFICATION}
+
+\begin{aprsbodyblock}
+Cette spécification décrit les exigences globales pour développer un
+logiciel conforme à la Version 1.0 du protocole APRS. Le flux
+d'information part de la trame AX.25 UI standard et descend
+progressivement dans les détails, l'usage de chaque champ de la trame
+étant exploré.
+
+Une caractéristique clé de la spécification est l'inclusion de dizaines
+d'exemples détaillés de paquets APRS typiques et des calculs
+mathématiques associés.
+
+Voici le plan des chapitres :
+
+\begin{list}{}{\setlength{\leftmargin}{0pt}\setlength{\rightmargin}{0pt}\setlength{\itemindent}{0pt}\setlength{\labelwidth}{0pt}\setlength{\labelsep}{0pt}\setlength{\itemsep}{0.35em}\setlength{\parsep}{0pt}}
+\item
+  \textbf{Introduction à APRS} --- bref historique et résumé des
+  principales caractéristiques.
+\item
+  \textbf{La philosophie de conception APRS} --- les fondamentaux
+  d'APRS, avec son usage comme outil de communication tactique temps
+  réel, le timing des transmissions APRS et l'usage du digipeating
+  générique.
+\item
+  \textbf{APRS et AX.25} --- bref rappel sur la structure de la trame
+  AX.25 UI, avec référence particulière aux usages spéciaux qu'APRS fait
+  des champs Destination, Source et Information.
+\item
+  \textbf{Données APRS dans les champs Destination et Source AX.25} ---
+  détails des indicatifs APRS génériques et des indicatifs qui
+  spécifient des symboles d'affichage et des numéros de version. Résumé
+  du stockage des données Mic-E dans le champ Destination, et de la
+  spécification d'une icône via le SSID Source.
+\item
+  \textbf{Données APRS dans le champ Information AX.25} --- détails des
+  principaux constituants des données APRS stockées dans le champ
+  Information. Contient la table des Data Type Identifiers APRS et un
+  résumé de tous les types de données possibles.
+\item
+  \textbf{Formats de temps et de position} --- timestamps, latitude,
+  longitude, ambiguïté de position, Maidenhead, NMEA, altitude.
+\item
+  \textbf{Extensions de données APRS} --- extensions optionnelles pour
+  course/vitesse de la station, vitesse/direction du vent,
+  puissance/hauteur/gain, portée radio pré-calculée, force de signal DF,
+  descripteur d'objet zone.
+\item
+  \textbf{Formats de rapports de position et DF} --- détails complets de
+  ces formats.
+\item
+  \textbf{Formats compressés de rapport de position} --- comment la
+  position d'une station et les extensions APRS sont compressées en
+  paquets très courts.
+\item
+  \textbf{Format de données Mic-E} --- encodage Mic-E de la lat/long,
+  altitude, course, vitesse, code message Mic-E, données de télémétrie
+  et chemin de digipeater APRS dans les champs Destination et
+  Information de la trame AX.25.
+\item
+  \textbf{Rapports d'objets et d'éléments} --- comment configurer des
+  objets et éléments APRS, et détails de l'encodage des Area Objects
+  (cercles, lignes, ellipses, etc.).
+\item
+  \textbf{Rapports météo} --- détails complets pour les stations météo
+  autonomes (sans position) et pour les rapports contenant une
+  information de position. Détail du format Storm Data.
+\item
+  \textbf{Données de télémétrie} --- description du format MIM/KPC-3+,
+  avec informations pour adapter l'interprétation des données brutes aux
+  circonstances individuelles.
+\item
+  \textbf{Messages, bulletins et annonces} --- format complet.
+\item
+  \textbf{Capacités, requêtes et réponses de station} --- dix types de
+  requêtes et les réponses attendues.
+\item
+  \textbf{Rapports de statut} --- format des messages de statut général,
+  plus les cas particuliers d'usage pour véhiculer beam
+  heading/puissance en meteor scatter et locator Maidenhead.
+\item
+  \textbf{Tunneling réseau} --- usage du Source Path Header pour
+  tunneliser des paquets APRS à travers des réseaux tiers qui ne
+  comprennent pas les adresses AX.25, et usage du Data Type Identifier
+  tiers.
+\item
+  \textbf{Format défini par l'utilisateur} --- APRS permet aux
+  utilisateurs de définir leurs propres formats à des fins
+  particulières. Ce chapitre explique comment faire.
+\item
+  \textbf{Autres paquets} --- énoncé général sur la façon dont APRS doit
+  traiter tout autre type de paquet non couvert par cette spécification.
+\item
+  \textbf{Symboles APRS} --- comment spécifier symboles et overlays dans
+  les rapports de position et dans les indicatifs de destination GPS
+  génériques.
+\item
+  \textbf{Formats de données APRS} --- annexe rassemblant tous les
+  formats pour référence.
+\item
+  \textbf{Tables de symboles APRS} --- liste complète des symboles des
+  tables Primary et Alternate.
+\item
+  \textbf{Table des codes ASCII} --- code ASCII complet, décimal et
+  hexadécimal (le décimal est nécessaire pour les calculs de lat/long
+  compressées et d'altitude), avec les codes hex des caractères ASCII
+  bit-shiftés dans les adresses AX.25 (utile pour décoder Mic-E et pour
+  le monitoring de paquets on-air).
+\item
+  \textbf{Glossaire} --- référence tout-en-un des nombreux termes
+  spécifiques APRS.
+\item
+  \textbf{Références} --- pointeurs vers d'autres documents pertinents.
+\end{list}
+\end{aprsbodyblock}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

@@ -1,0 +1,278 @@
+\chapter[FORMATS DE RAPPORTS DE POSITION ET DF]{Formats de rapports de position et
+DF}\label{formats-de-rapports-de-position-et-df}
+
+Les rapports Lat/Long Position sont dans le champ Information d'une
+trame AX.25 APRS. Zones grisées = optionnelles. Caractères ASCII
+littéraux surlignés. Max 43 caractères après le Symbol Code.
+
+\section*{Position Report --- sans
+timestamp}\label{position-report-sans-timestamp}
+
+\begin{longtable}[]{@{}lllllll@{}}
+\toprule\noalign{}
+Champ & \lit{!} ou \lit{=} & Lat & Sym Tbl ID & Long & Symbol Code
+& Comment \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & 8 & 1 & 9 & 1 & 0-43 \\
+\end{longtable}
+
+Exemples : - \texttt{!4903.50N/07201.75W-Test\ 001234} --- sans
+timestamp, sans messagerie, avec commentaire. -
+\texttt{!4903.50N/07201.75W-Test\ /A=001234} --- sans timestamp,
+altitude 1234 ft. - \texttt{!49VV.VVN/072VV.VVW-} --- position au degré
+près. - \texttt{TheNet\ X-1J4(BFLD)!4903.50N/07201.75Wn} --- sans
+timestamp, avec chaîne d'en-tête X1J.
+
+\section*{Position Report --- avec
+timestamp}\label{position-report-avec-timestamp}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Champ
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\lit{/} ou \lit{@}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Time DHM/HMS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lat
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Sym Tbl ID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Long
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Symbol Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Comment
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & 7 & 8 & 1 & 9 & 1 & 0-43 \\
+\end{longtable}
+
+Exemples : - \texttt{/092345z4903.50N/07201.75W\textgreater{}Test1234}
+--- avec timestamp, sans messagerie, heure zulu. -
+\texttt{@092345/4903.50N/07201.75W\textgreater{}Test1234} --- avec
+timestamp, avec messagerie, heure locale.
+
+\section*{Position Report avec Data Extension (sans
+timestamp)}\label{position-report-avec-data-extension-sans-timestamp}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Champ
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\lit{!} ou \lit{=}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lat
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Sym Tbl ID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Long
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Symbol Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data Extension
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Comment
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & 8 & 1 & 9 & 1 & 7 (Course/Speed, PHG, RNG ou DFS) & 0-36 \\
+\end{longtable}
+
+Exemples : - \texttt{=4903.50N/07201.75W\#PHG5132} --- sans timestamp,
+avec messagerie, PHG. -
+\texttt{=4903.50N/07201.75W\_225/000g000t050r000p001…h00b10138dU2k} ---
+weather report.
+
+\section*{Position Report avec Data Extension et
+timestamp}\label{position-report-avec-data-extension-et-timestamp}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Champ
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\lit{/} ou \lit{@}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Time
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lat
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Sym Tbl ID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Long
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Symbol Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data Extension
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Comment
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & 7 & 8 & 1 & 9 & 1 & 7 & 0-36 \\
+\end{longtable}
+
+Exemples : - \texttt{@092345/4903.50N/07201.75W\textgreater{}088/036}
+--- timestamp, messagerie, heure locale, course/speed. -
+\texttt{@234517h4903.50N/07201.75W\textgreater{}PHG5132} --- HMS + PHG.
+- \texttt{@092345z4903.50N/07201.75W\textgreater{}RNG0050} --- zulu +
+range. - \texttt{/234517h4903.50N/07201.75W\textgreater{}DFS2360} ---
+HMS + DF, sans messagerie. -
+\texttt{@092345z4903.50N/07201.75W\_090/000g000t066r000p000…dUII} ---
+weather.
+
+\section*{Maidenhead Locator Beacon
+(obsolète)}\label{maidenhead-locator-beacon-obsoluxe8te}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Champ & \lit{{[}} & Grid Locator & \lit{{]}} & Comment \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & 4 ou 6 & 1 & n \\
+\end{longtable}
+
+Exemples : - \texttt{{[}IO91SX{]}\ 35\ miles\ NNW\ of\ London} -
+\texttt{{[}IO91{]}}
+
+\section*{Raw NMEA Position Report}\label{raw-nmea-position-report}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Champ & \lit{\$} & NMEA Received Sentence \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Octets & 1 & 25-209 \\
+\end{longtable}
+
+Exemples :
+
+\begin{verbatim}
+$GPGGA,102705,5157.9762,N,00029.3256,W,1,04,2.0,75.7,M,47.6,M,,*62
+$GPGLL,2554.459,N,08020.187,W,154027.281,A
+$GPRMC,063909,A,3349.4302,N,11700.3721,W,43.022,89.3,291099,13.6,E*52
+$GPVTG,318.7,T,,M,35.1,N,65.0,K*69
+\end{verbatim}
+
+\section*{DF Reports}\label{df-reports}
+
+Contiennent le champ 8 octets \texttt{/BRG/NRQ} après l'extension. Le
+BRG/NRQ n'a de sens que si le symbole DF est utilisé (Symbol Table ID
+\texttt{/}, Symbol Code \texttt{\textbackslash{}}).
+
+Course = 0 → station DF fixe. Course ≠ 0 → mobile.
+
+\textbf{DF Report sans timestamp} :
+
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}ccccccccc@{}}
+\toprule
+Champ &
+\lit{!} ou \lit{=} &
+Lat &
+\shortstack{Sym\\Table\\ID} &
+Long &
+\shortstack{Symbol\\Code} &
+\shortstack{Course/Speed\\Power/Height/Gain/Dir\\Radio Range\\DF Signal Strength} &
+/BRG/NRQ &
+\shortstack{Comment\\(max. 28 car.)} \\
+\midrule
+Octets & 1 & 8 & 1 & 9 & 1 & 7 & 8 & 0-28 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+Exemples :
+
+\begin{verbatim}
+=4903.50N/07201.75W\088/036/270/729
+=4903.50N/07201.75W\000/036/270/729
+\end{verbatim}
+
+Le premier exemple est un rapport DF mobile sans timestamp,
+cse/spd/brg/NRQ. Le second est le même rapport en station DF fixe
+(\texttt{CSE=000}).
+
+\textbf{DF Report avec timestamp} :
+
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}cccccccccc@{}}
+\toprule
+Champ &
+\lit{/} ou \lit{@} &
+Time\newline DHM / HMS &
+Lat &
+\shortstack{Sym\\Table\\ID} &
+Long &
+\shortstack{Symbol\\Code} &
+\shortstack{Course/Speed\\Power/Height/Gain/Dir\\Radio Range\\DF Signal Strength} &
+/BRG/NRQ &
+\shortstack{Comment\\(max. 28 car.)} \\
+\midrule
+Octets & 1 & 7 & 8 & 1 & 9 & 1 & 7 & 8 & 0-28 \\
+\bottomrule
+\end{tabular}
+}
+\end{center}
+
+Exemples :
+
+\begin{verbatim}
+@092345z4903.50N/07201.75W\088/036/270/729
+/092345z4903.50N/07201.75W\000/000/270/729
+\end{verbatim}
+
+Le premier exemple est un rapport DF avec timestamp, course/vitesse,
+relèvement/NRQ, avec messagerie APRS. Le second est un rapport DF avec
+timestamp, relèvement/NRQ, sans course/vitesse, sans messagerie APRS.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

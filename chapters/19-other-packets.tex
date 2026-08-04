@@ -1,0 +1,28 @@
+\chapter[AUTRES PAQUETS]{Autres paquets}\label{autres-paquets}
+
+\section{Paquets invalides ou de
+test}\label{paquets-invalides-ou-de-test}
+
+DTI \texttt{,}. Ex : un Mic-E génère ça s'il détecte que la sentence GPS
+reçue n'est pas valide.
+
+\begin{verbatim}
+, | Invalid Data or Test Data
+\end{verbatim}
+
+Ex :
+\texttt{,191146,V,4214.2466,N,07303.5181,W,417.238,114.5,091099,14.7,W/GPS\ FIX}
+--- GPS invalide d'un Mic-E qui a stripé le header \texttt{\$GPRMC} car
+le \texttt{V} indique donnée invalide.
+
+\section{Tous les autres paquets}\label{tous-les-autres-paquets}
+
+Paquets ne correspondant à aucun format décrit = beacons non-APRS. Les
+programmes peuvent les traiter ou les ignorer, mais doivent les traiter
+sans effet secondaire. Souvent traités comme Status Reports (permet de
+capter comme statut toute trame UI adressée à un beacon typique, ex :
+trames d'ID de TNC). Une fois qu'un vrai Status Report (DTI
+\texttt{\textgreater{}}) est reçu d'une station, il n'est plus écrasé
+par ces autres paquets.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

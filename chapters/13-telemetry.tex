@@ -1,0 +1,153 @@
+\chapter[DONNÉES DE TÉLÉMÉTRIE]{Données de télémétrie}\label{donnuxe9es-de-tuxe9luxe9muxe9trie}
+
+DTI \texttt{T}. Le champ Information contient la télémétrie.
+
+\section{Format Telemetry Report}\label{format-telemetry-report}
+
+\begin{itemize}
+\tightlist
+\item
+  Sequence Number sur 3 caractères --- typiquement 3 chiffres, ou les 3
+  lettres \texttt{MIC} (dans ce cas, virgule optionnelle avant la
+  première valeur analogique).
+\item
+  5 valeurs analogiques 8 bits non signées (000-255, 3 chiffres
+  décimaux).
+\item
+  1 valeur digitale 8 bits (8 caractères \texttt{0} ou \texttt{1}).
+\end{itemize}
+
+Format utilisé par le Kantronics KPC-3+ et l'APRS MIM (Micro Interface
+Module).
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{T} & \lit{\#}xxx, & aaa, & aaa, & aaa, & aaa, & aaa, & bbbbbbbb \\
+ & DTI & Seq. No & Analog 1 & Analog 2 & Analog 3 & Analog 4 & Analog 5 & Digital \\
+\hline
+\textbf{Octets} & 1 & 5 & 4 & 4 & 4 & 4 & 4 & 8 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Comment (n octets, optionnel)
+
+Exemples : - \texttt{T\#005,199,000,255,073,123,01101001} -
+\texttt{T\#MIC199,000,255,073,123,01101001}
+
+\section{Définition on-air des
+paramètres}\label{duxe9finition-on-air-des-paramuxe8tres}
+
+Les données brutes sont interprétables librement. En pratique, un
+utilisateur APRS peut définir les paramètres (coefficients quadratiques,
+sens des bits binaires) à tout moment, en envoyant ces définitions comme
+messages APRS. Les autres stations qui reçoivent ces messages savent
+alors comment interpréter.
+
+Quatre messages :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Parameter Name} (\texttt{PARM.})
+\item
+  \textbf{Unit/Label} (\texttt{UNIT.})
+\item
+  \textbf{Equation Coefficients} (\texttt{EQNS.})
+\item
+  \textbf{Bit Sense / Project Name} (\texttt{BITS.})
+\end{itemize}
+
+L'adressee de ces messages est l'indicatif de la station qui émet la
+télémétrie. Ex : N0QBF lance un ballon \texttt{N0QBF-11} → les 4
+messages sont adressés à \texttt{N0QBF-11}.
+
+Voir chapitre 14 pour le format des messages.
+
+\section{Parameter Name Message}\label{parameter-name-message}
+
+Contient les noms (N) des 5 canaux analogiques et des 8 canaux digitaux.
+
+\begin{center}
+\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & PARM. & A1 & \lit{,}A2 & \lit{,}A3 & \lit{,}A4 & \lit{,}A5 & \lit{,}B1 & \lit{,}B2 & \lit{,}B3 & \lit{,}B4 & \lit{,}B5 & \lit{,}B6 & \lit{,}B7 \\
+\hline
+\textbf{Octets} & 5 & 1-7 & 1-7 & 1-6 & 1-6 & 1-5 & 1-6 & 1-5 & 1-4 & 1-4 & 1-4 & 1-3 & 1-3 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + \texttt{,B8} (1-3 octets). Décomptes incluant les virgules séparatrices.
+
+\textbf{Note} : les largeurs de champs varient (héritage historique des
+limitations d'écran). Les décomptes d'octets incluent les virgules
+séparatrices. La liste peut s'arrêter à n'importe quel champ.
+
+Ex :
+\texttt{:N0QBF-11\ :PARM.Battery,Btemp,ATemp,Pres,Alt,Camra,Chut,Sun,10m,ATV}
+
+\section{Unit/Label Message}\label{unitlabel-message}
+
+Unités des analogiques (U) et labels des digitaux (L). Mêmes largeurs de
+champs que \texttt{PARM.}.
+
+Ex :
+\texttt{:N0QBF-11\ :UNIT.v/100,deg.F,deg.F,Mbar,Kft,Click,OPEN,on,on,hi}
+
+\section{Equation Coefficients
+Message}\label{equation-coefficients-message}
+
+Trois coefficients (a, b, c) pour chacun des 5 canaux analogiques.
+Formule appliquée à la valeur brute \texttt{v} :
+
+\begin{verbatim}
+value = a × v² + b × v + c
+\end{verbatim}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \texttt{EQNS.} & A1 (\texttt{a,b,c}) & ,A2 & ,A3 & ,A4 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + \texttt{,A5}. Chaque canal analogique = 3 coefficients (a,b,c). La liste peut s'arrêter à n'importe quel champ.
+
+La liste peut s'arrêter à n'importe quel champ.
+
+Ex :
+\texttt{:N0QBF-11\ :EQNS.0,5.2,0,0,.53,-32,3,4.39,49,-32,3,18,1,2,3}
+
+Application : canal A1 = tension batterie en 1/100 volts, coefficients
+\texttt{a=0,\ b=5.2,\ c=0}. Si valeur brute \texttt{v=199} :
+
+\begin{verbatim}
+voltage = 0 × 199² + 5.2 × 199 + 0
+        = 1034.8 (1/100 volts)
+        = 10.348 V
+\end{verbatim}
+
+\section{Bit Sense / Project Name
+Message}\label{bit-sense-project-name-message}
+
+\begin{itemize}
+\tightlist
+\item
+  Motif 8 bits (0 ou 1) indiquant le sens de chaque canal digital
+  correspondant au label.
+\item
+  Nom du projet associé à la station.
+\end{itemize}
+
+\begin{verbatim}
+BITS. | b1b2b3b4b5b6b7b8 | Project Title (0-23)
+\end{verbatim}
+
+Ex :
+\texttt{:N0QBF-11\ :BITS.10110000,N0QBF\textquotesingle{}s\ Big\ Balloon}
+
+Interprétation : si B1=1, la caméra a cliqué. Si B2=0, le parachute
+s'est ouvert. Etc.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

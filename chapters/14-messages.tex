@@ -1,0 +1,172 @@
+\chapter[MESSAGES, BULLETINS ET ANNONCES]{Messages, bulletins et
+annonces}\label{messages-bulletins-et-annonces}
+
+Les messages, bulletins et annonces APRS sont des paquets contenant des
+chaînes de texte libre, destinés à véhiculer de l'information lisible
+par un humain. Un message vise un destinataire spécifique et attend en
+général un accusé. Bulletins et annonces visent plusieurs destinataires
+et ne sont pas acquittés.
+
+\section{Messages}\label{messages}
+
+Un message est un texte avec un destinataire spécifié. Le destinataire
+est un champ fixe 9 caractères (padding avec espaces si besoin) suivant
+le DTI \texttt{:}. Le destinataire est suivi d'un autre \texttt{:}, puis
+du texte.
+
+Longueur maximale : 67 caractères, ASCII imprimable sauf
+\texttt{\textbar{}}, \texttt{\textasciitilde{}}, \texttt{\{}.
+
+Identifiant de message optionnel appendu au texte : \texttt{\{} + 1 à 5
+caractères alphanumériques sans espace. Les messages sans identifiant ne
+sont pas à acquitter. Les messages avec identifiant sont acquittés par
+le destinataire --- l'émetteur retransmet jusqu'à ACK, annulation ou
+timeout.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{:} & Addressee & \lit{:} & Message Text & \lit{\{} + Message No \\
+\hline
+\textbf{Octets} & 1 & 9 & 1 & 0-67 & 1 + 1-5 (optionnel) \\
+\hline
+\end{tabular}
+\end{center}
+
+Exemples : - \texttt{:WU2Z\ \ \ \ \ :Testing} --- message à WU2Z, pas
+d'ACK attendu. - \texttt{:WU2Z\ \ \ \ \ :Testing\{003} --- même message,
+ACK attendu. - \texttt{:EMAIL\ \ \ \ :msproul@ap.org\ Test\ email} ---
+exemple e-mail. APRS ne supporte pas l'e-mail nativement.
+
+\section{ACK de message}\label{ack-de-message}
+
+Format proche du message, mais le texte est \texttt{ack} suivi du numéro
+de message.
+
+Ex : \texttt{:KB2ICI-14:ack003}.
+
+\section{Rejet de message}\label{rejet-de-message}
+
+Si une station ne peut pas accepter un message : \texttt{rej} au lieu de
+\texttt{ack}.
+
+Ex : \texttt{:KB2ICI-14:rej003}.
+
+\section{ACK multiples}\label{ack-multiples}
+
+Si un message est reçu plusieurs fois, on ACK chaque occurrence. Sur
+chemin long, plusieurs copies d'ACK peuvent améliorer les chances de
+succès. Espacer les ACK multiples d'au moins 30 s (les digipeaters
+suppriment les duplicatas dans un intervalle 30 s).
+
+\section{Groupes de messages}\label{groupes-de-messages}
+
+Une station peut définir des Message Groups (listes d'indicatifs à
+écouter en plus de son propre indicatif). Groupes définis localement à
+la station réceptrice, servent de filtre.
+
+Adresses lues par tous : \lit{ALL}, \lit{QST}, \lit{CQ}. La
+station n'acquitte que les messages qui la ciblent directement, jamais
+les messages de groupe. Cela vaut aussi en Alternate Net.
+
+\section{Bulletins généraux}\label{bulletins-guxe9nuxe9raux}
+
+Addressee = \texttt{BLN} + un chiffre + 5 espaces. Émis quelques fois
+par heure pendant quelques heures. Info temps-sensible. Longueur max 67
+caractères, ASCII imprimable sauf \texttt{\textbar{}}
+\texttt{\textasciitilde{}}.
+
+Ex : \texttt{:BLN3\ \ \ \ \ :Snow\ expected\ in\ Tampa\ RSN}
+
+\section{Annonces}\label{annonces}
+
+Similaires aux bulletins, mais avec une lettre majuscule au lieu du
+chiffre. Beaucoup moins fréquentes (mais possiblement sur plusieurs
+jours). Usuellement pas critiques dans le temps. Typiquement en amont
+d'un événement, tandis que bulletins servent pendant l'événement.
+
+Les utilisateurs doivent être alertés à l'arrivée d'un nouveau bulletin
+ou annonce.
+
+Ex :
+\texttt{:BLNQ\ \ \ \ \ :Mt\ St\ Helen\ digi\ will\ be\ QRT\ this\ weekend}
+
+\section{Bulletins de groupe}\label{bulletins-de-groupe}
+
+Adresse = \texttt{BLN} + un chiffre + nom du groupe (jusqu'à 5
+caractères + padding espaces).
+
+Ex : \texttt{:BLN4WX\ \ \ :Stand\ by\ your\ snowplows}
+
+Une station peut lister des groupes d'intérêt. Si liste non vide, seuls
+les bulletins de ces groupes (+ bulletins généraux) génèrent des
+alertes.
+
+\section{Bulletins du National Weather
+Service}\label{bulletins-du-national-weather-service}
+
+Format spécial adressé à \texttt{NWS-xxxxx} pour signaler des zones de
+la carte concernées par des alertes météo (US).
+
+Ex : \texttt{:NWS-WARN\ :092010z,THUNDER\_STORM,AR\_ASHLEY,\{S9JbA}
+
+L'« identifiant de message » \texttt{\{S9JbA} n'est qu'une référence ---
+les bulletins ne sont pas acquittés.
+
+\section{Radiogrammes NTS}\label{radiogrammes-nts}
+
+APRS peut transporter des radiogrammes NTS via le format message
+standard, en préfixant le texte par un identifiant
+\texttt{Nx\textbackslash{}} :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{N\#\textbackslash{}number\textbackslash{}precedence\textbackslash{}handling\textbackslash{}originator\textbackslash{}check\textbackslash{}place\textbackslash{}time\textbackslash{}date}
+\item
+  \texttt{NA\textbackslash{}address\_line1\textbackslash{}...\textbackslash{}address\_line4}
+\item
+  \texttt{NP\textbackslash{}phone\ number}
+\item
+  \texttt{N1\textbackslash{}} à \texttt{N6\textbackslash{}} : lignes 1 à
+  6 du texte NTS
+\item
+  \texttt{NS\textbackslash{}signature}
+\item
+  \texttt{NR\textbackslash{}Received\ from\textbackslash{}date\_time\textbackslash{}sent\_to\textbackslash{}date\_time}
+\end{itemize}
+
+Format inspiré du formulaire ARRL NTS Radiogram. Chaque ligne max 67
+caractères y compris l'identifiant 3 caractères. Max 6 lignes de texte
+NTS. Champs requis : \texttt{N\#\textbackslash{}},
+\texttt{NA\textbackslash{}}, \texttt{NS\textbackslash{}},
+\texttt{NR\textbackslash{}}.
+
+Séparateur backslash pour permettre l'inclusion de forward slashes dans
+les messages (le backslash n'existe ni en RTTY ni en CW). Sérialisation
+par le Message ID \texttt{\{xxxxx} standard.
+
+Une application APRS n'est pas tenue de comprendre ces messages --- ils
+restent lisibles en affichage message.
+
+\section{Format obsolète}\label{format-obsoluxe8te}
+
+Certaines stations émettent bulletins et annonces sans le DTI
+\texttt{:}. Format obsolète. À interpréter comme Status Report.
+
+\section{Recommandations
+d'implémentation}\label{recommandations-dimpluxe9mentation}
+
+Les bulletins/annonces sont un « panneau d'affichage » commun visible
+par tous les participants. Info à afficher, à mettre à jour, à retirer.
+Espace limité. À implémenter comme « Bulletin Screen » commun.
+
+Points à traiter : - \textbf{Tri} par indicatif émetteur et
+Bulletin/Announcement ID. - \textbf{Remplacement} : nouvelles lignes
+émises avec même ID écrasent les anciennes de la même station. -
+\textbf{Effacement} : l'utilisateur peut retirer une ligne lue. Les
+bulletins toujours valides reviendront par retransmission. -
+\textbf{Alertes} : sonnerie répétée jusqu'à acknowledgement utilisateur.
+- \textbf{Journalisation} : anciens bulletins archivés séquentiellement.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

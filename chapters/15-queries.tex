@@ -1,0 +1,139 @@
+\chapter[CAPACITÉS, REQUÊTES ET RÉPONSES DE STATION]{Capacités, requêtes et réponses de
+station}\label{capacituxe9s-requuxeates-et-ruxe9ponses-de-station}
+
+\section{Capacités de station}\label{capacituxe9s-de-station}
+
+Une station peut définir un ensemble d'attributs --- les Station
+Capabilities --- transmis en réponse à une requête \texttt{IGATE}, avec
+DTI \texttt{\textless{}}. Chaque capacité est un \texttt{TOKEN} ou une
+paire \texttt{TOKEN=VALUE}. Plusieurs sur une ligne, séparées par des
+virgules.
+
+Capacités actuellement définies :
+
+\begin{verbatim}
+IGATE,MSG_CNT=n,LOC_CNT=n
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{IGATE} : la station est un IGate.
+\item
+  \texttt{MSG\_CNT} : nombre de messages transmis.
+\item
+  \texttt{LOC\_CNT} : nombre de stations « locales » (à qui l'IGate
+  transmet les messages sur le RF local).
+\end{itemize}
+
+\section{Requêtes et réponses}\label{requuxeates-et-ruxe9ponses}
+
+Deux types : générale (à toutes les stations) ou dirigée (à une station
+individuelle en format message).
+
+Les requêtes commencent toujours par \texttt{?}, sont envoyées une seule
+fois, sans identifiant de message et ne sont pas acquittées. Idem pour
+les réponses.
+
+Types de requête :
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Portée
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Réponse
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{APRS} & Générale & Position + statut de la station \\
+\texttt{APRSD} & Dirigée --- stations entendues directement & Liste des
+stations entendues direct \\
+\texttt{APRSH} & Dirigée --- as-tu entendu telle station ? & Position de
+la station entendue comme Object APRS + stats des 8 dernières heures \\
+\texttt{APRSM} & Dirigée --- messages non ACK/livrés en attente & Tous
+les messages en suspens \\
+\texttt{APRSO} & Dirigée --- Objects & Objects de la station \\
+\texttt{APRSP} & Dirigée --- position & Position \\
+\texttt{APRSS} & Dirigée --- statut & Statut \\
+\texttt{APRST} ou \texttt{PING?} & Dirigée --- trace & Route trace \\
+\texttt{IGATE} & Générale --- tous les IGates & Capacités IGate \\
+\lit{WX} & Générale --- toutes les stations météo & Weather report (+
+position si absente) \\
+\end{longtable}
+
+Une station interrogée sans info à retourner peut ignorer la requête.
+Toute requête non reconnue est ignorée.
+
+\section{Requêtes générales}\label{requuxeates-guxe9nuxe9rales}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{?} & Query Type & \lit{?} \\
+\hline
+\textbf{Octets} & 1 & n & 1 \\
+\hline
+\end{tabular}
+\end{center}
+\noindent + Target Footprint optionnel : \texttt{Lat, Long, Radius} (lat/long en degrés flottants, radius en miles sur 4 chiffres).
+
+Exemples :
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Requête
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Réponse typique
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{?APRS?} & Position + statut standard \\
+\texttt{?APRS?\ 34.02,-117.15,0200} & Cible : rayon 200 miles autour de
+34.02°N, 117.15°W \\
+\texttt{?IGATE?} & \texttt{\textless{}IGATE,MSG\_CNT=43,LOC\_CNT=14} \\
+\texttt{?WX?} & Weather Report standard + position \\
+\end{longtable}
+
+Pour \texttt{?APRS?} avec footprint, lat/long en degrés flottants (pas
+en format APRS). N/E positifs → espace initial. S/W négatifs. Rayon en
+miles sur 4 chiffres fixes.
+
+\section{Requêtes dirigées}\label{requuxeates-diriguxe9es}
+
+Format message APRS sans identifiant. Addressee = indicatif de la
+station cible.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Champ} & \lit{:} & Addressee & \lit{:?} & Query Type & Callsign of Heard Station \\
+\hline
+\textbf{Octets} & 1 & 9 & 2 & 5 & 0-9 (optionnel) \\
+\hline
+\end{tabular}
+\end{center}
+
+Exemples : - \texttt{:KH2Z\ \ \ \ \ :?APRSD} →
+\texttt{:N8UR\ \ \ \ \ :Directs=\ WA1LOU\ WD5IV\ D…} -
+\texttt{:KH2Z\ \ \ \ \ :?APRSH\ N0QBF} →
+\texttt{:N8UR\ \ \ \ \ :N0QBF\ HEARD:\ 1\ 3\ 2\ .\ .\ 4\ 5\ 6} -
+\texttt{:KH2Z\ \ \ \ \ :?APRSM} → tous messages non ACK/livrés. -
+\texttt{:KH2Z\ \ \ \ \ :?APRSO} → objects. -
+\texttt{:KH2Z\ \ \ \ \ :?APRSP} → position. -
+\texttt{:KH2Z\ \ \ \ \ :?APRSS} → statut. -
+\texttt{:KH2Z\ \ \ \ \ :?APRST} ou \texttt{?PING?} → trace.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

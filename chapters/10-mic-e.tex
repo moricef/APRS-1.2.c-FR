@@ -1,0 +1,341 @@
+\chapter[FORMAT MIC-E]{Format Mic-E}\label{format-mic-e}
+
+\section{Format des données Mic-E}\label{format-des-donnuxe9es-mic-e}
+
+En format Mic-E, la position, course, vitesse et symbole de la station,
+plus un chemin digipeater APRS et un Message Code Mic-E sont empaquetés
+dans les champs AX.25 Destination Address et Information. Le champ
+Information peut aussi optionnellement contenir soit une donnée de
+télémétrie Mic-E soit du texte de statut Mic-E. Le statut peut contenir
+le locator Maidenhead et l'altitude.
+
+Un paquet Mic-E peut être très court : au minimum, sans indicatif dans
+le champ Digipeater Addresses et sans télémétrie ni statut optionnel, il
+fait 25 octets (hors FCS et flags).
+
+Utilisé aussi bien dans le Microphone Encoder, le PIC Encoder, que les
+radios Kenwood TH-D7 et TM-D700.
+
+\section{Charge utile Mic-E}\label{charge-utile-mic-e}
+
+\textbf{Destination Address (7 octets)} contient : - Les 6 chiffres de
+latitude. - Un identifiant de message Mic-E sur 3 bits (1 des 7 messages
+standards, 1 des 7 messages custom, ou message d'urgence). - Les
+indicateurs N/S et W/E. - L'indicateur Longitude Offset. - Le code de
+chemin digipeater APRS générique.
+
+Malgré son aspect inhabituel, cette adresse reste une adresse AX.25
+valide (ASCII 7 bits imprimable, shifté 1 bit à gauche). Voir la spec
+AX.25 pour les détails.
+
+\textbf{Information field} contient : - La longitude encodée. - Course
+et vitesse encodés. - Symbol Code + Symbol Table ID. - Un champ
+optionnel : télémétrie Mic-E ou status text (locator, altitude ou texte
+libre).
+
+\section{Champ Destination Mic-E ---
+encodage}\label{champ-destination-mic-e-encodage}
+
+Structure des 7 octets :
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Octet
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+7
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Contenu & Lat digit 1 + Message bit A & Lat 2 + B & Lat 3 + C & Lat 4 +
+N/S & Lat 5 + Long Offset & Lat 6 + W/E & APRS digi path code \\
+\end{longtable}
+
+Chaque octet 1-6 encode conjointement un chiffre de latitude et un bit
+d'information. Le tableau suivant donne l'encodage des six premiers
+octets du champ Destination Address. Les caractères ASCII de la table
+sont left-shiftés d'un bit avant transmission, conformément au format
+d'adresse AX.25.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Caractère} & \textbf{Chiffre lat.} & \textbf{Message A/B/C} & \textbf{N/S} & \textbf{Long. offset} & \textbf{W/E} \\
+\hline
+\texttt{0}--\texttt{9} & 0--9 & 0 & South & +0 & East \\
+\texttt{A}--\texttt{G} & 0--6 & 1 (Custom) & & & \\
+\texttt{H}--\texttt{J} & 7--9 & 1 (Custom) & & & \\
+\texttt{K} & espace & 1 (Custom) & & & \\
+\texttt{L} & espace & 0 & South & +0 & East \\
+\texttt{P}--\texttt{Y} & 0--9 & 1 (Std) & North & +100 & West \\
+\texttt{Z} & espace & 1 (Std) & North & +100 & West \\
+\hline
+\end{tabular}
+\end{center}
+
+Les caractères ASCII \texttt{A} à \texttt{K} ne sont pas utilisés dans
+les octets d'adresse 4 à 6.
+
+\textbf{Exemple} : station à 33° 25.64' N, hémisphère ouest, Long Offset
++0°, message std 1/0/0 → destination \texttt{S32U6T}.
+
+\section{Messages Mic-E}\label{messages-mic-e}
+
+Bits A/B/C encodent 15 types :
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+A & B & C & Standard & Custom \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 1 & 1 & M0: Off Duty & C0 \\
+1 & 1 & 0 & M1: En Route & C1 \\
+1 & 0 & 1 & M2: In Service & C2 \\
+1 & 0 & 0 & M3: Returning & C3 \\
+0 & 1 & 1 & M4: Committed & C4 \\
+0 & 1 & 0 & M5: Special & C5 \\
+0 & 0 & 1 & M6: Priority & C6 \\
+0 & 0 & 0 & Emergency & \\
+\end{longtable}
+
+Custom optionnel (pas supporté par Mic-E d'origine). Mélange Standard 1
+et Custom 1 → « unknown ».
+
+\section{SSID Destination}\label{ssid-destination}
+
+Code un chemin digipeater VIA classique ou un des 15 chemins APRS
+génériques (voir chapitre 4).
+
+\section{Champ Information Mic-E}\label{champ-information-mic-e}
+
+9 premiers octets :
+
+\begin{center}
+\begin{tabular}{|c|l|l|}
+\hline
+\textbf{Byte} & \textbf{Champ} & \textbf{Description} \\
+\hline
+1 & DTI & \texttt{`}, \texttt{'}, \texttt{0x1c} ou \texttt{0x1d} \\
+2 & \texttt{d+28} & longitude degrees \\
+3 & \texttt{m+28} & longitude minutes \\
+4 & \texttt{h+28} & longitude hundredths of minutes \\
+5 & \texttt{SP+28} & speed hundreds/tens knots \\
+6 & \texttt{DC+28} & speed units / course hundreds deg \\
+7 & \texttt{SE+28} & course tens/units deg \\
+8 & Symbol Code & \\
+9 & Symbol Table ID & \\
+\hline
+\end{tabular}
+\end{center}
+
+Suivi optionnellement de Mic-E telemetry data ou Mic-E status text.
+
+\textbf{DTIs} : - \texttt{\textasciigrave{}} : Current GPS data (pas
+utilisé sur Kenwood TM-D700). - \texttt{\textquotesingle{}} : Old GPS
+data (ou Current sur TM-D700). - \texttt{0x1c} : Current GPS (Rev.~0
+beta). - \texttt{0x1d} : Old GPS (Rev.~0 beta).
+
+\textbf{Attention} : certains octets sont non imprimables. Un setup TNC
+ou logiciel inadéquat peut les tronquer et donner un mauvais décodage.
+Si le champ Information paraît \textless{} 9 octets, ignorer le paquet.
+
+\section{Décodage longitude degrees
+(d+28)}\label{duxe9codage-longitude-degrees-d28}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Soustraire 28 de \texttt{d+28} → \texttt{d}.
+\item
+  Si Long Offset = +100° : ajouter 100 à \texttt{d}.
+\item
+  Si \texttt{180\ ≤\ d\ ≤\ 189} : soustraire 80 (longitude 100-109°).
+\item
+  Ou si \texttt{190\ ≤\ d\ ≤\ 199} : soustraire 190 (longitude 0-9°).
+\end{enumerate}
+
+Plage valide : d+28 = 38-127 (ASCII \texttt{\&} à DEL). Note : longitude
+0-9° → Long Offset forcé à +100.
+
+\section{Décodage longitude minutes
+(m+28)}\label{duxe9codage-longitude-minutes-m28}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Soustraire 28 → \texttt{m}.
+\item
+  Si \texttt{m\ ≥\ 60} : soustraire 60 (minutes 0-9).
+\end{enumerate}
+
+Plage valide : m+28 = 38-97 (ASCII \texttt{\&} à \texttt{a}).
+
+\section{Décodage longitude hundredths of minutes
+(h+28)}\label{duxe9codage-longitude-hundredths-of-minutes-h28}
+
+Soustraire 28. Plage 28-127 → 0-99 centièmes.
+
+\section{Encodage speed \& course}\label{encodage-speed-course}
+
+Répartis sur 3 octets \texttt{SP+28\ /\ DC+28\ /\ SE+28} : -
+\texttt{SP+28} : centaines/dizaines de knots (2 schémas d'encodage
+possibles). - \texttt{DC+28} : unités de knots + centaines de degrés du
+cap (2 schémas possibles). - \texttt{SE+28} : dizaines/unités de degrés
+du cap.
+
+\textbf{Algorithme de décodage} : - \texttt{SP\ =\ (SP+28)\ -\ 28}.
+Speed high = \texttt{SP\ ×\ 10}. Si \texttt{SP\ ≥\ 80}, soustraire 80. -
+\texttt{DC\ =\ (DC+28)\ -\ 28}. Quotient \texttt{DC/10} = unités de
+speed. Reste = centaines de degrés. - Speed = Speed\_high + unités. Si
+Speed ≥ 800 knots, soustraire 800. - Course = reste × 100 +
+\texttt{SE\ =\ (SE+28)\ -\ 28}. Si Course ≥ 400°, soustraire 400.
+
+\section{Exemple complet de
+décodage}\label{exemple-complet-de-duxe9codage}
+
+Info field \texttt{\textasciigrave{}\ (\_f\ n\ "Oj/}, destination
+indiquant hémisphère ouest, Long Offset +100° :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{\textasciigrave{}} = DTI Mic-E current.
+\item
+  \texttt{(} = d+28 = 40. \texttt{40\ -\ 28\ =\ 12}. Long Offset +100 →
+  \textbf{longitude 112°}.
+\item
+  \texttt{\_} = m+28 = 95. \texttt{95\ -\ 28\ =\ 67}. \texttt{67\ ≥\ 60}
+  → -60 → \textbf{7 minutes}.
+\item
+  \texttt{f} = h+28 = 102. \texttt{102\ -\ 28\ =\ 74} → \textbf{74
+  centièmes}.
+\end{itemize}
+
+Longitude = \textbf{112° 7.74' W}.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{n} = SP+28 = 110. \texttt{110\ -\ 28\ =\ 82}.
+  \texttt{82\ ≥\ 80} → -80 → 2 (dizaines). Speed high = 20 knots.
+\item
+  \texttt{"} = DC+28 = 34. \texttt{34\ -\ 28\ =\ 6}. Quotient
+  \texttt{6/10} = 0. Speed = 20 + 0 = \textbf{20 knots}. Reste 6, -4 → 2
+  → 200°.
+\item
+  \texttt{O} = SE+28 = 79. \texttt{79\ -\ 28\ =\ 51}. Course = 200 + 51
+  = \textbf{251°}.
+\end{itemize}
+
+Symbol : \texttt{j/} = jeep de la table primaire.
+
+\section{Ambiguïté de position
+Mic-E}\label{ambiguuxeftuxe9-de-position-mic-e}
+
+Comme au chapitre 6, en remplaçant des chiffres de latitude par le
+caractère marquant l'ambiguïté. Même ambiguïté appliquée à la longitude.
+Ex : destination \texttt{T4SQZZ} → 2 derniers chiffres de latitude
+ambigus, longitude tronquée aux minutes.
+
+\section{Télémétrie Mic-E}\label{tuxe9luxe9muxe9trie-mic-e}
+
+Si l'octet suivant le Symbol Table ID est un flag télémétrie
+(\texttt{\textasciigrave{}}, \texttt{\textquotesingle{}} ou
+\texttt{0x1d}), la télémétrie suit :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{\textasciigrave{}} : 2 valeurs hex imprimables (canaux 1 et
+  3).
+\item
+  \texttt{\textquotesingle{}} : 5 valeurs hex imprimables.
+\item
+  \texttt{0x1d} : 5 valeurs binaires (Rev.~0 beta uniquement).
+\end{itemize}
+
+Format hex : 2 octets par canal, valeur 0-255. Ex \texttt{FE} = 254.
+
+Ex \texttt{\textquotesingle{}7200007100} → 5 canaux hex : 114, 0, 0,
+113, 0.
+
+\section{Status text Mic-E}\label{status-text-mic-e}
+
+Alternative à la télémétrie. Longueur libre. Ne doit pas commencer par
+\texttt{\textasciigrave{}}, \texttt{\textquotesingle{}} ou
+\texttt{0x1d}. Peut contenir une position APRS standard qui remplacera
+la position Mic-E encodée (utile Mic-E sans GPS).
+
+Les radios Kenwood insèrent automatiquement un code de type en 10ᵉ
+caractère de l'Info field : - Kenwood TH-D7 : \texttt{\textgreater{}} -
+Kenwood TM-D700 : \texttt{{]}}
+
+Ne pas confondre avec les DTIs APRS de tête. Les Kenwood n'affichent que
+20 (TH-D7) ou 28 (TM-D700) caractères de status.
+
+Le TM-D700 utilise \texttt{\textquotesingle{}} (apostrophe) au lieu de
+\texttt{\textasciigrave{}} (grave) pour Current GPS. Détection : si
+premier et 10ᵉ caractères = \texttt{\textquotesingle{}} et \texttt{{]}},
+très probablement un TM-D700.
+
+\section{Locator Maidenhead dans Status
+Text}\label{locator-maidenhead-dans-status-text}
+
+Ex : - \texttt{IO91SX/G\ Hello\ world} (Mic-E ou PIC-E) -
+\texttt{\textgreater{}IO91SX/G\ Hello\ world} (TH-D7) -
+\texttt{{]}IO91SX/G\ Hello\ world} (TM-D700)
+
+\texttt{/G} = symbole grid locator. Si suivi de texte, séparer par un
+espace.
+
+\section{Altitude dans Status Text}\label{altitude-dans-status-text}
+
+Format \texttt{xxx\}}. \texttt{xxx} = mètres relatifs à -10 km sous le
+niveau moyen des mers (fosse la plus profonde), en base 91.
+
+Exemple 200 pieds = 61 m → 10061 m au-dessus du datum :
+
+\begin{verbatim}
+10061 / 91² = 1, reste 1780
+ 1780 / 91  = 19, reste 51
+\end{verbatim}
+
++33 : 34, 52, 84 → ASCII \texttt{"4T}. Suffixe \texttt{\}}. Résultat :
+\texttt{"4T\}}.
+
+Ex complets : \texttt{"4T\}} (Mic-E/PIC-E), \texttt{\textgreater{}"4T\}}
+(TH-D7), \texttt{{]}"4T\}} (TM-D700).
+
+\section{Mic-E hors APRS}\label{mic-e-hors-aprs}
+
+Certains octets Info sont binaires. Si le paquet reste dans APRS, pas de
+souci. Sur un réseau non 8-bit-clean (Internet), conversion nécessaire
+dans les deux sens.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

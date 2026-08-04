@@ -1,0 +1,120 @@
+\chapter[INTRODUCTION À APRS]{Introduction à APRS}\label{introduction-uxe0-aprs}
+
+\begin{aprssideblock}{Qu'est-ce\\qu'APRS ?}
+
+APRS est l'abréviation d'\emph{Automatic Position Reporting System},
+conçu par Bob Bruninga WB4APR et présenté par lui à la conférence
+TAPR/ARRL Digital Communications de 1992.
+
+Fondamentalement, APRS est un protocole de communication packet destiné
+à diffuser en temps réel des données vivantes à tous les nœuds d'un
+réseau. Sa fonctionnalité la plus visible est la combinaison du packet
+radio avec le réseau satellite GPS, permettant aux radioamateurs
+d'afficher automatiquement sur une carte PC la position de stations et
+d'autres objets. D'autres fonctions non directement liées au reporting
+de position sont supportées : stations météo, radiogoniométrie et
+messagerie.
+
+APRS diffère du packet classique à plusieurs égards :
+
+\begin{itemize}
+\tightlist
+\item
+  Cartes et affichages de données, pour la localisation
+  véhicules/personnels et le reporting météo en temps réel.
+\item
+  Communications \emph{one-to-many}, chacun étant mis à jour
+  immédiatement.
+\item
+  Digipeating générique avec alias d'indicatifs bien connus --- pas
+  besoin de connaître la topologie du réseau à l'avance.
+\item
+  Digipeating intelligent avec substitution d'indicatif pour réduire le
+  flooding.
+\item
+  Sur trames AX.25 UI, supporte la messagerie bidirectionnelle et la
+  diffusion de bulletins/annonces.
+\item
+  Communications avec les radios Kenwood TH-D7 et TM-D700 (TNC et
+  firmware APRS intégrés).
+\end{itemize}
+
+Le packet radio conventionnel n'est vraiment utile que pour transporter
+du trafic messagerie en masse d'un point à un autre, et a
+traditionnellement été difficile à appliquer à des événements temps réel
+où l'information a une durée de vie très courte. APRS transforme le
+packet radio en un système de communication et d'affichage tactique
+temps réel pour urgences et missions de service public.
+
+APRS fournit une connectivité universelle entre toutes les stations,
+sans la complexité, les délais et les limites d'un réseau à connexion.
+N'importe quel nombre de stations peut échanger des données comme le
+feraient des utilisateurs voix sur un net vocal. Toute station qui a
+quelque chose à partager l'envoie, toutes les stations le reçoivent et
+le journalisent.
+
+APRS reconnaît qu'un des besoins temps réel les plus importants lors
+d'un événement ou d'une urgence est le suivi d'actifs clés. Où est le
+leader du marathon ? Où sont les véhicules de secours ? Quelle météo en
+tel point ? Où sont les lignes électriques tombées ? Où est la tête du
+défilé ? Où est la caméra ATV mobile ? Où est l'orage ?
+
+Pour ces questions, APRS fournit un système complet de localisation
+automatique et de reporting de statut. Il peut fonctionner sur n'importe
+quel système radio bidirectionnel --- amateur, marine, cellulaire. Il
+existe même un réseau international de suivi APRS en direct sur
+Internet.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Fonctionnalités\\APRS}
+
+APRS tourne sur la plupart des plateformes : DOS, Windows 3.x, Windows
+95/98, MacOS, Linux, Palm. La plupart des implémentations supportent les
+principales fonctions :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Cartes} --- positions des stations APRS tracées en temps réel,
+  échelle de quelques centaines de mètres à monde entier. Les stations
+  reportant course et vitesse sont extrapolées à leur position actuelle
+  par dead-reckoning. Bases de données superposables : digipeaters APRS,
+  sites du National Weather Service US, magasins de matériel radio. Zoom
+  possible sur n'importe quel point du globe.
+\item
+  \textbf{Reporting de station météo} --- affichage automatique
+  d'informations météo distantes à l'écran.
+\item
+  \textbf{Reporting DX Cluster} --- outil idéal pour l'utilisateur de DX
+  cluster. Quelques stations APRS connectées à des clusters peuvent
+  relayer les infos de station DX à beaucoup d'autres stations locales,
+  réduisant la charge packet globale sur les clusters.
+\item
+  \textbf{Accès Internet} --- Internet peut être utilisé de manière
+  transparente pour interconnecter des réseaux radio locaux partout dans
+  le monde. On peut se connecter en telnet à des serveurs APRS Internet
+  et voir en direct des centaines de stations du monde entier. Tout le
+  monde peut alimenter le serveur avec ses paquets locaux, tout le monde
+  partout peut les voir.
+\item
+  \textbf{Messages} --- messages bidirectionnels avec accusé de
+  réception. Chaque message entrant alerte l'utilisateur et reste
+  affiché jusqu'à effacement manuel.
+\item
+  \textbf{Bulletins et annonces} --- adressés à tous. Les bulletins sont
+  envoyés quelques fois par heure pendant quelques heures ; les annonces
+  moins fréquemment mais peut-être sur plusieurs jours.
+\item
+  \textbf{Suivi de stations fixes} --- en plus du suivi automatique des
+  stations mobiles GPS/LORAN, APRS suit aussi les rapports manuels ou
+  par grid square.
+\item
+  \textbf{Objets} --- n'importe quel utilisateur peut placer un Object
+  APRS sur sa carte, et en quelques secondes cet objet apparaît sur tous
+  les autres écrans. Utile pour tracker des ressources non équipées de
+  trackers : un seul opérateur, en écoutant la voix, tient à jour les
+  positions ; toutes les autres stations en profitent.
+\end{itemize}
+\end{aprssideblock}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}

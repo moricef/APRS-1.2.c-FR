@@ -1,0 +1,265 @@
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+
+\documentclass[10pt,letterpaper,openany,twoside]{report}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp}
+\else
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{DejaVu Serif}
+  \setmonofont[]{DejaVu Sans Mono}
+\fi
+\ifPDFTeX
+  \usepackage{lmodern}
+\fi
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{%
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath}
+}{}
+
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage[letterpaper,inner=0.88in,outer=0.82in,top=1.12in,bottom=1.08in,headheight=15pt,headsep=28pt,footskip=46pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{longtable,booktabs,array,hhline}
+\usepackage{calc}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\definecolor{APRSMarkerYellow}{RGB}{255,255,0}
+\let\aprsorigtexttt\texttt
+\newcommand{\aprsmarkerlit}[1]{\begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut\aprsorigtexttt{#1}}\endgroup}
+\newcommand{\lit}[1]{\aprsmarkerlit{#1}}
+\renewcommand{\chaptername}{Chapitre}
+\renewcommand{\contentsname}{Table des Matières}
+\makeatletter
+\renewcommand\tableofcontents{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \clearpage
+    \phantomsection
+    \markboth{\contentsname}{\contentsname}%
+    \vspace*{2.8em}%
+    {\centering\sffamily\large\bfseries RÉFÉRENCE DU PROTOCOLE APRS\par}%
+    \vspace{0.8em}%
+    {\centering\sffamily\large\bfseries TABLE DES MATIÈRES\par}%
+    \vspace{2.6em}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+    }
+\renewcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 1.0em \@plus\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \sffamily\bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak
+      \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfill
+      \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{0em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{1.5em}{0em}}
+\newcommand*\l@tocmain{\@dottedtocline{0}{0em}{0em}}
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+                         \refstepcounter{chapter}%
+                         \typeout{\@chapapp\space\thechapter.}%
+                         \addcontentsline{toc}{chapter}%
+                                   {\protect\numberline{\thechapter}#1}%
+                    \else
+                      \addcontentsline{toc}{chapter}{#1}%
+                    \fi
+                    \chaptermark{#2}%
+                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
+                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
+                    \if@twocolumn
+                      \@topnewpage[\@makechapterhead{#2}]%
+                    \else
+                      \@makechapterhead{#2}%
+                      \@afterheading
+                    \fi}
+\makeatother
+\setcounter{secnumdepth}{0}
+\titleformat{\chapter}[block]
+  {\normalfont\sffamily\large\bfseries}
+  {\thechapter}{1em}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{2.8em}{2.6em}
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]
+  {\normalfont\sffamily\normalsize\bfseries}{\theparagraph}{1em}{}
+\titleformat{\subparagraph}[runin]
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubparagraph}{1em}{}
+\newenvironment{aprssideblock}[1]{%
+  \begin{list}{}{%
+    \setlength{\leftmargin}{0.275\textwidth}%
+    \setlength{\rightmargin}{0pt}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0.65em}%
+    \setlength{\topsep}{0.8em}%
+  }%
+  \item[]\leavevmode\llap{\parbox[t]{0.20\textwidth}{\raggedleft\sffamily\large\bfseries #1}\hspace{0.055\textwidth}}%
+}{%
+  \end{list}%
+}
+\newenvironment{aprsbodyblock}{%
+  \begin{list}{}{%
+    \setlength{\leftmargin}{0.275\textwidth}%
+    \setlength{\rightmargin}{0pt}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0.65em}%
+    \setlength{\topsep}{0.8em}%
+  }%
+  \item[]%
+}{%
+  \end{list}%
+}
+\ifLuaTeX
+  \usepackage{selnolig}
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{}
+\urlstyle{same}
+\hypersetup{
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
+  pdftitle={Référence du protocole APRS 1.0 --- Traduction française},
+  pdfauthor={APRS Working Group (trad.)},
+  pdfsubject={APRS Protocol Reference 1.0.1},
+  pdfcreator={LaTeX/lualatex}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\sffamily\bfseries\thepage}
+\fancyhead[LO,RE]{\sffamily\bfseries\nouppercase{\leftmark}}
+\newcommand{\APRSFooterLogo}{\raisebox{-0.42\height}{\includegraphics[height=16pt]{figures/aprs-logo.png}}}
+\fancyfoot[LO]{\APRSFooterLogo\hspace{0.6em}\sffamily\small\textbf{Référence du protocole APRS --- Version du protocole 1.0}}
+\fancyfoot[RE]{\sffamily\small\textbf{Référence du protocole APRS --- Version du protocole 1.0}\hspace{0.6em}\APRSFooterLogo}
+\fancyfoot[LE,RO]{\sffamily\scriptsize Document Version 1.0.1 : 29 août 2000}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\chaptermark}[1]{\markboth{Chapitre \thechapter : #1}{}}
+\assignpagestyle{\chapter}{fancy}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\small \thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\sffamily
+\vspace*{4.0em}
+\hspace*{0.16\textwidth}%
+\begin{minipage}{0.55\textwidth}
+{\Large\bfseries AUTOMATIC POSITION\par}
+{\Large\bfseries REPORTING SYSTEM\par}
+\vspace{3.8em}
+{\LARGE\bfseries APRS PROTOCOL\par}
+{\LARGE\bfseries REFERENCE\par}
+\vspace{1.2em}
+{\large Protocol Version 1.0\par}
+\vspace{4.0em}
+\begin{tabular}{@{}r@{\hspace{1em}}l@{}}
+Authors & The APRS Working Group \\
+Document Version & Approved Version 1.0.1 \\
+Filename & aprs101.pdf \\
+Date of Issue & 29 August 2000 \\
+Copyright & \copyright{}2000 APRS Working Group \\
+ & All rights reserved \\
+Technical Editor & Ian Wade, G3NRW \\
+\end{tabular}
+\end{minipage}
+\end{titlepage}
+\clearpage
+
+\input{chapters/00-copyright}
+\clearpage
+
+\input{chapters/00-foreword}
+\clearpage
+\null
+\thispagestyle{empty}
+\clearpage
+
+\hypersetup{linkcolor=blue}
+\pagenumbering{roman}
+\setcounter{tocdepth}{2}
+\begingroup
+\small
+\tableofcontents
+\endgroup
+\clearpage
+\null
+\thispagestyle{empty}
+\clearpage
+
+\pagenumbering{arabic}
+
+% Sections préliminaires (non numérotées)
+\input{chapters/00-front-matter}
+
+% Chapitres 1 à 20 (numérotés)
+\input{chapters/01-introduction}
+\input{chapters/02-design-philosophy}
+\input{chapters/03-aprs-and-ax25}
+\input{chapters/04-dest-source}
+\input{chapters/05-info-field}
+\input{chapters/06-time-position}
+\input{chapters/07-data-extensions}
+\input{chapters/08-position-df-reports}
+\input{chapters/09-compressed-position}
+\input{chapters/10-mic-e}
+\input{chapters/11-objects-items}
+\input{chapters/12-weather}
+\input{chapters/13-telemetry}
+\input{chapters/14-messages}
+\input{chapters/15-queries}
+\input{chapters/16-status}
+\input{chapters/17-tunneling}
+\input{chapters/18-user-defined}
+\input{chapters/19-other-packets}
+\input{chapters/20-symbols}
+
+% Annexes
+\appendix
+\input{chapters/21-appendices}
+
+\end{document}
