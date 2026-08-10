@@ -1,278 +1,380 @@
 \chapter[FORMATS DE RAPPORTS DE POSITION ET DF]{Formats de rapports de position et
 DF}\label{formats-de-rapports-de-position-et-df}
 
-Les rapports Lat/Long Position sont dans le champ Information d'une
-trame AX.25 APRS. Zones grisées = optionnelles. Caractères ASCII
-littéraux surlignés. Max 43 caractères après le Symbol Code.
-
-\section*{Position Report --- sans
-timestamp}\label{position-report-sans-timestamp}
-
-\begin{longtable}[]{@{}lllllll@{}}
-\toprule\noalign{}
-Champ & \lit{!} ou \lit{=} & Lat & Sym Tbl ID & Long & Symbol Code
-& Comment \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 8 & 1 & 9 & 1 & 0-43 \\
-\end{longtable}
-
-Exemples : - \texttt{!4903.50N/07201.75W-Test\ 001234} --- sans
-timestamp, sans messagerie, avec commentaire. -
-\texttt{!4903.50N/07201.75W-Test\ /A=001234} --- sans timestamp,
-altitude 1234 ft. - \texttt{!49VV.VVN/072VV.VVW-} --- position au degré
-près. - \texttt{TheNet\ X-1J4(BFLD)!4903.50N/07201.75Wn} --- sans
-timestamp, avec chaîne d'en-tête X1J.
-
-\section*{Position Report --- avec
-timestamp}\label{position-report-avec-timestamp}
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Champ
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\lit{/} ou \lit{@}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Time DHM/HMS
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Lat
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sym Tbl ID
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Long
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Symbol Code
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Comment
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 7 & 8 & 1 & 9 & 1 & 0-43 \\
-\end{longtable}
-
-Exemples : - \texttt{/092345z4903.50N/07201.75W\textgreater{}Test1234}
---- avec timestamp, sans messagerie, heure zulu. -
-\texttt{@092345/4903.50N/07201.75W\textgreater{}Test1234} --- avec
-timestamp, avec messagerie, heure locale.
-
-\section*{Position Report avec Data Extension (sans
-timestamp)}\label{position-report-avec-data-extension-sans-timestamp}
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Champ
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\lit{!} ou \lit{=}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Lat
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sym Tbl ID
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Long
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Symbol Code
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Data Extension
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Comment
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 8 & 1 & 9 & 1 & 7 (Course/Speed, PHG, RNG ou DFS) & 0-36 \\
-\end{longtable}
-
-Exemples : - \texttt{=4903.50N/07201.75W\#PHG5132} --- sans timestamp,
-avec messagerie, PHG. -
-\texttt{=4903.50N/07201.75W\_225/000g000t050r000p001…h00b10138dU2k} ---
-weather report.
-
-\section*{Position Report avec Data Extension et
-timestamp}\label{position-report-avec-data-extension-et-timestamp}
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Champ
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\lit{/} ou \lit{@}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Time
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Lat
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sym Tbl ID
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Long
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Symbol Code
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Data Extension
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Comment
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 7 & 8 & 1 & 9 & 1 & 7 & 0-36 \\
-\end{longtable}
-
-Exemples : - \texttt{@092345/4903.50N/07201.75W\textgreater{}088/036}
---- timestamp, messagerie, heure locale, course/speed. -
-\texttt{@234517h4903.50N/07201.75W\textgreater{}PHG5132} --- HMS + PHG.
-- \texttt{@092345z4903.50N/07201.75W\textgreater{}RNG0050} --- zulu +
-range. - \texttt{/234517h4903.50N/07201.75W\textgreater{}DFS2360} ---
-HMS + DF, sans messagerie. -
-\texttt{@092345z4903.50N/07201.75W\_090/000g000t066r000p000…dUII} ---
-weather.
-
-\section*{Maidenhead Locator Beacon
-(obsolète)}\label{maidenhead-locator-beacon-obsoluxe8te}
-
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Champ & \lit{{[}} & Grid Locator & \lit{{]}} & Comment \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 4 ou 6 & 1 & n \\
-\end{longtable}
-
-Exemples : - \texttt{{[}IO91SX{]}\ 35\ miles\ NNW\ of\ London} -
-\texttt{{[}IO91{]}}
-
-\section*{Raw NMEA Position Report}\label{raw-nmea-position-report}
-
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-Champ & \lit{\$} & NMEA Received Sentence \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 25-209 \\
-\end{longtable}
-
-Exemples :
-
-\begin{verbatim}
-$GPGGA,102705,5157.9762,N,00029.3256,W,1,04,2.0,75.7,M,47.6,M,,*62
-$GPGLL,2554.459,N,08020.187,W,154027.281,A
-$GPRMC,063909,A,3349.4302,N,11700.3721,W,43.022,89.3,291099,13.6,E*52
-$GPVTG,318.7,T,,M,35.1,N,65.0,K*69
-\end{verbatim}
-
-\section*{DF Reports}\label{df-reports}
-
-Contiennent le champ 8 octets \texttt{/BRG/NRQ} après l'extension. Le
-BRG/NRQ n'a de sens que si le symbole DF est utilisé (Symbol Table ID
-\texttt{/}, Symbol Code \texttt{\textbackslash{}}).
-
-Course = 0 → station DF fixe. Course ≠ 0 → mobile.
-
-\textbf{DF Report sans timestamp} :
-
-\begin{center}
-\scriptsize
-\setlength{\tabcolsep}{4pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{@{}ccccccccc@{}}
-\toprule
-Champ &
-\lit{!} ou \lit{=} &
-Lat &
-\shortstack{Sym\\Table\\ID} &
-Long &
-\shortstack{Symbol\\Code} &
-\shortstack{Course/Speed\\Power/Height/Gain/Dir\\Radio Range\\DF Signal Strength} &
-/BRG/NRQ &
-\shortstack{Comment\\(max. 28 car.)} \\
-\midrule
-Octets & 1 & 8 & 1 & 9 & 1 & 7 & 8 & 0-28 \\
-\bottomrule
-\end{tabular}
+\newfontfamily{\cheightspacesymbolfont}{FreeSans}
+\newcommand{\cheightspace}[1]{%
+  \begingroup
+  \strut{\cheightspacesymbolfont #1}%
+  \endgroup
 }
-\end{center}
-
-Exemples :
-
-\begin{verbatim}
-=4903.50N/07201.75W\088/036/270/729
-=4903.50N/07201.75W\000/036/270/729
-\end{verbatim}
-
-Le premier exemple est un rapport DF mobile sans timestamp,
-cse/spd/brg/NRQ. Le second est le même rapport en station DF fixe
-(\texttt{CSE=000}).
-
-\textbf{DF Report avec timestamp} :
-
-\begin{center}
-\scriptsize
-\setlength{\tabcolsep}{4pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{@{}cccccccccc@{}}
-\toprule
-Champ &
-\lit{/} ou \lit{@} &
-Time\newline DHM / HMS &
-Lat &
-\shortstack{Sym\\Table\\ID} &
-Long &
-\shortstack{Symbol\\Code} &
-\shortstack{Course/Speed\\Power/Height/Gain/Dir\\Radio Range\\DF Signal Strength} &
-/BRG/NRQ &
-\shortstack{Comment\\(max. 28 car.)} \\
-\midrule
-Octets & 1 & 7 & 8 & 1 & 9 & 1 & 7 & 8 & 0-28 \\
-\bottomrule
-\end{tabular}
+\newenvironment{cheightformatbox}[1]{%
+  \par\medskip\begingroup
+  \setlength{\arrayrulewidth}{0.6pt}%
+  \begin{center}%
+  \begin{tabular}{|p{0.92\textwidth}|}%
+  \hline
+  \cellcolor{gray!20}\hspace{0.6em}\sffamily\bfseries\itshape #1\\%
+  \hline
+  \begin{minipage}{0.98\linewidth}%
+  \vspace{0.35em}%
+}{%
+  \vspace{0.35em}%
+  \end{minipage}\\%
+  \hline
+  \end{tabular}%
+  \end{center}%
+  \endgroup\par\medskip
 }
+\newcommand{\chEightHead}[1]{\shortstack{\sffamily\bfseries\itshape #1}}
+\newcommand{\chEightPositionHead}[1]{%
+  \parbox[c][50pt][c]{\linewidth}{\centering\sffamily\bfseries\itshape #1\par}%
+}
+\newcommand{\chEightDataExtensionHead}{%
+  \makebox[\linewidth][c]{%
+  \begin{tabular}{@{}>{\centering\arraybackslash\sffamily\bfseries\itshape}p{\dimexpr\linewidth+2\tabcolsep\relax}@{}}
+  Course/Speed \\
+  \hline
+  Power/Height/Gain/Dir \\
+  \hline
+  Radio Range \\
+  \hline
+  DF Signal Strength
+  \end{tabular}}%
+}
+\newcommand{\chEightProto}[1]{\aprsorigtexttt{#1}}
+\newcommand{\chEightFitProto}[1]{\resizebox{\linewidth}{!}{\aprsorigtexttt{#1}}}
+\newcommand{\chEightBytes}[1]{%
+  \makebox[0pt][r]{Bytes:\hspace{1.2em}}%
+  \makebox[\linewidth][c]{#1}%
+}
+\newcommand{\chEightExampleText}[1]{{\rmfamily\large #1}}
+
+\phantomsection\addcontentsline{toc}{section}{Position Reports}
+\begin{aprssideblock}{Position Reports}
+Les Lat/Long Position Reports sont contenus dans le champ Information
+d'une trame AX.25 APRS.
+
+Les diagrammes suivants montrent les formats permis de ces rapports,
+accompagnés de quelques exemples. Les zones grises indiquent les champs
+optionnels, et les caractères ombrés (jaunes) sont des caractères ASCII
+littéraux. Dans tous les cas, il y a un maximum de 43 caractères après
+le Symbol Code.
+\end{aprssideblock}
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\begin{center}
+\sffamily\fontsize{8.4}{9.4}\selectfont
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.08\linewidth}|>{\centering\arraybackslash}m{0.08\linewidth}|>{\centering\arraybackslash}m{0.10\linewidth}|>{\centering\arraybackslash}m{0.10\linewidth}|>{\centering\arraybackslash}m{0.12\linewidth}|>{\centering\arraybackslash}m{0.44\linewidth}|}
+\hline
+\multicolumn{6}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\sffamily\bfseries\itshape Format de rapport de position Lat/Long --- sans timestamp}\\
+\hline
+\chEightPositionHead{\lit{!} or \lit{=}} & \chEightPositionHead{Lat} &
+\chEightPositionHead{Sym\\Table\\ID} & \chEightPositionHead{Long} &
+\chEightPositionHead{Symbol\\Code} &
+\cellcolor{gray!20}\chEightPositionHead{Comment\\(max 43 chars)} \\
+\hline
+\chEightBytes{1} & 8 & 1 & 9 & 1 & 0--43 \\
+\hline
+\multicolumn{6}{|p{0.96\linewidth}|}{%
+  \begin{minipage}{0.96\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\linewidth}>{\raggedright\arraybackslash}p{0.51\linewidth}@{}}
+  \mbox{\chEightProto{!4903.50N/07201.75W-Test 001234}} &
+  \chEightExampleText{sans timestamp ni APRS messaging, commentaire.} \\
+  \mbox{\chEightProto{!4903.50N/07201.75W-Test /A=001234}} &
+  \chEightExampleText{sans timestamp ni APRS messaging, altitude=1234 ft.} \\
+  \mbox{\chEightProto{!49}\cheightspace{⎵⎵}\chEightProto{.}\cheightspace{⎵⎵}\chEightProto{N/072}\cheightspace{⎵⎵}\chEightProto{.}\cheightspace{⎵⎵}\chEightProto{W-}} &
+  \chEightExampleText{sans timestamp, sans APRS messaging, position au degré le plus proche.} \\
+  \mbox{\lit{TheNet X-1J4~~(BFLD)}\chEightProto{!4903.50N/07201.75Wn}} &
+  \chEightExampleText{sans timestamp, sans APRS messaging, \begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut avec chaîne}\endgroup{} \begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut d'en-tête de nœud X1J.}\endgroup} \\
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
+\hline
+\end{tabular}%
 \end{center}
+\endgroup
 
-Exemples :
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\begin{center}
+\sffamily\fontsize{8.4}{9.4}\selectfont
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.07\linewidth}|>{\centering\arraybackslash}m{0.11\linewidth}|>{\centering\arraybackslash}m{0.07\linewidth}|>{\centering\arraybackslash}m{0.09\linewidth}|>{\centering\arraybackslash}m{0.09\linewidth}|>{\centering\arraybackslash}m{0.11\linewidth}|>{\centering\arraybackslash}m{0.36\linewidth}|}
+\hline
+\multicolumn{7}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\sffamily\bfseries\itshape Format de rapport de position Lat/Long --- avec timestamp}\\
+\hline
+\chEightPositionHead{\lit{/} or \lit{@}} &
+\chEightPositionHead{Time\\DHM /\\HMS} & \chEightPositionHead{Lat} &
+\chEightPositionHead{Sym\\Table\\ID} & \chEightPositionHead{Long} &
+\chEightPositionHead{Symbol\\Code} &
+\cellcolor{gray!20}\chEightPositionHead{Comment\\(max 43 chars)} \\
+\hline
+\chEightBytes{1} & 7 & 8 & 1 & 9 & 1 & 0--43 \\
+\hline
+\multicolumn{7}{|p{0.96\linewidth}|}{%
+  \begin{minipage}{0.96\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
 
-\begin{verbatim}
-@092345z4903.50N/07201.75W\088/036/270/729
-/092345z4903.50N/07201.75W\000/000/270/729
-\end{verbatim}
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.49\linewidth}>{\raggedright\arraybackslash}p{0.47\linewidth}@{}}
+  \mbox{\chEightProto{/092345z4903.50N/07201.75W>Test1234}} &
+  \chEightExampleText{avec timestamp, sans APRS messaging, heure zulu, avec commentaire.} \\
+  \mbox{\chEightProto{@092345/4903.50N/07201.75W>Test1234}} &
+  \chEightExampleText{avec timestamp, avec APRS messaging, heure locale, avec commentaire.} \\
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
+\hline
+\end{tabular}%
+\end{center}
+\endgroup
 
-Le premier exemple est un rapport DF avec timestamp, course/vitesse,
-relèvement/NRQ, avec messagerie APRS. Le second est un rapport DF avec
-timestamp, relèvement/NRQ, sans course/vitesse, sans messagerie APRS.
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\begin{center}
+\sffamily\fontsize{8.0}{9.0}\selectfont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.05\textwidth+2pt\relax}|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.18\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.445\textwidth-14\tabcolsep-8\arrayrulewidth-2pt\relax}|}
+\hline
+\multicolumn{7}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de rapport de position Lat/Long --- avec Data Extension (sans timestamp)}\\
+\hline
+\chEightHead{\lit{!} or \lit{=}} & \chEightHead{Lat} & \chEightHead{Sym\\Table\\ID} & \chEightHead{Long} & \chEightHead{Symbol\\Code} &
+\chEightDataExtensionHead &
+\cellcolor{gray!20}\chEightHead{Comment\\(max 36 chars)} \\
+\hline
+\chEightBytes{1} & 8 & 1 & 9 & 1 & 7 & 0--36 \\
+\hline
+\multicolumn{7}{|p{\dimexpr0.92\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \begin{minipage}{\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemple}}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.61\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}@{}}
+  \chEightProto{=4903.50N/07201.75W\#PHG5132} &
+  \chEightExampleText{sans timestamp, avec APRS messaging, avec PHG.} \\
+  \chEightFitProto{=4903.50N/07201.75W\lit{\_}225/000g000t050r000p001…h00b10138dU2k} &
+  \chEightExampleText{\lit{weather report.}} \\
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\begin{center}
+\sffamily\fontsize{7.8}{8.8}\selectfont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.045\textwidth+4pt\relax}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.045\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.18\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.40\textwidth-16\tabcolsep-9\arrayrulewidth-4pt\relax}|}
+\hline
+\multicolumn{8}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de rapport de position Lat/Long --- avec Data Extension et timestamp}\\
+\hline
+\chEightHead{\lit{/} or \lit{@}} & \chEightHead{Time\\DHM /\\HMS} & \chEightHead{Lat} & \chEightHead{Sym\\Table\\ID} & \chEightHead{Long} & \chEightHead{Symbol\\Code} &
+\chEightDataExtensionHead &
+\cellcolor{gray!20}\chEightHead{Comment\\(max 36 chars)} \\
+\hline
+\chEightBytes{1} & 7 & 8 & 1 & 9 & 1 & 7 & 0--36 \\
+\hline
+\multicolumn{8}{|p{\dimexpr0.92\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \begin{minipage}{\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.61\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}@{}}
+  \chEightProto{@092345/4903.50N/07201.75W>088/036} &
+  \chEightExampleText{avec timestamp, avec APRS messaging, heure locale, course/speed.} \\
+  \chEightProto{@234517h4903.50N/07201.75W>PHG5132} &
+  \chEightExampleText{avec timestamp, APRS messaging, heure hours/mins/secs, PHG.} \\
+  \chEightProto{@092345z4903.50N/07201.75W>RNG0050} &
+  \chEightExampleText{avec timestamp, APRS messaging, heure zulu, radio range.} \\
+  \chEightProto{/234517h4903.50N/07201.75W>DFS2360} &
+  \chEightExampleText{avec timestamp, heure hours/mins/secs, DF, sans APRS messaging.} \\
+  \chEightFitProto{@092345z4903.50N/07201.75W\lit{\_}090/000g000t066r000p000…dUII} &
+  \chEightExampleText{\lit{weather report.}} \\
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup
+
+\par\medskip
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\sffamily\fontsize{8.4}{9.4}\selectfont
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.5}
+\noindent\hspace{0.04\textwidth}%
+\begin{tabular}{|>{\centering\arraybackslash}m{0.04\textwidth}|>{\centering\arraybackslash}m{0.14\textwidth}|>{\centering\arraybackslash}m{0.04\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.28\textwidth-8\tabcolsep-5\arrayrulewidth\relax}|}
+\hline
+\multicolumn{4}{|>{\columncolor{gray!20}}c|}{\bfseries\itshape Balise Maidenhead Locator}\\
+\hline
+\chEightPositionHead{\lit{[}} & \chEightPositionHead{Grid Locator} &
+\chEightPositionHead{\lit{]}} & \cellcolor{gray!20}\chEightPositionHead{Comment} \\
+\hline
+\chEightBytes{1} & 4 or 6 & 1 & n \\
+\hline
+\multicolumn{4}{|p{\dimexpr0.50\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \chEightProto{[IO91SX] 35 miles NNW of London}
+
+  \chEightProto{[IO91]}
+  \vspace{0.25em}
+} \\
+\hline
+\end{tabular}
+\endgroup
+\par\medskip
+
+\par\medskip
+\noindent\begin{minipage}{\textwidth}
+\vspace*{2em}
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\sffamily\fontsize{8.4}{9.4}\selectfont
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.8}
+\noindent\hspace{0.04\textwidth}%
+\begin{tabular}{|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.29\textwidth-4\tabcolsep-3\arrayrulewidth\relax}|}
+\hline
+\multicolumn{2}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de rapport de position NMEA brut}\\
+\hline
+\multicolumn{2}{|c|}{\chEightHead{NMEA Received Sentence}} \\
+\hline
+\chEightHead{\lit{\$}} & \chEightHead{…,…,…,…,…,…,…} \\
+\hline
+\chEightBytes{1} & 25--209 \\
+\hline
+\end{tabular}\par
+\nointerlineskip
+\vspace{-6pt}
+\noindent\hspace{0.04\textwidth}%
+\begin{tabular}{|p{\dimexpr0.88\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}
+\hline
+\vspace{0.25em}
+{\rmfamily\underline{Exemples}}
+
+\vspace{0.25em}
+{\small\ttfamily
+\$GPGGA,102705,5157.9762,N,00029.3256,W,1,04,2.0,75.7,M,47.6,M,,*62\par
+\$GPGLL,2554.459,N,08020.187,W,154027.281,A\par
+\$GPRMC,063909,A,3349.4302,N,11700.3721,W,43.022,89.3,291099,13.6,E*52\par
+\$GPVTG,318.7,T,,M,35.1,N,65.0,K*69}
+\vspace{0.25em}
+\\
+\hline
+\end{tabular}
+\endgroup
+\end{minipage}
+\par\vspace{1em}
+
+\phantomsection\addcontentsline{toc}{section}{DF Reports}
+\begin{aprssideblock}{DF Reports}
+Les DF Reports sont contenus dans le champ Information d'une trame AX.25
+APRS. Les paramètres Bearing and Number/Range/Quality (BRG/NRQ) suivent
+le champ Data Extension.
+
+\textbf{Note :} les paramètres BRG/NRQ ne sont significatifs que lorsque
+le rapport contient le symbole DF (c'est-à-dire que le Symbol Table ID
+est \lit{/} et le Symbol Code est \lit{\textbackslash}).
+
+\textbf{Note :} si la station DF est fixe, la valeur Course est zéro. Si
+la station est en mouvement, la valeur Course est non nulle.
+\end{aprssideblock}
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\begin{center}
+\sffamily\fontsize{7.7}{8.7}\selectfont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.045\textwidth+4pt\relax}|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.18\textwidth}|>{\centering\arraybackslash}m{0.11\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.345\textwidth-16\tabcolsep-9\arrayrulewidth-4pt\relax}|}
+\hline
+\multicolumn{8}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de rapport DF --- sans timestamp}\\
+\hline
+\chEightHead{\lit{!} or \lit{=}} & \chEightHead{Lat} & \chEightHead{Sym\\Table\\ID\\\lit{/}} & \chEightHead{Long} & \chEightHead{Symbol\\Code\\\lit{\textbackslash}} &
+\chEightDataExtensionHead &
+\chEightHead{\lit{/}BRG\lit{/}NRQ} &
+\cellcolor{gray!20}\chEightHead{Comment\\(max 28 chars)} \\
+\hline
+\chEightBytes{1} & 8 & 1 & 9 & 1 & 7 & 8 & 0--28 \\
+\hline
+\multicolumn{8}{|p{\dimexpr0.92\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \begin{minipage}{\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.61\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}@{}}
+  \chEightProto{=4903.50N/07201.75W\textbackslash088/036/270/729} &
+  \chEightExampleText{sans timestamp, course/speed/bearing/NRQ, avec APRS messaging. Station DF en mouvement (CSE est non nul).} \\
+  \chEightProto{=4903.50N/07201.75W\textbackslash}\lit{000}\chEightProto{/036/270/729} &
+  \chEightExampleText{même rapport, station DF fixe (CSE=\lit{000}).} \\
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\begin{center}
+\sffamily\fontsize{7.5}{8.5}\selectfont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.04\textwidth+6pt\relax}|>{\centering\arraybackslash}m{0.055\textwidth}|>{\centering\arraybackslash}m{0.04\textwidth}|>{\centering\arraybackslash}m{0.055\textwidth}|>{\centering\arraybackslash}m{0.055\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.17\textwidth}|>{\centering\arraybackslash}m{0.10\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.345\textwidth-18\tabcolsep-10\arrayrulewidth-6pt\relax}|}
+\hline
+\multicolumn{9}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de rapport DF --- avec timestamp}\\
+\hline
+\chEightHead{\lit{/} or \lit{@}} & \chEightHead{Time\\DHM /\\HMS} & \chEightHead{Lat} & \chEightHead{Sym\\Table\\ID\\\lit{/}} & \chEightHead{Long} & \chEightHead{Symbol\\Code\\\lit{\textbackslash}} &
+\chEightDataExtensionHead &
+\chEightHead{\lit{/}BRG\lit{/}NRQ} &
+\cellcolor{gray!20}\chEightHead{Comment\\(max 28 chars)} \\
+\hline
+\chEightBytes{1} & 7 & 8 & 1 & 9 & 1 & 7 & 8 & 0--28 \\
+\hline
+\multicolumn{9}{|p{\dimexpr0.92\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \begin{minipage}{\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.61\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}@{}}
+  \chEightProto{@092345z4903.50N/07201.75W\textbackslash088/036/270/729} &
+  \chEightExampleText{avec timestamp, course/speed/bearing/NRQ, avec APRS messaging.} \\
+  \chEightProto{/092345z4903.50N/07201.75W\textbackslash000/000/270/729} &
+  \chEightExampleText{avec timestamp, bearing/NRQ, sans course/speed, sans APRS messaging.} \\
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup

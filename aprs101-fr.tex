@@ -2,7 +2,7 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 
-\documentclass[10pt,letterpaper,openany,twoside]{report}
+\documentclass[9pt,letterpaper,openany,twoside]{extreport}
 
 \usepackage{amsmath,amssymb}
 \usepackage{iftex}
@@ -27,14 +27,16 @@
 }{}
 
 \usepackage{parskip}
+\usepackage{ragged2e}
 \usepackage{xcolor}
 \usepackage{colortbl}
 \usepackage{graphicx}
 \usepackage{tikz}
-\usepackage[letterpaper,inner=0.88in,outer=0.82in,top=1.12in,bottom=1.08in,headheight=15pt,headsep=28pt,footskip=46pt]{geometry}
+\usepackage[letterpaper,inner=0.88in,outer=0.82in,top=1.12in,bottom=1.08in,headheight=15pt,headsep=28pt,footskip=56pt]{geometry}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{longtable,booktabs,array,hhline}
+\usepackage{needspace}
 \usepackage{calc}
 \usepackage{etoolbox}
 \makeatletter
@@ -43,7 +45,7 @@
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
 \setlength{\emergencystretch}{3em}
-\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\tightlist}{\setlength{\itemsep}{0.6\baselineskip}\setlength{\parskip}{0pt}}
 \definecolor{APRSMarkerYellow}{RGB}{255,255,0}
 \let\aprsorigtexttt\texttt
 \newcommand{\aprsmarkerlit}[1]{\begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut\aprsorigtexttt{#1}}\endgroup}
@@ -60,11 +62,13 @@
     \clearpage
     \phantomsection
     \markboth{\contentsname}{\contentsname}%
-    \vspace*{2.8em}%
-    {\centering\sffamily\large\bfseries RÉFÉRENCE DU PROTOCOLE APRS\par}%
-    \vspace{0.8em}%
-    {\centering\sffamily\large\bfseries TABLE DES MATIÈRES\par}%
-    \vspace{2.6em}%
+    \vspace*{0.5em}%
+    {\centering\sffamily\fontsize{16}{18}\selectfont\bfseries
+      RÉFÉRENCE DU PROTOCOLE APRS\par}%
+    \vspace{0.5em}%
+    {\centering\sffamily\fontsize{12}{14}\selectfont\bfseries
+      TABLE DES MATIÈRES\par}%
+    \vspace{1.5em}%
     \@starttoc{toc}%
     \if@restonecol\twocolumn\fi
     }
@@ -88,6 +92,12 @@
 \renewcommand*\l@section{\@dottedtocline{1}{1.5em}{0em}}
 \renewcommand*\l@subsection{\@dottedtocline{2}{1.5em}{0em}}
 \newcommand*\l@tocmain{\@dottedtocline{0}{0em}{0em}}
+\newcommand{\tocappendicesheading}{%
+  \clearpage
+  \vspace*{0.5em}%
+  {\noindent\sffamily\fontsize{14}{16}\selectfont\bfseries ANNEXES\par}%
+  \vspace{2.3em}%
+}
 \def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
                          \refstepcounter{chapter}%
                          \typeout{\@chapapp\space\thechapter.}%
@@ -107,10 +117,10 @@
                     \fi}
 \makeatother
 \setcounter{secnumdepth}{0}
-\titleformat{\chapter}[block]
-  {\normalfont\sffamily\large\bfseries}
+\titleformat{\chapter}[hang]
+  {\normalfont\sffamily\huge\bfseries\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000}
   {\thechapter}{1em}{\MakeUppercase}
-\titlespacing*{\chapter}{0pt}{2.8em}{2.6em}
+\titlespacing*{\chapter}{0pt}{0pt}{2.6em}
 \titleformat{\section}
   {\normalfont\sffamily\Large\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}
@@ -129,7 +139,7 @@
     \setlength{\parsep}{0.65em}%
     \setlength{\topsep}{0.8em}%
   }%
-  \item[]\leavevmode\llap{\parbox[t]{0.20\textwidth}{\raggedleft\sffamily\large\bfseries #1}\hspace{0.055\textwidth}}%
+  \item[]\leavevmode\llap{\raisebox{-3pt}[0pt][0pt]{\parbox[t]{0.20\textwidth}{\raggedleft\sffamily\large\bfseries #1}}\hspace{0.055\textwidth}}%
 }{%
   \end{list}%
 }
@@ -145,6 +155,22 @@
 }{%
   \end{list}%
 }
+% Bloc d'exemples indenté (lignes « 092345z   correspond à … » de l'original)
+\newenvironment{aprsexample}{%
+  \begin{list}{}{%
+    \setlength{\leftmargin}{1.2em}%
+    \setlength{\rightmargin}{0pt}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{0.35em}%
+    \setlength{\partopsep}{0pt}%
+  }%
+  \item[]\raggedright%
+}{%
+  \end{list}%
+}
+% Espacement entre l'exemple littéral et sa description
+\newcommand{\exgap}{\hspace{1.4em}}
 \ifLuaTeX
   \usepackage{selnolig}
 \fi
@@ -182,6 +208,8 @@
 }
 
 \begin{document}
+\RaggedRight
+\raggedbottom
 
 \begin{titlepage}
 \thispagestyle{empty}
@@ -223,7 +251,7 @@ Technical Editor & Ian Wade, G3NRW \\
 \pagenumbering{roman}
 \setcounter{tocdepth}{2}
 \begingroup
-\small
+\sffamily\fontsize{11.3}{12.7}\selectfont
 \tableofcontents
 \endgroup
 \clearpage

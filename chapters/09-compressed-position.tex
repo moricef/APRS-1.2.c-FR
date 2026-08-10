@@ -1,295 +1,517 @@
-\chapter[FORMATS COMPRESSÉS DE RAPPORT DE POSITION]{Formats compressés de rapport de
-position}\label{formats-compressuxe9s-de-rapport-de-position}
+\chapter[FORMATS DE DONNÉES DES RAPPORTS DE POSITION COMPRESSÉS]{Formats de données des rapports de
+position compressés}\label{formats-de-donnees-des-rapports-de-position-compresses}
 
-En format compressé, le champ Information contient lat/long +
-course/speed ou pré-calculated range ou altitude, comprimés pour
-minimiser la longueur du paquet (meilleure chance de réception en
-conditions dégradées). Symbol Code présent. Commentaire libre optionnel
-non compressé.
+\newcommand{\chNineHead}[1]{\shortstack{\sffamily\bfseries\itshape #1}}
+\newcommand{\chNineHeadCode}[2]{%
+  \shortstack{\sffamily\bfseries\itshape #1\\[-0.3ex]
+    \normalfont\ttfamily #2}%
+}
+\newcommand{\chNineBytes}[1]{%
+  \makebox[0pt][r]{Bytes:\hspace{1.2em}}%
+  \makebox[\linewidth][c]{#1}%
+}
+\newcommand{\chNineCompressedHead}{%
+  \makebox[\linewidth][c]{%
+  \begin{tabular}{@{}>{\centering\arraybackslash\sffamily\bfseries\itshape}p{\dimexpr\linewidth+2\tabcolsep\relax}@{}}
+  \resizebox{0.94\linewidth}{!}{\sffamily\bfseries\itshape Compressed Course/Speed} \\
+  \hline
+  \resizebox{0.94\linewidth}{!}{\sffamily\bfseries\itshape Compressed Radio Range} \\
+  \hline
+  \resizebox{0.94\linewidth}{!}{\sffamily\bfseries\itshape Compressed Altitude}
+  \end{tabular}}%
+}
+\newcommand{\chNineProto}[1]{\aprsorigtexttt{#1}}
+\newcommand{\chNineExampleText}[1]{{\rmfamily\normalsize #1}}
 
-\section*{Avantages}\label{avantages}
+\begin{aprsbodyblock}
+En format de données compressé, le champ Information contient la latitude et
+la longitude de la station, ainsi que le cap et la vitesse, ou une portée radio
+précalculée, ou l'altitude.
 
-\begin{itemize}
-\tightlist
-\item
-  Rétrocompatible avec les formats existants (\texttt{!}, \texttt{/},
-  \texttt{@}, \texttt{=}).
-\item
-  Supporte n'importe quel commentaire.
-\item
-  Vitesse précise à ±1 mph jusqu'à 40 mph, 3 \% à 600 mph.
-\item
-  Altitude en pieds précise à ±0.4 \% de 1 ft à 3000 miles.
-\item
-  Algorithme unique pour lat/long compressées.
-\item
-  Position améliorée à 1 pied dans le monde entier.
-\item
-  Pre-calculated range sur 1 octet.
-\item
-  Potentiel de compression 50 \% de tout format de position.
-\item
-  Réduction potentielle de 40 \% de la longueur du NMEA brut.
-\item
-  Réduction supplémentaire de 7 octets pour les altitudes GGA.
-\item
-  Support de la compression TNC à la source NMEA.
-\item
-  Compression digipeater à la volée des anciens trackers NMEA.
-\item
-  Toujours optionnel.
-\end{itemize}
+Ces informations sont compressées afin de réduire au minimum la longueur du
+paquet transmis (et donc d'améliorer ses chances d'être reçu correctement dans
+des conditions moins qu'idéales).
 
-Inconvénients mineurs : le cap ne résout qu'à ±2°, et pas de support
-PHG.
+Le champ Information contient également un Symbol Code d'affichage et peut,
+en option, comporter aussi un commentaire en texte clair (non compressé).
+\end{aprsbodyblock}
 
-\section*{Format des données
-compressées}\label{format-des-donnuxe9es-compressuxe9es}
+\phantomsection\addcontentsline{toc}{section}{Les avantages de la compression des données}
+\begin{aprssideblock}{Les avantages de la compression des données}
+Le format de données compressé peut être utilisé à la place des coordonnées
+numériques Lat/Long déjà décrites, par exemple dans les formats \lit{!},
+\lit{/}, \lit{@} et \lit{=}.
 
-Champ fixe 13 caractères : \texttt{/YYYYXXXX\$csT} où : - \texttt{/} =
-Symbol Table Identifier - \texttt{YYYY} = latitude compressée -
-\texttt{XXXX} = longitude compressée - \texttt{\$} = Symbol Code -
-\texttt{cs} = course/speed OU range pré-calculé OU altitude compressée -
-\texttt{T} = indicateur de type de compression
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Champ
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sym Tbl ID
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Comp Lat (YYYY)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Comp Long (XXXX)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Symbol Code
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-cs
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Comp Type (T)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & 4 & 4 & 1 & 2 & 1 \\
-\end{longtable}
-
-Tous les octets sauf \texttt{/} et le Symbol Code sont ASCII imprimables
-base-91 (\texttt{!..\{}), convertis en numérique par soustraction de 33.
-Ex : \texttt{\#} a code ASCII 35, valeur numérique 2.
-
-\section*{Symbole}\label{symbole}
-
-Le Symbol Table Identifier en tête (au lieu d'un chiffre) indique un
-rapport compressé, pas un lat/long normal.
-
-\section*{Encodage Lat/Long}\label{encodage-latlong}
-
-\begin{verbatim}
-YYYY = 380926 × (90 - latitude)      [base 91]
-XXXX = 190463 × (180 + longitude)    [base 91]
-\end{verbatim}
-
-Latitude positive au nord, longitude positive à l'est (degrés décimaux).
-
-\textbf{Exemple} longitude -72.75° :
-
-\begin{verbatim}
-190463 × (180 - 72.75) = 20427156
-20427156 / 91³ = 27, reste 80739
-   80739 / 91² =  9, reste 6210
-    6210 / 91¹ = 68, reste 22
-\end{verbatim}
-
-Ajout 33 : 60, 42, 101, 55 → \texttt{\textless{}*e7}.
-
-\section*{Décodage Lat/Long}\label{duxe9codage-latlong}
-
-Pour \texttt{YYYY\ =\ y1y2y3y4} et \texttt{XXXX\ =\ x1x2x3x4} :
-
-\begin{verbatim}
-Lat  =  90 - ((y1-33)×91³ + (y2-33)×91² + (y3-33)×91 + (y4-33)) / 380926
-Long = -180 + ((x1-33)×91³ + (x2-33)×91² + (x3-33)×91 + (x4-33)) / 190463
-\end{verbatim}
-
-Ex \texttt{\textless{}*e7} :
-
-\begin{verbatim}
-Long = -180 + (27×91³ + 9×91² + 68×91 + 22) / 190463
-     = -180 + (20346417 + 74529 + 6188 + 22) / 190463
-     = -180 + 107.25
-     = -72.75°
-\end{verbatim}
-
-\section*{Course/Speed, Range,
-Altitude}\label{coursespeed-range-altitude}
-
-Les 2 octets \texttt{cs} après le Symbol Code contiennent, en base 91 :
-- soit course/speed - soit range pré-calculé - soit altitude
-
-Cas spécial \texttt{c\ =\ V} (espace) : pas de course/speed/range →
-\texttt{csT} ignoré.
-
-\textbf{Course/Speed} --- si \texttt{c} ASCII est dans \texttt{!..z}
-(0-89 après -33) :
-
-\begin{verbatim}
-course = c × 4
-speed  = 1.08^s - 1
-\end{verbatim}
-
-Ex \texttt{7P} : c=22, s=47 → course=88°, speed = 1.08⁴⁷ - 1 ≈ 36.2
-knots.
-
-\textbf{Pre-calculated Range} --- si \texttt{c\ =\ \{} :
-
-\begin{verbatim}
-range = 2 × 1.08^s
-\end{verbatim}
-
-Ex \texttt{\{?} : s=30 → range = 2 × 1.08³⁰ ≈ 20 miles.
-
-\section*{Octet Compression Type (T)}\label{octet-compression-type-t}
-
-Suit \texttt{cs}. Contient des bit-fields (GPS fix, source NMEA, origine
-compression). Non significatif si \texttt{c\ =\ V}.
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1111}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Bit
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-7
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-5
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-4
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-3
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Valeur & non utilisé & non utilisé & GPS Fix & NMEA Source (2 bits) & &
-Compression Origin (3 bits) & & \\
-\end{longtable}
+La compression des données présente plusieurs avantages importants :
 
 \begin{itemize}
-\tightlist
-\item
-  GPS Fix : 0 = ancien, 1 = courant.
-\item
-  NMEA Source : 00 = other, 01 = GLL, 10 = GGA, 11 = RMC.
-\item
-  Compression Origin : 000 = Compressed, 001 = TNC BText, 010 = Software
-  (DOS/Mac/Win/+SA), 011 = tbd, 100 = KPC3, 101 = Pico, 110 = Other
-  tracker, 111 = Digipeater conversion.
+\setlength{\itemsep}{0.25em}
+\setlength{\parskip}{0pt}
+\item Entièrement rétrocompatible avec tous les formats existants.
+\item Prend entièrement en charge toute chaîne de commentaire.
+\item La vitesse est précise à $\pm 1$ mph jusqu'à environ 40 mph et à 3\,\%
+  près à 600 mph.
+\item L'altitude en pieds est précise à $\pm 0{,}4$\,\%, de 1 pied à
+  3000 miles.
+\item Traitement cohérent des latitude et longitude compressées par un
+  algorithme unique.
+\item Position améliorée à 1 pied dans le monde entier.
+\item Portée radio précalculée, compressée sur un octet.
+\item Compression potentielle de 50\,\% de tous les formats de position
+  transmis sur les ondes.
+\item Réduction potentielle de 40\,\% de la longueur des données GPS NMEA
+  brutes.
+\item Réduction supplémentaire de 7 octets pour les altitudes NMEA GGA.
+\item Prise en charge de la compression par le TNC à la source NMEA
+  (depuis le récepteur GPS).
+\item Compression à la volée, par un digipeater, des anciens trackers NMEA.
+\item L'utilisation est facultative dans tous les cas.
 \end{itemize}
 
-\textbf{Exemple} : RMC + fix courant + APRSdos → binaire
-\texttt{0\ 0\ 1\ 11\ 010} = 58 décimal. +33 = 91 = \texttt{{[}}.
+Les seuls inconvénients mineurs sont que le cap n'a qu'une résolution de
+$\pm 2$ degrés et que ce format ne prend pas en charge PHG.
+\end{aprssideblock}
 
-Complet avec les exemples plus haut (49° 30' N, 72° 45' W, 36.2 knots,
-88°, symbole « car »):
+\phantomsection\addcontentsline{toc}{section}{Format des données compressées}
+\begin{aprssideblock}{Format des données compressées}
+Les données compressées peuvent être générées de plusieurs façons :
 
-\begin{verbatim}
-/ YYYY  XXXX  $  csT
-/ 5L!!  <*e7  >  7P[
-\end{verbatim}
+\begin{itemize}
+\setlength{\itemsep}{0.25em}
+\setlength{\parskip}{0pt}
+\item par un logiciel APRS.
+\item par une saisie manuelle préalable dans le texte de beacon d'un
+  digipeater.
+\item par un digipeater convertissant en données compressées les paquets NMEA
+  bruts d'un tracker.
+\end{itemize}
 
-\section*{Altitude (source GGA)}\label{altitude-source-gga}
+[À l'avenir, il est possible qu'un Kantronics KPC-3 ou un autre TNC de tracker
+puisse compresser directement les données provenant d'un récepteur GPS
+connecté.]
 
-Si le T byte indique GGA (bits 4-3 = \texttt{10}), la sentence contient
-une altitude en pieds. Après compression, dans les octets \texttt{cs} :
+Dans tous les cas, le format compressé est un champ fixe de 13 caractères :
 
-\begin{verbatim}
-altitude = 1.002^cs  feet
-\end{verbatim}
+\par\medskip
+\noindent\hspace*{0.7em}\chNineProto{/YYYYXXXX\$csT}
+\par\medskip
 
-où \texttt{cs} (numérique) = (c-33) × 91 + (s-33).
+où
 
-Ex \texttt{S{]}} : c=50, s=60 → cs = 50 × 91 + 60 = 4610 → altitude =
-1.002⁴⁶¹⁰ = 10004 ft.
+\begin{tabular}{@{}>{\ttfamily}p{0.13\linewidth}@{}>{\raggedright\arraybackslash}p{0.80\linewidth}@{}}
+/    & est le Symbol Table Identifier ; \\
+YYYY & est la latitude compressée ; \\
+XXXX & est la longitude compressée ; \\
+\$   & est le Symbol Code ; \\
+cs   & est le cap et la vitesse compressés, ou la portée radio précalculée
+       compressée, ou l'altitude compressée ; \\
+T    & est l'indicateur du type de compression.
+\end{tabular}
 
-\section*{New Trackers}\label{new-trackers}
+\medskip
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.35}
+\sffamily\fontsize{7.7}{8.7}\selectfont
+\begin{tabular}{|>{\centering\arraybackslash}m{0.10\linewidth}|>{\centering\arraybackslash}m{0.18\linewidth}|>{\centering\arraybackslash}m{0.18\linewidth}|>{\centering\arraybackslash}m{0.12\linewidth}|>{\centering\arraybackslash}m{0.22\linewidth}|>{\centering\arraybackslash}m{\dimexpr0.20\linewidth-12\tabcolsep-7\arrayrulewidth\relax}|}
+\hline
+\multicolumn{6}{|l|}{\bfseries\itshape Compressed Position Data} \\
+\hline
+\chNineHead{Sym\\Table\\ID} &
+\chNineHeadCode{Compressed\\Lat}{YYYY} &
+\chNineHeadCode{Compressed\\Long}{XXXX} &
+\chNineHead{Symbol\\Code} &
+\chNineCompressedHead &
+\chNineHeadCode{Comp\\Type}{T} \\
+\hline
+\chNineBytes{1} & 4 & 4 & 1 & 2 & 1 \\
+\hline
+\end{tabular}
+\endgroup
 
-Firmware tracker peut compresser directement le GPS au format APRS
-compressé. DTI \texttt{!} = temps réel + tracker sans capacité APRS. DTI
-\texttt{/} = pas temps réel, avec dernier fix time inclus.
+Le format compressé peut être utilisé à la place du format de position
+Lat/Long partout où apparaît
+\chNineProto{…ddmm.hhN/dddmm.hhW\$xxxxxxx…}.
 
-\section*{Old Trackers}\label{old-trackers}
+Tous les octets, à l'exception de \lit{/} et de \lit{\$}, sont des
+caractères ASCII imprimables en base 91 (\lit{!..\{}). Ils sont convertis en
+valeurs numériques en soustrayant 33 au code décimal du caractère ASCII. Par
+exemple, \lit{\#} a pour code ASCII 35 et représente la valeur numérique 2
+(c'est-à-dire $35-33$).
+\end{aprssideblock}
 
-Certains digipeaters convertissent le NMEA brut d'anciens trackers en
-format compressé. Ils compressent si l'adresse de destination est
-\texttt{GPS} (les 3 lettres exactes, pas \texttt{GPS*}). Les trackers ne
-voulant pas être modifiés utilisent une autre destination générique
+\phantomsection\addcontentsline{toc}{section}{Symbole}
+\begin{aprssideblock}{Symbole}
+La présence, en tête, du Symbol Table Identifier à la place d'un chiffre
+indique qu'il s'agit d'un Position Report compressé et non d'un rapport
+Lat/Long normal.
+\end{aprssideblock}
+
+\begingroup
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
+\setlength{\abovedisplayshortskip}{2pt}
+\setlength{\belowdisplayshortskip}{2pt}
+
+\phantomsection\addcontentsline{toc}{section}{Encodage Lat/Long}
+\begin{aprssideblock}{Encodage Lat/Long}
+Les valeurs de \chNineProto{YYYY} et \chNineProto{XXXX} sont calculées comme
+suit :
+
+\begin{align*}
+\chNineProto{YYYY} &\quad\text{vaut}\quad
+  380926 \times (90-\text{latitude}) \qquad \text{[base 91]},
+\end{align*}
+\hspace*{3.7em}la latitude est positive au nord et négative au sud, en degrés.
+
+\begin{align*}
+\chNineProto{XXXX} &\quad\text{vaut}\quad
+  190463 \times (180+\text{longitude}) \qquad \text{[base 91]},
+\end{align*}
+\hspace*{3.7em}la longitude est positive à l'est et négative à l'ouest, en degrés.
+
+Par exemple, pour une longitude de $72^{\circ}\ 45'\ 00''$ ouest
+(c'est-à-dire $-72{,}75$ degrés), le calcul est
+$190463\times(180-72{,}75)=20427156$. Comme il s'agit de la base 91, il faut
+ensuite diviser progressivement cette valeur par des puissances décroissantes
+de 91 afin d'obtenir les valeurs numériques de X :
+
+\begin{align*}
+20427156 / 91^3 &= \lit{27},\quad \text{reste }80739 \\
+80739 / 91^2    &= \lit{9},\quad  \text{reste }6210 \\
+6210 / 91^1     &= \lit{68},\quad \text{reste }\lit{22}
+\end{align*}
+
+Pour obtenir les caractères ASCII correspondants, on ajoute 33 à chacune de
+ces valeurs, ce qui donne 60 (soit $27+33$), 42, 101 et 55. D'après la table
+des codes ASCII (annexe 3), cela correspond à \lit{<*e7} pour
+\chNineProto{XXXX}.
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Décodage Lat/Long}
+\begin{aprssideblock}{Décodage Lat/Long}
+Pour décoder une position Lat/Long compressée, il faut effectuer l'opération
+inverse. Ainsi, si \chNineProto{YYYY} est représenté par
+\chNineProto{y1y2y3y4} et \chNineProto{XXXX} par
+\chNineProto{x1x2x3x4}, alors :
+
+\begin{align*}
+\mathrm{Lat}={}&90-\bigl((y_1-33)\times91^3+(y_2-33)\times91^2 \\
+&\hspace{5.8em}+(y_3-33)\times91+y_4-33\bigr)/380926, \\[0.4em]
+\mathrm{Long}={}&-180+\bigl((x_1-33)\times91^3+(x_2-33)\times91^2 \\
+&\hspace{5.8em}+(x_3-33)\times91+x_4-33\bigr)/190463.
+\end{align*}
+
+Par exemple, si la valeur compressée de la longitude est \lit{<*e7}
+(comme calculé ci-dessus), le calcul devient :
+
+\begin{align*}
+\mathrm{Long}
+ &= -180+(27\times91^3+9\times91^2+68\times91+22)/190463 \\
+ &= -180+(20346417+74529+6188+22)/190463 \\
+ &= -180+107{,}25 \\
+ &= -72{,}75\ \text{degrés}.
+\end{align*}
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Course/Speed, portée radio précalculée et altitude}
+\begin{aprssideblock}{Course/Speed, portée radio précalculée et altitude}
+Les deux octets \chNineProto{cs} qui suivent le caractère Symbol Code peuvent
+contenir soit le cap et la vitesse compressés, soit la portée radio
+précalculée compressée, soit l'altitude de la station. Ces deux octets sont au
+format base 91.
+
+Dans le cas particulier où \chNineProto{c = }\lit{~} (espace), il n'y a pas
+de données de cap, de vitesse ou de portée ; les octets \chNineProto{csT}
+sont alors ignorés.
+
+\textbf{Course/Speed} --- Si le code ASCII de \lit{c} est compris entre
+\lit{!} et \lit{z} inclus --- ce qui correspond aux valeurs numériques
+décimales 0 à 89 (après soustraction de 33 au code ASCII) ---,
+\chNineProto{cs} représente alors une valeur Course/Speed compressée :
+\end{aprssideblock}
+
+\endgroup
+
+\begin{aprsbodyblock}
+\begin{align*}
+\mathrm{course} &= \lit{c}\times4, \\
+\mathrm{speed}  &= 1{,}08^{\lit{s}}-1.
+\end{align*}
+
+Par exemple, si les caractères \chNineProto{cs} sont \lit{7P}, les valeurs
+correspondantes de \lit{c} et \lit{s} (après soustraction de 33 au code du
+caractère ASCII) sont respectivement 22 et 47. En remplaçant dans les équations
+ci-dessus :
+
+\begin{align*}
+\mathrm{course} &= \lit{22}\times4=88\ \text{degrés}, \\
+\mathrm{speed}  &= 1{,}08^{\lit{47}}-1=36{,}2\ \text{knots}.
+\end{align*}
+
+\textbf{Portée radio précalculée} --- Si \chNineProto{c = }\lit{\{}, alors
+\chNineProto{cs} représente une valeur de portée radio précalculée compressée :
+
+\begin{align*}
+\mathrm{range}=2\times1{,}08^{\lit{s}}.
+\end{align*}
+
+Par exemple, si les octets \chNineProto{cs} sont \lit{\{?}, le code ASCII
+de \lit{?} est 63 ; la valeur de \lit{s} est donc 30 (soit $63-33$). Ainsi :
+
+\begin{align*}
+\mathrm{range} &= 2\times1{,}08^{\lit{30}} \\
+               &\simeq 20\ \text{miles}.
+\end{align*}
+
+APRS trace donc à l'écran un cercle de 20 miles de rayon autour du symbole de
+la station.
+\end{aprsbodyblock}
+
+\phantomsection\addcontentsline{toc}{section}{Octet de type de compression (T)}
+\begin{aprssideblock}{Octet de type de compression (T)}
+L'octet \chNineProto{T} suit les octets \chNineProto{cs}. Il contient
+plusieurs champs de bits indiquant l'état du fix GPS, la source NMEA des
+données de position et l'origine de la compression.
+
+L'octet \chNineProto{T} n'a pas de signification si l'octet
+\chNineProto{c} est \lit{~} (espace).
+\end{aprssideblock}
+
+\begin{aprsbodyblock}
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\sffamily\fontsize{7.2}{8.1}\selectfont
+\begin{tabular}{|
+  >{\centering\arraybackslash}m{0.135\linewidth}|
+  >{\centering\arraybackslash}m{0.135\linewidth}|
+  >{\centering\arraybackslash}m{0.15\linewidth}|
+  >{\centering\arraybackslash}m{0.17\linewidth}|
+  >{\centering\arraybackslash}m{\dimexpr0.41\linewidth-10\tabcolsep-6\arrayrulewidth\relax}|}
+\hline
+\multicolumn{5}{|l|}{\bfseries\itshape Format de l'octet Compression Type (T)} \\
+\hline
+\makebox[0pt][r]{Bit:\hspace{1.2em}}\makebox[\linewidth][c]{7} & 6 & 5 &
+\makebox[\linewidth][s]{4\hfill\rule[-1.45ex]{\arrayrulewidth}{3.5ex}\hfill 3} &
+\makebox[\linewidth][s]{2\hfill\rule[-1.45ex]{\arrayrulewidth}{3.5ex}\hfill
+1\hfill\rule[-1.45ex]{\arrayrulewidth}{3.5ex}\hfill 0} \\
+\hline
+\rowcolor{gray!20}
+\itshape Non utilisé &
+\itshape Non utilisé &
+\bfseries\itshape GPS Fix &
+\bfseries\itshape NMEA Source &
+\bfseries\itshape Compression Origin \\
+\hline
+\makebox[0pt][r]{Valeur:\hspace{1.2em}}0 &
+0 &
+{\raggedright 0 = ancien (dernier)\newline 1 = courant\par} &
+{\raggedright 0 0 = autre\newline 0 1 = GLL\newline 1 0 = GGA\newline 1 1 = RMC\par} &
+{\raggedright 0 0 0 = Compressed\newline 0 0 1 = TNC BText\newline
+0 1 0 = Software (DOS/Mac/Win/+SA)\newline 0 1 1 = [tbd]\newline
+1 0 0 = KPC3\newline 1 0 1 = Pico\newline 1 1 0 = Other tracker [tbd]\newline
+1 1 1 = Digipeater conversion\par} \\
+\hline
+\end{tabular}
+\endgroup
+\end{aprsbodyblock}
+
+\begin{aprsbodyblock}
+Par exemple, si la position compressée provient d'une sentence RMC, si le fix
+est courant et si la compression est effectuée par le logiciel APRSdos, la
+valeur binaire de \chNineProto{T} est \chNineProto{0 0 1 11 010}, soit 58
+en décimal. En ajoutant 33 à cette valeur, on obtient le code ASCII de
+l'octet \chNineProto{T} (soit 91), qui correspond au caractère \lit{[}.
+
+Ainsi, en utilisant les données de tous les exemples précédents, si la
+sentence RMC contient (entre autres paramètres) les données suivantes :
+
+\begin{tabular}{@{}r@{\ }c@{\ }l@{}}
+Latitude  & = & $49^{\circ}\ 30'\ 00''$ nord \\
+Longitude & = & $72^{\circ}\ 45'\ 00''$ ouest \\
+Vitesse   & = & 36,2 knots \\
+Cap       & = & $88^{\circ}$
+\end{tabular}
+
+et que :
+
+\begin{tabular}{@{}l@{}}
+le fix est courant, \\
+la compression est effectuée par le logiciel APRSdos, \\
+le symbole d'affichage est une « voiture »,
+\end{tabular}
+
+alors le champ de position compressé complet de 13 caractères est transmis
+ainsi :
+
+\begin{center}
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\chNineProto{/} & \chNineProto{YYYY} & \chNineProto{XXXX} &
+\chNineProto{\$} & \chNineProto{csT} \\
+\hline
+\lit{/} & \lit{5L!!} & \lit{<*e7} & \lit{>} & \lit{7P[} \\
+\hline
+\end{tabular}
+\end{center}
+\end{aprsbodyblock}
+
+\phantomsection\addcontentsline{toc}{section}{Altitude}
+\begin{aprssideblock}{Altitude}
+Si l'octet \chNineProto{T} indique que les données brutes proviennent d'une
+sentence GGA (c'est-à-dire que les bits 4 et 3 de l'octet \chNineProto{T}
+valent \chNineProto{10}), alors la sentence contient une altitude en pieds.
+Après compression, les données d'altitude compressées sont placées dans les
+octets \chNineProto{cs}, de telle sorte que :
+
+\begin{align*}
+\mathrm{altitude}=1{,}002^{\lit{cs}}\ \text{pieds}.
+\end{align*}
+
+Par exemple, si les octets \chNineProto{cs} reçus sont \lit{S]}, le calcul
+s'effectue comme suit :
+
+\begin{itemize}
+\setlength{\itemsep}{0.35em}
+\item Soustraire 33 du code ASCII de chaque caractère :
+  \begin{align*}
+  \lit{c} &= 83-33=50, \\
+  \lit{s} &= 93-33=60.
+  \end{align*}
+\item Multiplier \lit{c} par 91 et ajouter \lit{s} pour obtenir \lit{cs} :
+  \begin{align*}
+  \lit{cs} &= 50\times91+60 \\
+            &= 4610.
+  \end{align*}
+\item Puis :
+  \begin{align*}
+  \mathrm{altitude} &= 1{,}002^{\lit{4610}} \\
+                     &= 10004\ \text{pieds}.
+  \end{align*}
+\end{itemize}
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Nouveaux trackers}
+\begin{aprssideblock}{Nouveaux trackers}
+Le firmware d'un tracker peut compresser directement les données GPS au
+format APRS compressé. Il utilise alors le Data Type Indicator \lit{!}, qui
+indique que la position est en temps réel et que le tracker n'est pas doté de
+fonctions APRS.
+
+Si le Position Report n'est pas en temps réel, le Data Type Indicator \lit{/}
+peut être utilisé à la place, afin d'inclure l'heure du dernier fix.
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{Anciens trackers}
+\begin{aprssideblock}{Anciens trackers}
+Certains digipeaters peuvent convertir en format de données compressé les
+chaînes NMEA brutes provenant de trackers existants, avant de les retransmettre.
+
+Ces digipeaters compressent les données si la Destination Address du tracker
+est \chNineProto{GPS}. (\textbf{Note :} il s'agit de l'adresse à 3 lettres
+\chNineProto{GPS}, et non de \chNineProto{GPS*}.)
+
+Les trackers qui ne veulent pas que leurs paquets soient modifiés par le réseau
+APRS utilisent n'importe quelle autre APRS Destination Address générique
 valide.
+\end{aprssideblock}
 
-\section*{Formats de rapport
-compressés}\label{formats-de-rapport-compressuxe9s}
+\phantomsection\addcontentsline{toc}{section}{Formats de rapports compressés}
+\begin{aprssideblock}{Formats de rapports compressés}
+Les données compressées sont contenues dans le champ Information AX.25, dans
+les formats suivants :
+\end{aprssideblock}
 
-\textbf{Sans timestamp} :
-
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.35}
+\sffamily\fontsize{7.5}{8.5}\selectfont
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.055\textwidth+2pt\relax}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.085\textwidth}|>{\centering\arraybackslash}m{0.18\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.315\textwidth-16\tabcolsep-9\arrayrulewidth-2pt\relax}|}
 \hline
-\textbf{Champ} & \lit{!} ou \lit{=} & Sym Tbl ID & Comp Lat & Comp Long & Symbol Code & cs & T \\
+\multicolumn{8}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de Position Report Lat/Long compressé --- sans timestamp} \\
 \hline
-\textbf{Octets} & 1 & 1 & 4 & 4 & 1 & 2 & 1 \\
+\chNineHead{\lit{!} or \lit{=}} &
+\chNineHead{Sym\\Table\\ID} &
+\chNineHeadCode{Comp\\Lat}{YYYY} &
+\chNineHeadCode{Comp\\Long}{XXXX} &
+\chNineHead{Symbol\\Code} &
+\chNineCompressedHead &
+\chNineHeadCode{Comp\\Type}{T} &
+\cellcolor{gray!20}\chNineHead{Comment\\(max 40 chars)} \\
+\hline
+\chNineBytes{1} & 1 & 4 & 4 & 1 & 2 & 1 & 0--40 \\
+\hline
+\multicolumn{8}{|p{\dimexpr0.92\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \begin{minipage}{\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.62\linewidth}@{}}
+  \chNineProto{=/5L!!<*e7>}\lit{~}\lit{sT}\chNineProto{Comment} &
+  \chNineExampleText{avec APRS messaging. Noter le caractère \lit{~}
+  (espace) qui suit le Symbol Code \chNineProto{>}, indiquant qu'il n'y a ni
+  Course/Speed, ni portée radio, ni altitude. Les caractères \lit{sT} sont
+  des fillers et n'ont ici aucune signification.} \\
+  \chNineProto{=/5L!!<*e7>7P[} &
+  \chNineExampleText{avec APRS messaging, sentence RMC, avec Course/Speed.} \\
+  \chNineProto{=/5L!!<*e7>\{?!} &
+  \chNineExampleText{avec APRS messaging, avec portée radio.} \\
+  \chNineProto{=/5L!!<*e7OS]S} &
+  \chNineExampleText{avec APRS messaging, sentence GGA, altitude.}
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
 \hline
 \end{tabular}
 \end{center}
-\noindent + Comment (0-40 octets)
+\endgroup
 
-Exemples : - \texttt{=/5L!!\textless{}*e7\textgreater{}V\ sTComment} ---
-messagerie, \texttt{V} espace après Symbol Code = pas de
-cs/range/altitude, \texttt{sT} sont des fillers ignorés. -
-\texttt{=/5L!!\textless{}*e7\textgreater{}7P{[}} --- messagerie, RMC,
-avec course/speed. - \texttt{=/5L!!\textless{}*e7\textgreater{}\{?!} ---
-messagerie, avec range. - \texttt{=/5L!!\textless{}*e7OS{]}S} ---
-messagerie, GGA, altitude.
-
-\textbf{Avec timestamp} :
-
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.35}
+\sffamily\fontsize{7.3}{8.3}\selectfont
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.05\textwidth+4pt\relax}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.065\textwidth}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.17\textwidth}|>{\centering\arraybackslash}m{0.065\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.30\textwidth-18\tabcolsep-10\arrayrulewidth-4pt\relax}|}
 \hline
-\textbf{Champ} & \lit{/} ou \lit{@} & Time & Sym Tbl ID & Comp Lat & Comp Long & Symbol Code & cs & T \\
+\multicolumn{9}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de Position Report Lat/Long compressé --- avec timestamp} \\
 \hline
-\textbf{Octets} & 1 & 7 & 1 & 4 & 4 & 1 & 2 & 1 \\
+\chNineHead{\lit{/} or \lit{@}} &
+\chNineHead{Time\\DHM /\\HMS} &
+\chNineHead{Sym\\Table\\ID} &
+\chNineHeadCode{Comp\\Lat}{YYYY} &
+\chNineHeadCode{Comp\\Long}{XXXX} &
+\chNineHead{Symbol\\Code} &
+\chNineCompressedHead &
+\chNineHeadCode{Comp\\Type}{T} &
+\cellcolor{gray!20}\chNineHead{Comment\\(max 40 chars)} \\
+\hline
+\chNineBytes{1} & 7 & 1 & 4 & 4 & 1 & 2 & 1 & 0--40 \\
+\hline
+\multicolumn{9}{|p{\dimexpr0.92\textwidth-2\tabcolsep-2\arrayrulewidth\relax}|}{%
+  \begin{minipage}{\linewidth}
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemple}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{0.62\linewidth}@{}}
+  \chNineProto{@092345z/5L!!<*e7>\{?!} &
+  \chNineExampleText{avec APRS messaging, timestamp et portée radio.}
+  \end{tabular}
+  \vspace{0.25em}
+  \end{minipage}%
+} \\
 \hline
 \end{tabular}
 \end{center}
-\noindent + Comment (0-40 octets)
-
-Ex : \texttt{@092345z/5L!!\textless{}*e7\textgreater{}\{?!} ---
-messagerie, timestamp, range.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\endgroup

@@ -1,225 +1,310 @@
 \chapter[FORMATS DE TEMPS ET DE POSITION]{Formats de temps et de
 position}\label{formats-de-temps-et-de-position}
 
-\section{Formats de temps}\label{formats-de-temps}
-
-Les timestamps APRS s'expriment de 3 manières :
-
-\begin{itemize}
-\tightlist
-\item
-  Day/Hours/Minutes (DHM)
-\item
-  Hours/Minutes/Seconds (HMS)
-\item
-  Month/Day/Hours/Minutes (MDHM)
-\end{itemize}
-
-Toutes utilisent l'horloge 24 h.
-
-\textbf{DHM} --- champ fixe de 7 caractères : 6 chiffres (jour + heure)
-+ 1 indicateur (\texttt{z} ou \texttt{/}). Le groupe est
-\texttt{JJHHMM}, jour du mois 01-31, heures et minutes.
+\begin{aprssideblock}{Formats de temps}
+\phantomsection\addcontentsline{toc}{section}{Formats de temps}\label{formats-de-temps}
+Les timestamps APRS s'expriment de trois manières différentes :
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{092345z} = 23:45 zulu, jour 9 du mois.
+  Format Day/Hours/Minutes
 \item
-  \texttt{092345/} = 23:45 heure locale, jour 9.
+  Format Hours/Minutes/Seconds
+\item
+  Format Month/Day/Hours/Minutes
 \end{itemize}
 
-Recommandé : n'émettre que du zulu à l'avenir. Les Status Reports
-n'acceptent que le zulu.
+Dans les trois formats, l'horloge de 24 heures est utilisée.
 
-\textbf{HMS} --- champ fixe de 7 caractères : 6 chiffres
-(heures/minutes/secondes) + \texttt{h}.
+\textbf{Day/Hours/Minutes} (DHM) est un champ fixe de 7 caractères,
+constitué d'un groupe \emph{day/time} de 6 chiffres suivi d'un unique
+caractère \emph{time indicator} (\lit{z} ou \lit{/}). Le groupe
+\emph{day/time} est constitué d'un jour du mois à deux chiffres
+(01--31) et d'une heure à quatre chiffres, en heures et minutes.
+
+Les heures peuvent être exprimées en temps \emph{zulu} (UTC/GMT) ou en
+heure \emph{locale}. Par exemple :
+
+\begin{aprsexample}
+\texttt{092345}\lit{z} \exgap correspond à 2345 heures, temps
+\emph{zulu}, le 9\textsuperscript{e} jour du mois. \\
+\texttt{092345}\lit{/} \exgap correspond à 2345 heures, heure
+\emph{locale}, le 9\textsuperscript{e} jour du mois.
+\end{aprsexample}
+
+Il est recommandé que les futures implémentations APRS ne transmettent
+sur l'air que le format zulu.
+
+\textbf{Note} : l'heure dans les Status Reports ne peut être
+qu'\emph{uniquement} au format zulu.
+
+\textbf{Hours/Minutes/Seconds} (HMS) est un champ fixe de 7 caractères,
+constitué d'une heure de 6 chiffres en heures, minutes et secondes,
+suivie du caractère \emph{time-indicator} \lit{h}. Par exemple :
+
+\begin{aprsexample}
+\texttt{234517}\lit{h} \exgap correspond à 23 heures 45 minutes et
+17 secondes \emph{zulu}.
+\end{aprsexample}
+
+\textbf{Note :} ce format ne peut \emph{pas} être utilisé dans les
+Status Reports.
+
+\textbf{Month/Day/Hours/Minutes} (MDHM) est un champ fixe de
+8 caractères, constitué du mois (01--12) et du jour du mois (01--31),
+suivis de l'heure en heures et minutes zulu. Par exemple :
+
+\begin{aprsexample}
+\texttt{10092345} \exgap correspond à 23 heures 45 minutes zulu le
+9 octobre.
+\end{aprsexample}
+
+Ce format n'est utilisé que dans les rapports provenant de stations
+météo « positionless » autonomes (c'est-à-dire des rapports qui ne
+contiennent pas d'information de position de la station).
+\end{aprssideblock}
+
+\begin{aprssideblock}{Utilisation des\\timestamps}
+\phantomsection\addcontentsline{toc}{section}{Utilisation des timestamps}\label{utilisation-des-timestamps}
+Lorsqu'une station transmet un rapport \emph{sans} timestamp, une
+station APRS réceptrice peut enregistrer en interne l'heure à laquelle
+il a été reçu, si nécessaire. Cet enregistrement correspond à ce que la
+station \emph{réceptrice} considère comme l'heure de création du
+rapport.
+
+En revanche, lorsqu'une station transmet un rapport \emph{avec} un
+timestamp, ce timestamp représente ce que la station \emph{émettrice}
+considère comme l'heure de création du rapport.
+
+Autrement dit, les rapports envoyés \emph{sans} timestamp peuvent être
+considérés comme des rapports en temps réel, « courants » (et la
+station \emph{réceptrice} doit enregistrer l'heure à laquelle ils ont
+été reçus), tandis que les rapports envoyés \emph{avec} un timestamp
+peuvent être ou ne pas être en temps réel, et peuvent éventuellement
+être (très) « anciens ».
+
+Quatre APRS Data Type Identifiers indiquent si un rapport contient ou
+non un timestamp, selon que la station dispose ou non de la capacité de
+messagerie APRS :
+\end{aprssideblock}
+
+\begin{aprsbodyblock}
+{\small
+\setlength{\arrayrulewidth}{0.75pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.3}
+\noindent\hfill
+\begin{tabular}{|>{\bfseries\itshape}p{0.60\linewidth}|>{\centering\arraybackslash}p{0.15\linewidth}|>{\centering\arraybackslash}p{0.15\linewidth}|}
+\cline{2-3}
+\multicolumn{1}{c|}{} & \cellcolor{gray!20}\bfseries\itshape No APRS Messaging & \cellcolor{gray!20}\bfseries\itshape With APRS Messaging \\
+\hline
+(Current/real-time)\hfill Report without timestamp & \lit{!} & \lit{=} \\
+\hline
+(Old/non-real-time)\hfill Report with timestamp & \lit{/} & \lit{@} \\
+\hline
+\end{tabular}
+}
+\end{aprsbodyblock}
+
+\begin{aprsbodyblock}
+Les stations dépourvues de la capacité de messagerie APRS sont
+typiquement des trackers autonomes ou des digipeaters. Les stations qui
+émettent des rapports sans timestamp sont généralement (mais pas
+nécessairement) des stations fixes.
+\end{aprsbodyblock}
+
+\begin{aprssideblock}{Format de latitude}
+\phantomsection\addcontentsline{toc}{section}{Format de latitude}\label{format-de-latitude}
+La latitude est exprimée sous la forme d'un champ fixe de 8 caractères,
+en degrés et minutes décimales (à deux décimales), suivi de la lettre
+\lit{N} pour nord ou \lit{S} pour sud.
+
+Les degrés de latitude sont compris entre 00 et 90. Les minutes de
+latitude sont exprimées en minutes entières et centièmes de minute,
+séparées par un point décimal.
+
+Par exemple :
+
+\begin{aprsexample}
+\texttt{4903.50}\lit{N} \exgap correspond à 49 degrés 3 minutes
+30 secondes nord.
+\end{aprsexample}
+
+Dans les exemples de format générique, la latitude est représentée par
+la chaîne de 8 caractères \texttt{ddmm.hhN} (c'est-à-dire degrés,
+minutes et centièmes de minute nord).
+\end{aprssideblock}
+
+\begin{aprssideblock}{Format de longitude}
+\phantomsection\addcontentsline{toc}{section}{Format de longitude}\label{format-de-longitude}
+La longitude est exprimée sous la forme d'un champ fixe de 9 caractères,
+en degrés et minutes décimales (à deux décimales), suivi de la lettre
+\lit{E} pour est ou \lit{W} pour ouest.
+
+Les degrés de longitude sont compris entre 000 et 180. Les minutes de
+longitude sont exprimées en minutes entières et centièmes de minute,
+séparées par un point décimal.
+
+Par exemple :
+
+\begin{aprsexample}
+\texttt{07201.75}\lit{W} \exgap correspond à 72 degrés 1 minute
+45 secondes ouest.
+\end{aprsexample}
+
+Dans les exemples de format générique, la longitude est représentée par
+la chaîne de 9 caractères \texttt{dddmm.hhW} (c'est-à-dire degrés,
+minutes et centièmes de minute ouest).
+\end{aprssideblock}
+
+\begin{aprssideblock}{Coordonnées\\de position}
+\phantomsection\addcontentsline{toc}{section}{Coordonnées de position}\label{coordonnuxe9es-de-position}
+Les coordonnées de position sont une combinaison de latitude et de
+longitude, séparées par un Symbol Table Identifier d'affichage, et
+suivies d'un Symbol Code. Par exemple :
+
+\begin{aprsexample}
+\texttt{4903.50N}\lit{/}\texttt{07201.75W}\lit{-}
+\end{aprsexample}
+
+Le caractère \lit{/} entre la latitude et la longitude est le Symbol
+Table Identifier (indiquant dans ce cas l'utilisation de la Primary
+Symbol Table), et le caractère \lit{-} à la fin est le Symbol Code issu
+de cette table (indiquant dans ce cas une icône « maison »).
+
+Une description des symboles d'affichage figure au chapitre 20 :
+Symboles APRS. La liste complète des Symbol Tables figure à l'annexe 2.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Ambiguïté de position}
+\phantomsection\addcontentsline{toc}{section}{Ambiguïté de position}\label{ambiguuxeftuxe9-de-position}
+Dans certains cas --- par exemple lorsque la position exacte n'est pas
+connue --- la station émettrice peut souhaiter réduire le nombre de
+chiffres de précision de la latitude et de la longitude. Dans ce cas,
+les chiffres \texttt{mm} et \texttt{hh} de la latitude peuvent être
+progressivement remplacés par un caractère \lit{~} (espace) à mesure que
+l'imprécision augmente. Par exemple :
+
+\begin{aprsexample}
+\texttt{4903.5}\lit{~}\texttt{N} \exgap représente la latitude au
+1/10\textsuperscript{e} de minute le plus proche. \\
+\texttt{4903.}\lit{~~}\texttt{N} \exgap représente la latitude à la
+minute la plus proche. \\
+\texttt{490}\lit{~}\texttt{.}\lit{~~}\texttt{N} \exgap représente la
+latitude aux 10 minutes les plus proches. \\
+\texttt{49}\lit{~~}\texttt{.}\lit{~~}\texttt{N} \exgap représente la
+latitude au degré le plus proche.
+\end{aprsexample}
+
+Le niveau d'ambiguïté spécifié dans la latitude s'applique
+automatiquement à la longitude également --- il n'est pas nécessaire
+d'inclure des caractères \lit{~} dans la longitude.
+
+Par exemple, les coordonnées :
+
+\begin{aprsexample}
+\texttt{4903.}\lit{~~}\texttt{N/07201.75W-}
+\end{aprsexample}
+
+représentent la position à la minute la plus proche. C'est-à-dire que
+les centièmes de minute de latitude et de longitude peuvent prendre
+n'importe quelle valeur comprise entre \texttt{00} et \texttt{99}.
+
+Ainsi la station peut être située n'importe où à l'intérieur d'un
+rectangle englobant ayant les coordonnées de coins suivantes :
+
+\begin{aprsexample}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{}}
+Coin nord-ouest : & 49° 3.99′ N, 72° 1.99′ W \\
+Coin nord-est : & 49° 3.99′ N, 72° 1.00′ W \\
+Coin sud-est : & 49° 3.00′ N, 72° 1.00′ W \\
+Coin sud-ouest : & 49° 3.00′ N, 72° 1.99′ W \\
+\end{tabular}
+\end{aprsexample}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Position nulle\\par défaut}
+\phantomsection\addcontentsline{toc}{section}{Position nulle par défaut}\label{position-nulle-par-duxe9faut}
+Lorsqu'une station ne dispose d'\emph{aucune} information de position
+spécifique à transmettre (par exemple une unité Mic-E sans récepteur GPS
+qui lui soit connecté), la station doit transmettre une position nulle
+par défaut dans le champ de localisation.
+
+La position nulle correspond à 0° 0′ 0″ nord, 0° 0′ 0″ ouest.
+
+La position nulle devrait inclure le symbole
+\lit{\textbackslash{}.} (position inconnue/indéterminée). Par exemple,
+un Position Report pour une station dont la position est inconnue
+contiendra les coordonnées
+\texttt{…0000.00N}\lit{\textbackslash{}}\texttt{00000.00W}\lit{.}\texttt{…}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Locator Maidenhead\\(Grid Square)}
+\phantomsection\addcontentsline{toc}{section}{Locator Maidenhead (Grid Square)}\label{locator-maidenhead-grid-square}
+Une méthode alternative pour exprimer la localisation d'une station
+consiste à fournir un locator Maidenhead (grid square). Il y a quatre
+manières de le faire :
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{234517h} = 23:45:17 zulu.
+  Dans un Status Report --- par ex. \texttt{IO91SX/-}\\
+  \hspace*{1.5em}(\texttt{/-} représente le symbole d'une « maison »).
+\item
+  Dans un Mic-E Status Text --- par ex.
+  \texttt{IO91SX}\lit{/G}\\
+  \hspace*{1.5em}(\lit{/G} indique un « grid square »).
+\item
+  Dans la Destination Address --- par ex. \texttt{IO91SX}. (obsolète).
+\item
+  Dans un texte de beacon AX.25, avec l'APRS Data Type Identifier
+  \lit{{[}} --- par ex. \lit{{[}}\texttt{IO91SX{]}} (obsolète).
 \end{itemize}
 
-Non utilisable dans les Status Reports.
+Les grid squares peuvent être sous la forme à 6 caractères (comme
+ci-dessus) ou sous la forme raccourcie à 4 caractères (par ex.
+\texttt{IO91}).
+\end{aprssideblock}
 
-\textbf{MDHM} --- champ fixe de 8 caractères : mois (01-12), jour
-(01-31), heures + minutes zulu.
+\begin{aprssideblock}{Données NMEA}
+\phantomsection\addcontentsline{toc}{section}{Données NMEA}\label{donnuxe9es-nmea}
+APRS reconnaît les chaînes de données ASCII brutes conformes à la
+spécification NMEA 0183 Version 2.0, provenant d'équipements de
+navigation tels que les récepteurs GPS et LORAN. Il est recommandé que
+les stations APRS interprètent au moins les types de NMEA Received
+Sentence suivants :
+
+\begin{aprsexample}
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+GGA & Global Positioning System Fix Data \\
+GLL & Geographic Position, Latitude/Longitude Data \\
+RMC & Recommended Minimum Specific GPS/Transit Data \\
+VTG & Velocity and Track Data \\
+WPT & Way Point Location \\
+\end{tabular}
+\end{aprsexample}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Altitude}
+\phantomsection\addcontentsline{toc}{section}{Altitude}\label{altitude}
+L'altitude peut être exprimée de deux manières :
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{10092345} = 23:45 zulu le 9 octobre.
+  Dans le texte de commentaire.
+\item
+  Au format Mic-E.
 \end{itemize}
 
-Utilisé uniquement dans les rapports de stations météo « positionless ».
+\textbf{Altitude in Comment Text} --- le commentaire peut contenir une
+valeur d'altitude, sous la forme \lit{/A=}\texttt{aaaaaa}, où
+\texttt{aaaaaa} est l'altitude en pieds. Par exemple :
+\texttt{/A=001234}. L'altitude peut apparaître n'importe où dans le
+commentaire.
 
-\section{Usage des timestamps}\label{usage-des-timestamps}
-
-Quand une station émet un rapport sans timestamp, une station APRS
-réceptrice peut noter en interne l'heure de réception. C'est la vision «
-émission = maintenant » côté récepteur.
-
-Quand une station émet un rapport avec timestamp, ce timestamp
-représente l'heure de création côté émetteur.
-
-Autrement dit : - rapport sans timestamp = temps réel, courant (le
-récepteur note l'heure). - rapport avec timestamp = pas nécessairement
-temps réel, potentiellement (très) ancien.
-
-Quatre DTIs indiquent si le rapport contient ou non un timestamp, selon
-que la station a la capacité messagerie APRS ou non :
-
-\begin{longtable}[]{@{}lll@{}}
-\toprule\noalign{}
-& Sans messagerie APRS & Avec messagerie APRS \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Sans timestamp (courant) & \texttt{!} & \texttt{=} \\
-Avec timestamp (ancien / différé) & \texttt{/} & \texttt{@} \\
-\end{longtable}
-
-Stations sans messagerie = généralement trackers autonomes ou
-digipeaters. Stations sans timestamp = généralement stations fixes.
-
-\section{Format latitude}\label{format-latitude}
-
-Champ fixe 8 caractères : degrés + minutes décimales (2 décimales) +
-\texttt{N} ou \texttt{S}.
-
-\begin{itemize}
-\tightlist
-\item
-  Degrés : 00 à 90.
-\item
-  Minutes : entier + centièmes, séparés par un point.
-\end{itemize}
-
-Ex : \texttt{4903.50N} = 49° 3' 30'' nord.
-
-Notation générique : chaîne \texttt{ddmm.hhN}.
-
-\section{Format longitude}\label{format-longitude}
-
-Champ fixe 9 caractères : degrés + minutes décimales (2 décimales) +
-\texttt{E} ou \texttt{W}.
-
-\begin{itemize}
-\tightlist
-\item
-  Degrés : 000 à 180.
-\item
-  Minutes : entier + centièmes.
-\end{itemize}
-
-Ex : \texttt{07201.75W} = 72° 1' 45'' ouest.
-
-Notation générique : \texttt{dddmm.hhW}.
-
-\section{Coordonnées de position}\label{coordonnuxe9es-de-position}
-
-Combinaison lat + long séparées par un Symbol Table Identifier, suivies
-d'un Symbol Code.
-
-Ex : \texttt{4903.50N/07201.75W-} --- \texttt{/} = table de symboles
-primaire, \texttt{-} = icône « maison ».
-
-Voir chapitre 20 et annexe 2 pour les symboles.
-
-\section{Ambiguïté de position}\label{ambiguuxeftuxe9-de-position}
-
-Quand la position exacte n'est pas connue, on peut réduire la précision
-en remplaçant progressivement \texttt{mm} puis \texttt{hh} de la
-latitude par des espaces (\texttt{V}) :
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{4903.5VN} = latitude au dixième de minute.
-\item
-  \texttt{4903.VVN} = à la minute.
-\item
-  \texttt{490V.VVN} = à 10 minutes.
-\item
-  \texttt{49VV.VVN} = au degré.
-\end{itemize}
-
-Le niveau d'ambiguïté de la latitude s'applique automatiquement à la
-longitude --- inutile d'y ajouter des \texttt{V}.
-
-Ex : \texttt{4903.VVN/07201.75W-} = position au plus proche de la
-minute. Les centièmes de minutes en lat/long peuvent prendre n'importe
-quelle valeur 00-99. Bounding box : - NW : 49° 3.99' N, 72° 1.99' W - NE
-: 49° 3.99' N, 72° 1.00' W - SE : 49° 3.00' N, 72° 1.00' W - SW : 49°
-3.00' N, 72° 1.99' W
-
-\section{Position nulle par
-défaut}\label{position-nulle-par-duxe9faut}
-
-Quand une station n'a pas de position spécifique (ex : Mic-E sans GPS
-connecté), elle doit émettre une position nulle par défaut : 0° 0' 0''
-N, 0° 0' 0'' W, avec le symbole \texttt{\textbackslash{}.} (position
-inconnue).
-
-Ex : \texttt{…0000.00N\textbackslash{}00000.00W.…}
-
-\section{Locator Maidenhead (Grid
-Square)}\label{locator-maidenhead-grid-square}
-
-Alternative à la lat/long. Quatre manières :
-
-\begin{itemize}
-\tightlist
-\item
-  Dans un Status Report : \texttt{IO91SX/(} (\texttt{/-} = symbole
-  maison).
-\item
-  Dans le Mic-E Status Text : \texttt{IO91SX/G} (\texttt{/G} = « grid
-  square »).
-\item
-  Dans le champ Destination (obsolète) : \texttt{IO91SX}.
-\item
-  Dans un beacon AX.25 avec DTI \texttt{{[}} (obsolète) :
-  \texttt{{[}IO91SX{]}}.
-\end{itemize}
-
-Le grid square est en forme 6 caractères ou raccourcie 4 caractères
-(\texttt{IO91}).
-
-\section{Données NMEA}\label{donnuxe9es-nmea}
-
-APRS reconnaît les chaînes ASCII brutes conformes NMEA 0183 v2.0
-provenant de GPS ou LORAN. Recommandé d'interpréter au moins :
-
-\begin{longtable}[]{@{}ll@{}}
-\toprule\noalign{}
-Sentence & Signification \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\texttt{GGA} & Global Positioning System Fix Data \\
-\texttt{GLL} & Geographic Position, Latitude/Longitude Data \\
-\texttt{RMC} & Recommended Minimum Specific GPS/Transit Data \\
-\texttt{VTG} & Velocity and Track Data \\
-\texttt{WPT} & Way Point Location \\
-\end{longtable}
-
-\section{Altitude}\label{altitude}
-
-Deux façons :
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Dans le comment text} --- format \texttt{/A=aaaaaa},
-  \texttt{aaaaaa} = altitude en \textbf{pieds}. Ex : \texttt{/A=001234}.
-  Peut apparaître n'importe où dans le commentaire.
-\item
-  \textbf{En format Mic-E} --- champ statut Mic-E optionnel. Voir
-  chapitre 10.
-\end{itemize}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\textbf{Altitude in Mic-E format} --- le champ de statut Mic-E optionnel
+peut contenir des données d'altitude. Voir chapitre 10 : Format de
+données Mic-E.
+\end{aprssideblock}

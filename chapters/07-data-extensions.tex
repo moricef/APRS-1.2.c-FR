@@ -1,282 +1,362 @@
 \chapter[EXTENSIONS DE DONNÉES APRS]{Extensions de données
 APRS}\label{extensions-de-donnuxe9es-aprs}
 
-Un champ fixe de 7 octets peut suivre les données de position APRS.
-Types d'extension :
+\newfontfamily{\chsevenspacesymbolfont}{FreeSans}
+\newcommand{\chsevenblanktripletslash}{%
+  \begingroup
+  \setlength{\fboxsep}{1pt}%
+  \colorbox{APRSMarkerYellow}{\strut{\chsevenspacesymbolfont ⎵⎵⎵/⎵⎵⎵}}%
+  \endgroup
+}
+\newcommand{\chsevendircell}[2]{%
+  \parbox[c][7.0ex][c]{28pt}{\centering #1\\[0.25ex]#2}%
+}
+\newcommand{\chsevengraycell}{\cellcolor{gray!20}}
+\newcommand{\chsevengrayrow}{\rowcolor{gray!20}}
+
+\begin{aprsbodyblock}
+Un champ de longueur fixe de 7 octets peut suivre les données de
+position APRS. Ce champ est une APRS Data Extension. L'extension peut
+être l'une des suivantes :
 
 \begin{itemize}
 \tightlist
 \item
-  \texttt{CSE/SPD} --- Course and Speed (peut être suivi de 8 octets
-  supplémentaires : bearing DF + NRQ).
+  \texttt{CSE}\lit{/}\texttt{SPD} --- Course and Speed (celle-ci peut être suivie de
+  8 octets supplémentaires contenant le relèvement DF et les paramètres
+  Number/Range/Quality)
 \item
-  \texttt{DIR/SPD} --- Wind Direction and Wind Speed.
+  \texttt{DIR}\lit{/}\texttt{SPD} --- Wind Direction and Wind Speed
 \item
-  \texttt{PHGphgd} --- Power + Height/Gain/Directivity.
+  \lit{PHG}\texttt{phgd} --- Station Power and Effective Antenna
+  Height/Gain/Directivity
 \item
-  \texttt{RNGrrrr} --- Pre-Calculated Radio Range.
+  \lit{RNG}\texttt{rrrr} --- Pre-Calculated Radio Range
 \item
-  \texttt{DFSshgd} --- DF Signal Strength + Height/Gain.
+  \lit{DFS}\texttt{shgd} --- DF Signal Strength and Effective Antenna
+  Height/Gain
 \item
-  \texttt{Tyy/Cxx} --- Area Object Descriptor.
+  \texttt{Tyy/Cxx} --- Area Object Descriptor
 \end{itemize}
+\end{aprsbodyblock}
 
-\section*{Course and Speed}\label{course-and-speed}
+\begin{aprssideblock}{Route et vitesse}
+\phantomsection\addcontentsline{toc}{section}{Route et vitesse}\label{course-and-speed}
+L'APRS Data Extension \texttt{CSE}\lit{/}\texttt{SPD} de 7 octets peut être utilisée
+pour représenter la route et la vitesse d'un véhicule ou d'un APRS
+Object.
 
-Course en degrés 001-360 (nord = 360, sens horaire). Vitesse en knots.
-Séparateur \texttt{/}.
+La route est exprimée en degrés (001--360), dans le sens horaire à
+partir du plein nord. La vitesse est exprimée en knots. Un caractère
+barre oblique \lit{/} sépare les deux.
 
-Ex : \texttt{088/036} = cap 88°, 36 knots.
+Par exemple :
 
-Si inconnu : \texttt{000/000}, \texttt{.../...} ou \texttt{VVV/VVV}.
+\begin{aprsexample}
+\texttt{088/036} \exgap représente une route de 88 degrés, parcourue à
+36 knots.
+\end{aprsexample}
 
-\textbf{Cas DF} : \texttt{000} = station DF fixe ; non nul = mobile.
+Si la route et la vitesse sont inconnues ou sans objet, elles peuvent
+être définies à \lit{000/000}, \lit{.../...} ou
+\chsevenblanktripletslash.
 
-\section*{Wind Direction and Wind
-Speed}\label{wind-direction-and-wind-speed}
+\textbf{Note :} dans le cas particulier des DF reports, une route de
+\texttt{000} signifie que la station DF est fixe. Si la route n'est pas
+nulle, la station est mobile.
+\end{aprssideblock}
 
-Direction du vent en degrés 001-360. Vitesse en knots. Séparateur
-\texttt{/}. Vitesse soutenue sur 1 minute.
+\begin{aprssideblock}{Direction et vitesse\\du vent}
+\phantomsection\addcontentsline{toc}{section}{Direction et vitesse du vent}\label{wind-direction-and-wind-speed}
+L'APRS Data Extension \texttt{DIR}\lit{/}\texttt{SPD} de 7 octets peut être utilisée
+pour représenter la direction du vent et la vitesse du vent soutenue
+sur une minute dans un Weather Report.
 
-Ex : \texttt{220/004} = vent de 220° à 4 knots.
+La direction du vent est exprimée en degrés (001--360), dans le sens
+horaire à partir du plein nord. La vitesse est exprimée en knots. Un
+caractère barre oblique \lit{/} sépare les deux.
 
-\section*{Power, Effective Antenna
-Height/Gain/Directivity}\label{power-effective-antenna-heightgaindirectivity}
+Par exemple :
 
-Format \texttt{PHGphgd} --- 7 caractères. Sert à tracer un cercle de
-portée radio autour de la station.
+\begin{aprsexample}
+\texttt{220/004} \exgap représente une direction du vent de 220 degrés
+et une vitesse de 4 knots.
+\end{aprsexample}
 
-\begin{itemize}
-\tightlist
-\item
-  Caractères 1-3 : \texttt{PHG} fixe.
-\item
-  Char 4 : \texttt{p} code puissance.
-\item
-  Char 5 : \texttt{h} code hauteur.
-\item
-  Char 6 : \texttt{g} code gain antenne.
-\item
-  Char 7 : \texttt{d} code directivité.
-\end{itemize}
+Si la direction et la vitesse du vent sont inconnues ou sans objet,
+elles peuvent être définies à \lit{000/000}, \lit{.../...} ou
+\chsevenblanktripletslash.
+\end{aprssideblock}
 
-Codes PHG :
+\begin{aprssideblock}{Puissance, hauteur\\effective de l'antenne/\\gain/directivité}
+\phantomsection\addcontentsline{toc}{section}{Puissance, hauteur effective de l'antenne/gain/directivité}\label{power-effective-antenna-heightgaindirectivity}
+L'APRS Data Extension \lit{PHG}\texttt{phgd} de 7 octets spécifie la puissance
+de l'émetteur, la hauteur effective de l'antenne au-dessus du terrain
+moyen, le gain de l'antenne et sa directivité. APRS utilise ces
+informations pour tracer des cercles de portée radio autour des
+stations.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Code
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-3
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-4
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-5
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-7
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-8
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-9
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Unités
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Power & 0 & 1 & 4 & 9 & 16 & 25 & 36 & 49 & 64 & 81 & watts \\
-Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 &
-feet \\
-Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & dB \\
-Directivity & omni & 45 NE & 90 E & 135 SE & 180 S & 225 SW & 270 W &
-315 NW & 360 N & & deg \\
-\end{longtable}
+Les 7 caractères de cette Data Extension sont codés comme suit :
 
-Le code Height représente la \textbf{hauteur effective au-dessus du
-terrain moyen local}, pas au-dessus du sol ni du niveau de la mer. Le
-code peut être n'importe quel ASCII à partir de \texttt{0} --- pour
-ballons, avions, satellites : - \texttt{:} = 10240 pieds
-(\textasciitilde1.9 miles). - \texttt{;} = 20480 pieds
-(\textasciitilde3.9 miles), etc.
+\begin{aprsexample}
+\begin{tabular}{@{}ll@{}}
+Caractères 1--3 : & \lit{PHG} (fixe) \\
+Caractère 4 : & \lit{p}\quad code de puissance \\
+Caractère 5 : & \lit{h}\quad code de hauteur \\
+Caractère 6 : & \lit{g}\quad code de gain de l'antenne \\
+Caractère 7 : & \lit{d}\quad code de directivité
+\end{tabular}
+\end{aprsexample}
 
-Le code Directivity décale le cercle PHG d'un tiers dans la direction
-indiquée (front-to-back 2:1). Utilisé pour signaler une direction
-favorisée ou un null, même sur antenne omni.
+Les codes PHG sont indiqués dans le tableau ci-dessous :
+\end{aprssideblock}
 
-Ex : \texttt{PHG5132} = 25 W, 20 ft d'antenne au-dessus du terrain moyen
-local, 3 dB de gain, gain max plein est.
+\noindent{\sffamily\bfseries Codes PHG}\par
+\vspace{0.25em}
+{\sffamily\fontsize{8.5}{10.5}\selectfont
+\setlength{\arrayrulewidth}{0.60pt}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.70}
+\noindent
+\begin{tabular}{|>{\raggedleft\arraybackslash}m{55pt}|*{10}{>{\centering\arraybackslash}m{28pt}|}>{\raggedright\arraybackslash}m{30pt}|}
+\hline
+\chsevengrayrow
+{\ttfamily phgd} \textbf{\textit{Code:}} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{\textit{Units}} \\
+\hline
+\chsevengraycell Power & 0 & 1 & 4 & 9 & 16 & 25 & 36 & 49 & 64 & 81 & \chsevengraycell watts \\
+\hline
+\chsevengraycell Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 & \chsevengraycell feet \\
+\hline
+\chsevengraycell Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \chsevengraycell dB \\
+\hline
+\chsevengraycell Directivity & omni & \chsevendircell{45}{NE} & \chsevendircell{90}{E} & \chsevendircell{135}{SE} & \chsevendircell{180}{S} & \chsevendircell{225}{SW} & \chsevendircell{270}{W} & \chsevendircell{315}{NW} & \chsevendircell{360}{N} & \chsevengraycell & \chsevengraycell deg \\
+\hline
+\end{tabular}
+}
 
-\section*{Range Circle Plot}\label{range-circle-plot}
+\begin{aprsbodyblock}
+Le code de hauteur représente la hauteur effective de l'antenne
+au-dessus du terrain moyen local, et non au-dessus du sol ou du niveau
+de la mer --- cela permet de donner une indication approximative de
+l'efficacité de l'antenne dans la zone locale.
 
-APRS calcule la portée radio utilisable (en miles) pour tracer le cercle
-:
+Le code de hauteur peut en fait être n'importe quel caractère ASCII de
+\lit{0} à \lit{9} et au-delà. Cela permet de spécifier des
+hauteurs plus importantes pour les ballons, les aéronefs ou les
+satellites. Par exemple :
 
-\begin{verbatim}
-power = p²
-haat = 10 × 2^h                            (feet)
-gain = 10^(g/10)
-range = √(2 × haat × √((power/10) × (gain/2)))
-\end{verbatim}
+\begin{aprsexample}
+\begin{tabular}{@{}l@{\hspace{0.8em}}>{\raggedright\arraybackslash}p{0.84\linewidth}@{}}
+\lit{:} & est le code de hauteur pour 10240 pieds (environ 1.9 miles). \\
+\lit{;} & est le code de hauteur pour 20480 pieds (environ 3.9 miles), et ainsi de suite.
+\end{tabular}
+\end{aprsexample}
 
-Ex \texttt{PHG5132} :
+Le code de directivité décale le cercle PHG d'un tiers dans la direction
+indiquée. Cela correspond à un rapport avant-arrière de 2 à 1. Le plus
+souvent, il sert à indiquer une direction favorisée ou un creux, même si
+le site dispose d'une antenne omnidirectionnelle.
 
-\begin{verbatim}
-power = 5² = 25 W
-haat = 10 × 2¹ = 20 ft
-gain = 10^(3/10) = 1.995262
-range = √(2 × 20 × √((25/10) × (1.995262/2))) ≈ 7.9 miles
-\end{verbatim}
+Voici un exemple d'APRS Data Extension PHG :
 
-Comme le gain max est plein est, APRS trace un cercle de rayon 8 miles,
-décalé de 2.7 miles (1/3 de 8) vers l'est.
+\begin{aprsexample}
+\begin{tabular}{@{}l@{\hspace{1.2em}}>{\raggedright\arraybackslash}p{0.69\linewidth}@{}}
+\texttt{PHG5132} & signifie une puissance de 25 watts, \\
+& une hauteur d'antenne de 20 pieds au-dessus du terrain moyen local, \\
+& un gain d'antenne de 3 dB, \\
+& et un gain maximal orienté plein est.
+\end{tabular}
+\end{aprsexample}
+\end{aprsbodyblock}
 
-\textbf{En l'absence de données PHG}, les stations sont supposées 10 W,
-3 dB omni, 20 ft → cercle 6 miles centré sur la station.
+\begin{aprssideblock}{Tracé du cercle\\de portée}
+\phantomsection\addcontentsline{toc}{section}{Tracé du cercle de portée}\label{range-circle-plot}
+À la réception, APRS utilise les codes \lit{p}, \lit{h},
+\lit{g} et \lit{d} pour calculer la portée radio utilisable (en
+miles), afin de tracer un cercle de portée représentant l'horizon radio
+local autour de la station. La portée radio est calculée comme suit :
 
-\section*{Pre-Calculated Radio
-Range}\label{pre-calculated-radio-range}
+{\small
+\[
+\begin{aligned}
+\mathit{power} &= \text{\lit{p}}^{2} \\[0.6em]
+\text{Height-above-average-terrain (haat)} &= 10 \times 2^{\text{\lit{h}}} \\
+\mathit{gain} &= 10^{(\text{\lit{g}}/10)} \\
+\mathit{range} &= \sqrt{2 \times \mathit{haat} \times
+  \sqrt{(\mathit{power}/10) \times (\mathit{gain}/2)}}
+\end{aligned}
+\]
+}
 
-Format \texttt{RNGrrrr} --- 7 octets. \texttt{rrrr} = portée en miles
-avec zéros de tête.
+Ainsi, pour \texttt{PHG5132} :
 
-Ex : \texttt{RNG0050} = 50 miles. APRS trace un cercle correspondant.
+\[
+\begin{aligned}
+\mathit{power} &= \text{\lit{5}}^{2} = 25\ \text{watts} \\[0.6em]
+\mathit{haat} &= 10 \times 2^{\text{\lit{1}}} = 20\ \text{feet} \\[0.6em]
+\mathit{gain} &= 10^{(\text{\lit{3}}/10)} = 1.995262 \\
+\mathit{range} &= \sqrt{2 \times 20 \times
+  \sqrt{(25/10) \times (1.995262/2)}} \\
+&\mathrel{\sim} 7.9\ \text{miles}
+\end{aligned}
+\]
 
-\section*{Omni-DF Signal Strength}\label{omni-df-signal-strength}
+Comme le gain maximal est orienté plein est, APRS tracera autour
+de la station un cercle de portée de 8 miles de rayon, décalé de
+2.7 miles (c'est-à-dire un tiers de 8 miles) vers l'est.
 
-Format \texttt{DFSshgd} --- 7 octets. Permet à APRS de localiser un
-brouilleur en traçant les contours de force de signal des stations qui
-l'entendent. Remplace \texttt{PHG} : la puissance est remplacée par la
-force relative \texttt{s} (0 à 9).
+\textbf{Note :} en l'absence de données PHG, les stations sont supposées
+fonctionner avec 10 watts sur une antenne omnidirectionnelle de 3 dB à
+20 pieds, ce qui donne un cercle de portée de 6 miles de rayon, centré
+sur la station.
+\end{aprssideblock}
 
-Codes DFS :
+\begin{aprssideblock}{Portée radio\\précalculée}
+\phantomsection\addcontentsline{toc}{section}{Portée radio précalculée}\label{pre-calculated-radio-range}
+L'APRS Data Extension \lit{RNG}\texttt{rrrr} de 7 octets permet aux
+utilisateurs de transmettre une portée radio omnidirectionnelle
+précalculée, où \texttt{rrrr} est la portée en miles (avec des zéros de
+tête).
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 22\tabcolsep) * \real{0.0833}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Code
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-3
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-4
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-5
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-7
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-8
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-9
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Unités
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Strength & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & S-points \\
-Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 &
-feet \\
-Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & dB \\
-Directivity & omni & 45 NE & 90 E & 135 SE & 180 S & 225 SW & 270 W &
-315 NW & 360 N & & deg \\
-\end{longtable}
+Par exemple, \texttt{RNG0050} indique une portée radio de 50 miles.
 
-Ex : \texttt{DFS2360} = signal S2 sur antenne omni 6 dB à 80 pieds.
+APRS peut utiliser cette valeur pour tracer un cercle de portée autour
+de la station.
+\end{aprssideblock}
 
-Une force \texttt{0} est particulièrement significative : APRS s'en sert
-pour tracer (souvent en noir) des cercles où le brouilleur n'est
-\textbf{pas} entendu. Beaucoup de valeur : bien plus de stations
-n'entendent pas le brouilleur que le contraire.
+\begin{aprssideblock}{Force du signal\\Omni-DF}
+\phantomsection\addcontentsline{toc}{section}{Force du signal Omni-DF}\label{omni-df-signal-strength}
+L'APRS Data Extension \lit{DFS}\texttt{shgd} de 7 octets permet à APRS de
+localiser les brouilleurs en traçant les contours de force du signal qui
+se chevauchent pour toutes les stations entendant le signal. Ce format
+Omni-DF remplace le format PHG pour indiquer la force du signal DF, le
+champ de puissance de l'émetteur étant remplacé par la force relative du
+signal (\texttt{s}), comprise entre 0 et 9.
+\end{aprssideblock}
 
-\section*{Bearing / Number / Range / Quality
-(BRG/NRQ)}\label{bearing-number-range-quality-brgnrq}
+\noindent{\sffamily\bfseries Codes DFS}\par
+\vspace{0.25em}
+{\sffamily\fontsize{8.5}{10.5}\selectfont
+\setlength{\arrayrulewidth}{0.60pt}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.70}
+\noindent
+\begin{tabular}{|>{\raggedleft\arraybackslash}m{55pt}|*{10}{>{\centering\arraybackslash}m{28pt}|}>{\raggedright\arraybackslash}m{30pt}|}
+\hline
+\chsevengrayrow
+{\ttfamily shgd} \textbf{\textit{Code:}} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{\textit{Units}} \\
+\hline
+\chsevengraycell Strength & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \chsevengraycell S-points \\
+\hline
+\chsevengraycell Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 & \chsevengraycell feet \\
+\hline
+\chsevengraycell Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \chsevengraycell dB \\
+\hline
+\chsevengraycell Directivity & omni & \chsevendircell{45}{NE} & \chsevendircell{90}{E} & \chsevendircell{135}{SE} & \chsevendircell{180}{S} & \chsevendircell{225}{SW} & \chsevendircell{270}{W} & \chsevendircell{315}{NW} & \chsevendircell{360}{N} & \chsevengraycell & \chsevengraycell deg \\
+\hline
+\end{tabular}
+}
 
-Champ 8 octets \texttt{/BRG/NRQ} suivant l'extension \texttt{CSE/SPD}.
-Spécifie course, vitesse, bearing et NRQ (Number/Range/Quality).
+\begin{aprsbodyblock}
+Par exemple, \texttt{DFS2360} représente un signal faible (d'une force
+d'environ S2) entendu sur une antenne omnidirectionnelle ayant un gain
+de 6 dB à 80 pieds.
 
-Ex : \texttt{…088/036/270/729…} --- course=88°, vitesse=36 knots,
-bearing=270°, N=7, R=2, Q=9.
+Une force de signal nulle (\texttt{0}) est particulièrement
+significative, car APRS utilise ces rapports de signal nul pour tracer
+des cercles (généralement noirs) là où le brouilleur n'est \emph{pas}
+entendu. Ces cercles noirs sont extrêmement précieux, puisqu'il y aura
+beaucoup plus de rapports provenant de stations qui n'entendent pas le
+brouilleur que de stations qui l'entendent. Cela permet d'éliminer
+rapidement une grande partie du territoire.
+\end{aprsbodyblock}
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{N=0} → NRQ non significatif.
-\item
-  \texttt{N=1..8} → nombre de hits par période relatif à la longueur de
-  la période (8 = 100 \%).
-\item
-  \texttt{N=9} → rapport manuel.
-\item
-  N n'est pas traité, c'est juste un indicateur des unités DF
-  automatiques.
-\end{itemize}
+\begin{aprssideblock}{Relèvement et\\Number/Range/\\Quality}
+\phantomsection\addcontentsline{toc}{section}{Relèvement et Number/Range/Quality}\label{bearing-number-range-quality-brgnrq}
+Les DF reports contiennent un champ de 8 octets \lit{/}\texttt{BRG}\lit{/}\texttt{NRQ} qui
+suit l'APRS Data Extension \texttt{CSE}\lit{/}\texttt{SPD} et spécifie la route, la
+vitesse, le relèvement et la valeur NRQ (Number/Range/Quality) du
+rapport. NRQ indique le nombre de détections, la portée approximative et
+la qualité du rapport.
 
-Range = \texttt{2\^{}R} (miles). Ex \texttt{R=4} → 16 miles.
+Par exemple, dans :
 
-Q (0-9) donne la précision du bearing :
+\begin{aprsexample}
+\begin{tabular}{@{}l@{\hspace{1.2em}}l@{}}
+\texttt{…088/036/270/729…} & route = 88 degrés, vitesse = 36 knots, \\
+& relèvement = 270 degrés, N = 7, R = 2, Q = 9
+\end{tabular}
+\end{aprsexample}
 
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-Q & Précision & Q & Précision \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0 & Inutile & 5 & \textless{} 16° \\
-1 & \textless{} 240° & 6 & \textless{} 8° \\
-2 & \textless{} 120° & 7 & \textless{} 4° \\
-3 & \textless{} 64° & 8 & \textless{} 2° \\
-4 & \textless{} 32° & 9 & \textless{} 1° (meilleur) \\
-\end{longtable}
+Si N vaut 0, la valeur NRQ est alors dépourvue de signification. Les
+valeurs de N comprises entre 1 et 8 donnent une indication du nombre de
+détections par période par rapport à la durée de cette période --- ainsi,
+une valeur de 8 signifie que 100\% de tous les échantillons possibles
+ont donné une détection. Une valeur de 9 pour N indique aux autres
+utilisateurs que le rapport est manuel.
 
-Si course/speed non pertinents : \texttt{000/000}, \texttt{.../...} ou
-\texttt{VVV/VVV}.
+La valeur N n'est pas traitée, mais constitue simplement un indicateur
+supplémentaire provenant des unités DF automatiques.
 
-\section*{Area Object Descriptor}\label{area-object-descriptor}
+La portée limite la longueur de la ligne à l'échelle de la carte
+d'origine de la station émettrice. La portée vaut $2^{R}$ ; ainsi, pour
+$R=4$, elle sera de 16 miles.
 
-Format \texttt{Tyy/Cxx} --- 7 octets. \texttt{T} = type d'objet (carré,
-cercle, triangle, etc.), \texttt{/C} = couleur de remplissage. Voir
-chapitre 11.
+Q est un chiffre unique compris entre 0 et 9 et donne une indication de
+la précision du relèvement :
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{flushleft}
+{\sffamily\fontsize{8.5}{10}\selectfont
+\setlength{\arrayrulewidth}{1pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.40}
+\begin{tabular}{!{\vrule width 1pt}>{\columncolor{gray!20}\centering\arraybackslash}m{24pt}!{\vrule width 1pt}>{\raggedright\arraybackslash}p{104pt}!{\vrule width 1pt}}
+\hline
+\rowcolor{gray!20}\textbf{\textit{Q}} & \textbf{\textit{Précision du relèvement}} \\
+\hline
+0 & Inutile \\
+\hline
+1 & $<240$ degrés \\
+\hline
+2 & $<120$ degrés \\
+\hline
+3 & $<64$ degrés \\
+\hline
+4 & $<32$ degrés \\
+\hline
+\end{tabular}
+\hspace{0.7em}
+\begin{tabular}{!{\vrule width 1pt}>{\columncolor{gray!20}\centering\arraybackslash}m{24pt}!{\vrule width 1pt}>{\raggedright\arraybackslash}p{104pt}!{\vrule width 1pt}}
+\hline
+\rowcolor{gray!20}\textbf{\textit{Q}} & \textbf{\textit{Précision du relèvement}} \\
+\hline
+5 & $<16$ degrés \\
+\hline
+6 & $<8$ degrés \\
+\hline
+7 & $<4$ degrés \\
+\hline
+8 & $<2$ degrés \\
+\hline
+9 & $<1$ degré (meilleure) \\
+\hline
+\end{tabular}
+}
+\end{flushleft}
+\end{aprssideblock}
+
+\begin{aprsbodyblock}
+Si les paramètres de route et de vitesse ne conviennent pas, ils
+devraient prendre la valeur \lit{000/000}, \lit{.../...} ou
+\chsevenblanktripletslash.
+\end{aprsbodyblock}
+
+\begin{aprssideblock}{Descripteur\\d'Area Object}
+\phantomsection\addcontentsline{toc}{section}{Descripteur d'Area Object}\label{area-object-descriptor}
+L'APRS Data Extension \texttt{Tyy/Cxx} de 7 octets est un Area Object
+Descriptor. Le paramètre \texttt{T} spécifie le type d'objet (carré,
+cercle, triangle, etc.) et le paramètre \texttt{/C} spécifie sa couleur
+de remplissage.
+
+Les Area Objects sont décrits au chapitre 11 : Object and Item Reports.
+\end{aprssideblock}

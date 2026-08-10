@@ -1,341 +1,1015 @@
-\chapter[FORMAT MIC-E]{Format Mic-E}\label{format-mic-e}
+\chapter[FORMAT DES DONNÉES MIC-E]{Format des données Mic-E}\label{format-des-donnees-mic-e}
 
-\section{Format des données Mic-E}\label{format-des-donnuxe9es-mic-e}
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
 
-En format Mic-E, la position, course, vitesse et symbole de la station,
-plus un chemin digipeater APRS et un Message Code Mic-E sont empaquetés
-dans les champs AX.25 Destination Address et Information. Le champ
-Information peut aussi optionnellement contenir soit une donnée de
-télémétrie Mic-E soit du texte de statut Mic-E. Le statut peut contenir
-le locator Maidenhead et l'altitude.
+\newcommand{\chTenToc}[1]{\phantomsection\addcontentsline{toc}{section}{#1}}
+\newcommand{\chTenHead}[1]{{\sffamily\bfseries\itshape #1}}
+\newcommand{\chTenGray}{\cellcolor{gray!20}}
+\newcommand{\chTenBlack}[1]{\cellcolor{black}\textcolor{white}{\bfseries #1}}
+\newfontfamily{\chTenSpaceFont}{FreeSans}
+\newcommand{\chTenSpace}{\begingroup\chTenSpaceFont ⎵\endgroup}
+\newcommand{\chTenLitSpace}{\begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut\chTenSpaceFont ⎵}\endgroup}
+\newcommand{\chTenItems}{\setlength{\itemsep}{0.35em}\setlength{\parskip}{0pt}}
 
-Un paquet Mic-E peut être très court : au minimum, sans indicatif dans
-le champ Digipeater Addresses et sans télémétrie ni statut optionnel, il
-fait 25 octets (hors FCS et flags).
+\chTenToc{Format des données Mic-E}
+\begin{aprssideblock}{Format des données\\Mic-E}
+Dans le format de données Mic-E, la position, le cap, la vitesse et le symbole
+d'affichage de la station, ainsi qu'un chemin de digipeaters APRS et un Mic-E
+Message Code, sont regroupés dans les champs Destination Address et Information
+AX.25.
 
-Utilisé aussi bien dans le Microphone Encoder, le PIC Encoder, que les
-radios Kenwood TH-D7 et TM-D700.
+Le champ Information peut également contenir, en option, soit des données de
+télémétrie Mic-E, soit un statut Mic-E. Le statut Mic-E peut contenir le locator
+Maidenhead et l'altitude de la station.
 
-\section{Charge utile Mic-E}\label{charge-utile-mic-e}
+Les paquets Mic-E peuvent être très courts. Au minimum, sans indicatifs dans le
+champ Digipeater Addresses et sans données de télémétrie ni texte de statut
+Mic-E optionnels, un paquet Mic-E complet ne comporte que 25 octets (hors FCS
+et flags).
 
-\textbf{Destination Address (7 octets)} contient : - Les 6 chiffres de
-latitude. - Un identifiant de message Mic-E sur 3 bits (1 des 7 messages
-standards, 1 des 7 messages custom, ou message d'urgence). - Les
-indicateurs N/S et W/E. - L'indicateur Longitude Offset. - Le code de
-chemin digipeater APRS générique.
+Le format de données Mic-E n'est pas seulement utilisé dans le Microphone
+Encoder ; il l'est aussi dans le PIC Encoder et dans les radios Kenwood TH-D7
+et TM-D700.
+\end{aprssideblock}
 
-Malgré son aspect inhabituel, cette adresse reste une adresse AX.25
-valide (ASCII 7 bits imprimable, shifté 1 bit à gauche). Voir la spec
-AX.25 pour les détails.
+\chTenToc{Charge utile Mic-E}
+\begin{aprssideblock}{Charge utile Mic-E}
+Le format de données Mic-E permet de transporter une grande quantité de
+données dans un paquet très court. Les données sont réparties entre le champ
+Destination Address et le champ Information d'une UI-frame AX.25 standard.
 
-\textbf{Information field} contient : - La longitude encodée. - Course
-et vitesse encodés. - Symbol Code + Symbol Table ID. - Un champ
-optionnel : télémétrie Mic-E ou status text (locator, altitude ou texte
-libre).
+\textbf{Champ Destination Address} --- Le champ Destination Address de
+7 octets contient les informations encodées suivantes :
 
-\section{Champ Destination Mic-E ---
-encodage}\label{champ-destination-mic-e-encodage}
+\begin{itemize}\chTenItems
+\item les 6 chiffres de latitude ;
+\item un identifiant de message Mic-E sur 3 bits, spécifiant l'un des 7 Standard
+  Mic-E Message Codes, l'un des 7 Custom Message Codes ou un Emergency Message
+  Code ;
+\item les indicateurs North/South et West/East ;
+\item l'indicateur Longitude Offset ;
+\item le code de chemin de digipeaters APRS générique.
+\end{itemize}
 
-Structure des 7 octets :
+Bien que la Destination Address paraisse assez inhabituelle, elle reste une
+adresse AX.25 valide, constituée uniquement de valeurs ASCII 7 bits imprimables
+(décalées d'un bit vers la gauche) --- voir la spécification
+\textit{Amateur Packet-Radio Link-Layer Protocol} pour tous les détails sur le
+format des adresses AX.25 standard.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 14\tabcolsep) * \real{0.1250}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Octet
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-3
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-4
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-5
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-6
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-7
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Contenu & Lat digit 1 + Message bit A & Lat 2 + B & Lat 3 + C & Lat 4 +
-N/S & Lat 5 + Long Offset & Lat 6 + W/E & APRS digi path code \\
-\end{longtable}
+\textbf{Champ Information} --- Ce champ contient les données suivantes :
 
-Chaque octet 1-6 encode conjointement un chiffre de latitude et un bit
-d'information. Le tableau suivant donne l'encodage des six premiers
-octets du champ Destination Address. Les caractères ASCII de la table
-sont left-shiftés d'un bit avant transmission, conformément au format
-d'adresse AX.25.
+\begin{itemize}\chTenItems
+\item la longitude encodée ;
+\item le cap et la vitesse encodés ;
+\item le Symbol Code d'affichage et le Symbol Table Identifier ;
+\item un champ optionnel contenant soit des données de télémétrie Mic-E, soit
+  une chaîne de texte de statut Mic-E. La chaîne de statut peut contenir du
+  texte en clair, un locator Maidenhead ou l'altitude de la station.
+\end{itemize}
+\end{aprssideblock}
+
+\chTenToc{Champ Destination Address Mic-E}
+\begin{aprssideblock}{Champ Destination\\Address Mic-E}
+Le champ Destination Address AX.25 standard comporte 7 octets, contenant
+6 caractères d'indicatif et le SSID (ainsi qu'un certain nombre d'autres bits
+qui ne nous intéressent pas ici). Lorsqu'il est utilisé pour transporter des
+données Mic-E, ce champ présente toutefois un format très différent :
+\end{aprssideblock}
 
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.75}
+\footnotesize\sffamily
+\hspace*{15pt}%
+\begin{tabular}{@{}|*{7}{>{\centering\arraybackslash}p{0.1215\textwidth}|}@{}}
 \hline
-\textbf{Caractère} & \textbf{Chiffre lat.} & \textbf{Message A/B/C} & \textbf{N/S} & \textbf{Long. offset} & \textbf{W/E} \\
+\multicolumn{7}{|l|}{\cellcolor{black}\textcolor{white}{\sffamily\bfseries\itshape
+Mic-E Data --- DESTINATION ADDRESS FIELD Format}} \\
 \hline
-\texttt{0}--\texttt{9} & 0--9 & 0 & South & +0 & East \\
-\texttt{A}--\texttt{G} & 0--6 & 1 (Custom) & & & \\
-\texttt{H}--\texttt{J} & 7--9 & 1 (Custom) & & & \\
-\texttt{K} & espace & 1 (Custom) & & & \\
-\texttt{L} & espace & 0 & South & +0 & East \\
-\texttt{P}--\texttt{Y} & 0--9 & 1 (Std) & North & +100 & West \\
-\texttt{Z} & espace & 1 (Std) & North & +100 & West \\
+\chTenHead{Lat Digit 1\newline + Message\newline Bit A} &
+\chTenHead{Lat Digit 2\newline + Message\newline Bit B} &
+\chTenHead{Lat Digit 3\newline + Message\newline Bit C} &
+\chTenHead{Lat Digit 4\newline + N/S Lat\newline Indicator} &
+\chTenHead{Lat Digit 5\newline + Longitude\newline Offset} &
+\chTenHead{Lat Digit 6\newline + W/E Long\newline Indicator} &
+\chTenHead{APRS\newline Digi Path\newline Code} \\
+\hline
+\multicolumn{1}{|c|}{\makebox[0pt][r]{Bytes:\hspace{37pt}}1} & 1 & 1 & 1 & 1 & 1 & 1 \\
 \hline
 \end{tabular}
 \end{center}
 
-Les caractères ASCII \texttt{A} à \texttt{K} ne sont pas utilisés dans
-les octets d'adresse 4 à 6.
+\begin{aprsbodyblock}
+Le champ Destination Address contient :
 
-\textbf{Exemple} : station à 33° 25.64' N, hémisphère ouest, Long Offset
-+0°, message std 1/0/0 → destination \texttt{S32U6T}.
+\begin{itemize}\chTenItems
+\item six chiffres de latitude encodés spécifiant les degrés (chiffres 1 et 2),
+  les minutes (chiffres 3 et 4) et les centièmes de minute (chiffres 5 et 6) ;
+\item un identifiant de message Mic-E sur 3 bits (bits de message A, B et C) ;
+\item l'indicateur de latitude North/South ;
+\item le Longitude Offset (qui ajoute 0 degré ou 100 degrés au calcul de la
+  longitude dans le champ Information) ;
+\item l'indicateur de longitude West/East ;
+\item le chemin de digipeaters APRS générique (encodé dans le SSID).
+\end{itemize}
+\end{aprsbodyblock}
 
-\section{Messages Mic-E}\label{messages-mic-e}
+\chTenToc{Encodage du champ Destination Address}
+\begin{aprssideblock}{Encodage du champ\\Destination Address}
+Le tableau de la page suivante présente l'encodage des 6 premiers octets du
+champ Destination Address, pour toutes les combinaisons du chiffre de latitude,
+de l'identifiant de message Mic-E sur 3 bits (A/B/C), des indicateurs de
+latitude/longitude et du Longitude Offset.
 
-Bits A/B/C encodent 15 types :
+L'encodage prend en charge l'ambiguïté de position.
 
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-A & B & C & Standard & Custom \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-1 & 1 & 1 & M0: Off Duty & C0 \\
-1 & 1 & 0 & M1: En Route & C1 \\
-1 & 0 & 1 & M2: In Service & C2 \\
-1 & 0 & 0 & M3: Returning & C3 \\
-0 & 1 & 1 & M4: Committed & C4 \\
-0 & 1 & 0 & M5: Special & C5 \\
-0 & 0 & 1 & M6: Priority & C6 \\
-0 & 0 & 0 & Emergency & \\
-\end{longtable}
-
-Custom optionnel (pas supporté par Mic-E d'origine). Mélange Standard 1
-et Custom 1 → « unknown ».
-
-\section{SSID Destination}\label{ssid-destination}
-
-Code un chemin digipeater VIA classique ou un des 15 chemins APRS
-génériques (voir chapitre 4).
-
-\section{Champ Information Mic-E}\label{champ-information-mic-e}
-
-9 premiers octets :
+Les caractères ASCII indiqués dans le tableau sont décalés d'un bit vers la
+gauche avant transmission.
+\end{aprssideblock}
 
 \begin{center}
-\begin{tabular}{|c|l|l|}
-\hline
-\textbf{Byte} & \textbf{Champ} & \textbf{Description} \\
-\hline
-1 & DTI & \texttt{`}, \texttt{'}, \texttt{0x1c} ou \texttt{0x1d} \\
-2 & \texttt{d+28} & longitude degrees \\
-3 & \texttt{m+28} & longitude minutes \\
-4 & \texttt{h+28} & longitude hundredths of minutes \\
-5 & \texttt{SP+28} & speed hundreds/tens knots \\
-6 & \texttt{DC+28} & speed units / course hundreds deg \\
-7 & \texttt{SE+28} & course tens/units deg \\
-8 & Symbol Code & \\
-9 & Symbol Table ID & \\
-\hline
+\sffamily\bfseries Encodage du champ Destination Address Mic-E (octets 1--6)
+
+\medskip
+\footnotesize\sffamily\normalfont
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.88}
+\newcommand{\desthead}{%
+\chTenHead{\shortstack{ASCII\\Char}} & \chTenHead{\shortstack{Lat\\Digit}} &
+\chTenHead{\shortstack{Message\\A/B/C}} & \chTenHead{N/S} &
+\chTenHead{\shortstack{Long\\Offset}} & \chTenHead{W/E}}
+\makebox[\textwidth][c]{\hspace*{9pt}%
+\begin{tabular}{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}\hline
+\multicolumn{1}{r|}{Byte:} & 1--6 & 1--3 & 4 & 5 & 6 \\
+\hline\rowcolor{gray!20}\desthead\\\hline
+0&0&0&South&+0&East\\\hline
+1&1&0&South&+0&East\\\hline
+2&2&0&South&+0&East\\\hline
+3&3&0&South&+0&East\\\hline
+4&4&0&South&+0&East\\\hline
+5&5&0&South&+0&East\\\hline
+6&6&0&South&+0&East\\\hline
+7&7&0&South&+0&East\\\hline
+8&8&0&South&+0&East\\\hline
+9&9&0&South&+0&East\\\hline
+A&0&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+B&1&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+C&2&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+D&3&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+E&4&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+F&5&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+G&6&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+\end{tabular}
+\hspace{10.5pt}%
+\begin{tabular}{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}\hline
+\multicolumn{1}{r|}{Byte:} & 1--6 & 1--3 & 4 & 5 & 6 \\
+\hline\rowcolor{gray!20}\desthead\\\hline
+H&7&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+I&8&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+J&9&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+K&space&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
+L&space&0&South&+0&East\\\hline
+P&0&1 (Std)&North&+100&West\\\hline
+Q&1&1 (Std)&North&+100&West\\\hline
+R&2&1 (Std)&North&+100&West\\\hline
+S&3&1 (Std)&North&+100&West\\\hline
+T&4&1 (Std)&North&+100&West\\\hline
+U&5&1 (Std)&North&+100&West\\\hline
+V&6&1 (Std)&North&+100&West\\\hline
+W&7&1 (Std)&North&+100&West\\\hline
+X&8&1 (Std)&North&+100&West\\\hline
+Y&9&1 (Std)&North&+100&West\\\hline
+Z&space&1 (Std)&North&+100&West\\\hline
+\end{tabular}
+\hspace*{-9pt}}
+\end{center}
+
+\begin{aprsbodyblock}
+\textbf{Note :} les caractères ASCII \lit{A}--\lit{K} ne sont pas utilisés
+dans les octets d'adresse 4 à 6.
+
+Par exemple, pour une station située à une latitude de 33 degrés
+25,64 minutes nord, dans l'hémisphère ouest, avec un Longitude Offset de
++0 degré, et transmettant les bits d'identifiant de message standard 1/0/0,
+l'encodage des 6 premiers octets du champ Destination Address est le suivant :
+\end{aprsbodyblock}
+
+\begin{center}
+\small\sffamily
+\setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.75}
+\begin{tabular}{@{}|>{\columncolor{gray!20}\raggedleft\arraybackslash}p{65pt}|*{6}{>{\centering\arraybackslash}p{43.5pt}|}@{}}\cline{2-7}
+\multicolumn{1}{r|}{\makebox[0pt][r]{Destination Address Byte:\hspace{6pt}}} & \chTenGray\bfseries\itshape 1&\chTenGray\bfseries\itshape 2&\chTenGray\bfseries\itshape 3&\chTenGray\bfseries\itshape 4&\chTenGray\bfseries\itshape 5&\chTenGray\bfseries\itshape 6\\\hline
+\chTenHead{Latitude Digit}&3&3&2&5&6&4\\\hline
+\chTenHead{Message Bits}&\shortstack{Message\\Bit A\\= 1 (Std)}&\shortstack{Message\\Bit B\\= 0}&\shortstack{Message\\Bit C\\= 0}&\chTenGray&\chTenGray&\chTenGray\\\hline
+\chTenHead{N/S Indicator}&\chTenGray&\chTenGray&\chTenGray&North&\chTenGray&\chTenGray\\\hline
+\chTenHead{Long Offset}&\chTenGray&\chTenGray&\chTenGray&\chTenGray&+0&\chTenGray\\\hline
+\chTenHead{W/E Indicator}&\chTenGray&\chTenGray&\chTenGray&\chTenGray&\chTenGray&West\\\hline
+\chTenHead{Dest Address\newline (ASCII Char)}&\ttfamily S&\ttfamily 3&\ttfamily 2&\ttfamily U&\ttfamily 6&\ttfamily T\\\hline
 \end{tabular}
 \end{center}
 
-Suivi optionnellement de Mic-E telemetry data ou Mic-E status text.
+\chTenToc{Messages Mic-E}
+\begin{aprssideblock}{Messages Mic-E}
+Les trois premiers octets du champ Destination Address contiennent trois bits
+d'identifiant de message : A, B et C. Ces bits permettent de spécifier l'un des
+15 types de message :
 
-\textbf{DTIs} : - \texttt{\textasciigrave{}} : Current GPS data (pas
-utilisé sur Kenwood TM-D700). - \texttt{\textquotesingle{}} : Old GPS
-data (ou Current sur TM-D700). - \texttt{0x1c} : Current GPS (Rev.~0
-beta). - \texttt{0x1d} : Old GPS (Rev.~0 beta).
+\begin{itemize}\chTenItems
+\item 7 messages Standard ;
+\item 7 messages Custom ;
+\item 1 message Emergency.
+\end{itemize}
 
-\textbf{Attention} : certains octets sont non imprimables. Un setup TNC
-ou logiciel inadéquat peut les tronquer et donner un mauvais décodage.
-Si le champ Information paraît \textless{} 9 octets, ignorer le paquet.
+Pour les 7 messages Standard, un ou plusieurs bits d'identifiant de message
+valent \lit{1}, indiqués par \textit{1 (Std)} dans le tableau d'encodage du champ
+Destination Address Mic-E.
 
-\section{Décodage longitude degrees
-(d+28)}\label{duxe9codage-longitude-degrees-d28}
+Pour les 7 messages Custom, un ou plusieurs bits d'identifiant de message
+valent \lit{1}, indiqués par \textit{1 (Custom)} dans ce même tableau.
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Soustraire 28 de \texttt{d+28} → \texttt{d}.
-\item
-  Si Long Offset = +100° : ajouter 100 à \texttt{d}.
-\item
-  Si \texttt{180\ ≤\ d\ ≤\ 189} : soustraire 80 (longitude 100-109°).
-\item
-  Ou si \texttt{190\ ≤\ d\ ≤\ 199} : soustraire 190 (longitude 0-9°).
+Pour le message Emergency, les trois bits d'identifiant de message valent
+\lit{0}.
+
+Le tableau suivant présente l'encodage des types de message Mic-E pour toutes
+les combinaisons des bits d'identifiant de message A/B/C :
+
+\par\medskip
+\sffamily\bfseries Types de messages Mic-E
+
+\smallskip
+\sffamily\normalfont
+\setlength{\tabcolsep}{2.5pt}\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\raggedright\arraybackslash}p{0.23\linewidth}|>{\raggedright\arraybackslash}p{0.23\linewidth}|}\hline
+\rowcolor{gray!20}\chTenHead{A}&\chTenHead{B}&\chTenHead{C}&\chTenHead{Type de message Mic-E\newline Standard}&\chTenHead{Type de message Mic-E\newline Custom}\\\hline
+1&1&1&M0: Off Duty&C0: Custom-0\\\hline
+1&1&0&M1: En Route&C1: Custom-1\\\hline
+1&0&1&M2: In Service&C2: Custom-2\\\hline
+1&0&0&M3: Returning&C3: Custom-3\\\hline
+0&1&1&M4: Committed&C4: Custom-4\\\hline
+0&1&0&M5: Special&C5: Custom-5\\\hline
+0&0&1&M6: Priority&C6: Custom-6\\\hline
+0&0&0&\multicolumn{2}{c|}{Emergency}\\\hline
+\end{tabular}
+
+Les messages Standard et le message Emergency ont la même signification pour
+toutes les stations APRS. Les messages Custom peuvent recevoir n'importe
+quelle signification arbitraire.
+
+\textbf{Note :} la prise en charge des messages Custom est facultative. Les
+unités Mic-E d'origine ne prennent pas en charge les messages Custom.
+
+\textbf{Note :} si les bits d'identifiant de message A/B/C contiennent un
+mélange de \lit{1} Standard et de \lit{1} Custom, le type de message est
+« unknown ».
+\end{aprssideblock}
+
+\begin{aprsbodyblock}
+Quelques exemples d'encodage du type de message :
+
+\begin{center}
+\small\sffamily
+\setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.70}
+\makebox[\linewidth][c]{\hspace*{-13.5pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\centering\arraybackslash}p{0.22\linewidth}|>{\centering\arraybackslash}p{0.31\linewidth}|>{\centering\arraybackslash}p{0.14\linewidth}|>{\raggedright\arraybackslash}p{0.18\linewidth}|}\hline
+\rowcolor{gray!20}
+\chTenHead{3 premiers octets de la\newline Destination Address}&
+\chTenHead{Bits d'identifiant de\newline message A/B/C}&
+\chTenHead{Type de\newline message}&\chTenHead{Message}\\\hline
+\ttfamily S32&Standard 1 / 0 / 0&Standard&M3: Returning\\\hline
+\ttfamily F2D&Custom 1 / 0 / Custom 1&Custom&C2: Custom-2\\\hline
+\ttfamily 234&0 / 0 / 0&Emergency&Emergency\\\hline
+\end{tabular}%
+\hspace*{13.5pt}}
+\end{center}
+\end{aprsbodyblock}
+
+\chTenToc{Champ SSID de Destination Address}
+\begin{aprssideblock}{Champ SSID de\\Destination Address}
+Le SSID du champ Destination Address d'un paquet Mic-E est codé pour spécifier
+soit un chemin de digipeaters VIA conventionnel (contenu dans le champ
+Digipeater Addresses de la trame AX.25), soit l'un des 15 chemins de
+digipeaters APRS génériques. Voir le chapitre 4 : Données APRS dans les champs
+Destination Address et Source Address AX.25.
+\end{aprssideblock}
+
+\chTenToc{Champ Information Mic-E}
+\begin{aprssideblock}{Champ Information\\Mic-E}
+Le champ Information sert à compléter le Position Report commencé dans le
+champ Destination Address. L'encodage utilisé diffère de celui de la
+Destination Address, car le contenu n'est pas contraint à de l'ASCII 7 bits
+imprimable décalé, comme il l'est dans l'adresse. Toutefois, le binaire 8 bits
+complet n'est pas utilisé : toutes les valeurs sont décalées de 28 et d'autres
+opérations (décrites ci-dessous) sont effectuées sur certaines valeurs afin de
+rendre presque toutes les données imprimables en ASCII.
+
+Le format du champ Information est le suivant :
+\end{aprssideblock}
+
+\begin{center}
+\footnotesize\sffamily\setlength{\tabcolsep}{1.5pt}\renewcommand{\arraystretch}{1.60}
+\makebox[\textwidth][c]{\hspace*{11.5pt}%
+\begin{tabular}{@{}|>{\centering\arraybackslash}p{31.5pt}|*{3}{>{\centering\arraybackslash}p{32pt}|}*{3}{>{\centering\arraybackslash}p{34.5pt}|}>{\centering\arraybackslash}p{39pt}|>{\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{110.5pt}|@{}}\hline
+\multicolumn{10}{|l|}{\cellcolor{gray!20}\sffamily\bfseries\itshape Mic-E Data --- INFORMATION FIELD Format}\\\hline
+\chTenHead{Data\newline Type\newline ID}&\multicolumn{3}{c|}{\chTenHead{Longitude}}&\multicolumn{3}{c|}{\chTenHead{Speed and Course}}&\chTenHead{Symbol\newline Code}&\chTenHead{Sym\newline Table\newline ID}&\begin{tabular}{@{}>{\centering\arraybackslash}p{104pt}@{}}\chTenHead{Mic-E Telemetry Data}\\\hline\cellcolor{gray!20}\chTenHead{Mic-E Status Text}\end{tabular}\\\cline{2-7}
+&\ttfamily d+28&\ttfamily m+28&\ttfamily h+28&\ttfamily SP+28&\ttfamily DC+28&\ttfamily SE+28&&&\\\hline
+\multicolumn{1}{r}{\makebox[0pt][r]{Bytes:\hspace{1em}}}1&1&1&1&1&1&1&1&1&n\\\hline
+\end{tabular}%
+\hspace*{-11.5pt}}
+\end{center}
+
+\chTenToc{Données du champ Information}
+\begin{aprssideblock}{Données du champ\\Information}
+Les 9 premiers octets du champ Information contiennent l'APRS Data Type
+Identifier, la longitude, la vitesse, le cap et les données de symbole.
+
+L'APRS Data Type Identifier est l'un des suivants :
+
+\begin{tabular}{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
+\lit{`} & données GPS actuelles (mais non utilisées dans les radios Kenwood
+TM-D700) ; \\
+\lit{'} & anciennes données GPS (ou données GPS actuelles dans les radios
+Kenwood TM-D700) ; \\
+\texttt{0x1c} & données GPS actuelles (unités beta Rev. 0 uniquement) ; \\
+\texttt{0x1d} & anciennes données GPS (unités beta Rev. 0 uniquement).
+\end{tabular}
+
+\textbf{\underline{NOTE IMPORTANTE :}} comme expliqué en détail ci-dessous, certains
+octets du champ Information sont des caractères ASCII non imprimables. Dans
+certaines circonstances (configuration incorrecte du TNC ou logiciel
+inapproprié, par exemple), certains de ces caractères non imprimables peuvent
+être supprimés, ce qui fait paraître le champ Information plus court qu'il ne
+l'est réellement. Cela entraîne un décodage incorrect. En particulier, si le
+champ Information paraît comporter moins de 9 octets, le paquet doit être
+ignoré.
+\end{aprssideblock}
+
+\chTenToc{Encodage des degrés de longitude}
+\begin{aprssideblock}{Encodage des degrés\\de longitude}
+L'octet \lit{d+28} du champ Information contient la valeur encodée des degrés
+de longitude, dans la plage 0--179 degrés.
+
+(Noter que, pour les longitudes comprises entre 0 et 9 degrés, le Longitude
+Offset est de +100 degrés) :
+
+\par\smallskip
+\sffamily\bfseries Encodage Mic-E des degrés de longitude
+
+\smallskip
+\footnotesize\sffamily\normalfont
+\setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.61}
+\hspace*{-7pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{25pt}|>{\centering\arraybackslash}p{25.5pt}|>{\centering\arraybackslash}p{32pt}|}\hline
+\rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Deg}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{d+28}&\chTenHead{\shortstack{Long\\Offset}}\\\hline
+0&v&118&\lit{+100}\\\hline
+1&w&119&\lit{+100}\\\hline
+2&x&120&\lit{+100}\\\hline
+3&y&121&\lit{+100}\\\hline
+4&z&122&\lit{+100}\\\hline
+5&\{&123&\lit{+100}\\\hline
+6&|&124&\lit{+100}\\\hline
+7&\}&125&\lit{+100}\\\hline
+8&\textasciitilde&126&\lit{+100}\\\hline
+9&\chTenBlack{DEL}&127&\lit{+100}\\\hline
+10&\& &38&+0\\\hline
+11&\aprsorigtexttt{'}&39&+0\\\hline
+12&(&40&+0\\\hline
+\ldots&\ldots&\ldots&\ldots\\\hline
+97&\}&125&+0\\\hline
+98&\textasciitilde&126&+0\\\hline
+99&\chTenBlack{DEL}&127&+0\\\hline
+\end{tabular}\hspace{35pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{25pt}|>{\centering\arraybackslash}p{25.5pt}|>{\centering\arraybackslash}p{32pt}|}\hline
+\rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Deg}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{d+28}&\chTenHead{\shortstack{Long\\Offset}}\\\hline
+100&l&108&+100\\\hline
+101&m&109&+100\\\hline
+102&n&110&+100\\\hline
+103&o&111&+100\\\hline
+104&p&112&+100\\\hline
+105&q&113&+100\\\hline
+106&r&114&+100\\\hline
+107&s&115&+100\\\hline
+108&t&116&+100\\\hline
+109&u&117&+100\\\hline
+110&\& &38&+100\\\hline
+111&\aprsorigtexttt{'}&39&+100\\\hline
+112&(&40&+100\\\hline
+\ldots&\ldots&\ldots&\ldots\\\hline
+177&i&105&+100\\\hline
+178&j&106&+100\\\hline
+179&k&107&+100\\\hline
+\end{tabular}
+
+\normalsize
+Le tableau montre que l'encodage est divisé en quatre parties distinctes :
+
+\begin{itemize}\chTenItems
+\item \underline{0--9 degrés} : \lit{d+28} est compris entre 118 et 127 en
+  décimal, ce qui correspond aux caractères ASCII \lit{v} à \lit{DEL}.
+
+  \textbf{Note importante :} le Longitude Offset est réglé sur +100 degrés
+  lorsque la longitude est comprise entre 0 et 9 degrés.
+\item \underline{10--99 degrés} : \lit{d+28} est compris entre 38 et 127 en
+  décimal (ce qui correspond aux caractères ASCII \lit{\&} à \lit{DEL}) et le Longitude
+  Offset est de +0 degré.
+\item \underline{100--109 degrés} : \lit{d+28} est compris entre 108 et 117 en
+  décimal, ce qui correspond aux caractères ASCII \lit{l} (lettre « L »
+  minuscule) à \lit{DEL}, et le Longitude Offset est de +100 degrés.
+\item \underline{110--179 degrés} : \lit{d+28} est compris entre 38 et 127 en
+  décimal (ce qui correspond aux caractères ASCII \lit{\&} à \lit{DEL}) et le
+  Longitude Offset est de +100 degrés.
+\end{itemize}
+
+La plage globale des valeurs valides de \lit{d+28} est donc 38--127 en décimal
+(ce qui correspond aux caractères ASCII \lit{\&} à \lit{DEL}).
+
+Tous ces caractères, \underline{à l'exception de \lit{DEL} pour 9 et 99
+degrés}, sont des caractères ASCII imprimables.
+
+Pour décoder la valeur des degrés de longitude :
+
+\begin{enumerate}\chTenItems
+\item soustraire 28 de la valeur \lit{d+28} pour obtenir \lit{d} ;
+\item si le Longitude Offset est de +100 degrés, ajouter 100 à \lit{d} ;
+\item soustraire 80 si $180 \le \lit{d} \le 189$ (c'est-à-dire si la longitude est
+  comprise entre 100 et 109 degrés) ;
+\item sinon, soustraire 190 si $190 \le \lit{d} \le 199$ (c'est-à-dire si la
+  longitude est comprise entre 0 et 9 degrés).
 \end{enumerate}
+\end{aprssideblock}
 
-Plage valide : d+28 = 38-127 (ASCII \texttt{\&} à DEL). Note : longitude
-0-9° → Long Offset forcé à +100.
+\chTenToc{Encodage des minutes de longitude}
+\begin{aprssideblock}{Encodage des minutes\\de longitude}
+L'octet \lit{m+28} du champ Information contient la valeur encodée des minutes
+de longitude, dans la plage 0--59 minutes :
 
-\section{Décodage longitude minutes
-(m+28)}\label{duxe9codage-longitude-minutes-m28}
+\par\smallskip
+\sffamily\bfseries Encodage Mic-E des minutes de longitude
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Soustraire 28 → \texttt{m}.
-\item
-  Si \texttt{m\ ≥\ 60} : soustraire 60 (minutes 0-9).
+\smallskip
+\footnotesize\sffamily\normalfont
+\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.60}
+\hspace*{-3pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Mins}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\\hline
+0&X&88\\\hline
+1&Y&89\\\hline
+2&Z&90\\\hline
+3&[&91\\\hline
+4&\textbackslash&92\\\hline
+5&]&93\\\hline
+6&\textasciicircum&94\\\hline
+7&\_&95\\\hline
+8&\aprsorigtexttt{`}&96\\\hline
+9&a&97\\\hline
+\end{tabular}\hspace{28pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Mins}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\\hline
+10&\& &38\\\hline
+11&\aprsorigtexttt{'}&39\\\hline
+12&(&40\\\hline
+13&)&41\\\hline
+14&*&42\\\hline
+\ldots&&\\\hline
+56&T&84\\\hline
+57&U&85\\\hline
+58&V&86\\\hline
+59&W&87\\\hline
+\end{tabular}
+
+\normalsize
+Le tableau montre que l'encodage est divisé en deux parties distinctes :
+
+\begin{itemize}\chTenItems
+\item \underline{0--9 minutes} : \lit{m+28} est compris entre 88 et 97 en
+  décimal, ce qui correspond aux caractères ASCII \lit{X} à \lit{a} ;
+\item \underline{10--59 minutes} : \lit{m+28} est compris entre 38 et 87 en
+  décimal (ce qui correspond aux caractères ASCII \lit{\&} à \lit{W}).
+\end{itemize}
+
+La plage globale des valeurs valides de \lit{m+28} est donc 38--97 en décimal
+(ce qui correspond aux caractères ASCII \lit{\&} à \lit{a}). Tous ces
+caractères sont des caractères ASCII imprimables.
+
+Pour décoder la valeur des minutes de longitude :
+
+\begin{enumerate}\chTenItems
+\item soustraire 28 de la valeur \lit{m+28} pour obtenir \lit{m} ;
+\item soustraire 60 si $\lit{m} \ge 60$ (c'est-à-dire si les minutes de longitude
+  sont comprises entre 0 et 9).
 \end{enumerate}
+\end{aprssideblock}
 
-Plage valide : m+28 = 38-97 (ASCII \texttt{\&} à \texttt{a}).
+\chTenToc{Encodage des centièmes de minute de longitude}
+\begin{aprssideblock}{Encodage des\\centièmes de minute\\de longitude}
+L'octet \lit{h+28} du champ Information contient la valeur encodée des
+centièmes de minute de longitude, dans la plage 0--99 minutes. Cet octet
+prend une valeur comprise entre 28 en décimal (correspondant à 0 centième de
+minute) et 127 en décimal (correspondant à 99 centièmes de minute).
 
-\section{Décodage longitude hundredths of minutes
-(h+28)}\label{duxe9codage-longitude-hundredths-of-minutes-h28}
+Pour décoder la valeur des centièmes de minute de longitude, soustraire 28 de
+la valeur \lit{h+28}.
 
-Soustraire 28. Plage 28-127 → 0-99 centièmes.
+Toutes les valeurs possibles sont des caractères ASCII imprimables
+(\underline{à l'exception de 0--3 et 99 centièmes de minute}).
+\end{aprssideblock}
 
-\section{Encodage speed \& course}\label{encodage-speed-course}
+\chTenToc{Encodage de la vitesse et du cap}
+\begin{aprssideblock}{Encodage de la\\vitesse et du cap}
+La vitesse et le cap d'une station sont encodés sur 3 octets, désignés
+\lit{SP+28}, \lit{DC+28} et \lit{SE+28}.
 
-Répartis sur 3 octets \texttt{SP+28\ /\ DC+28\ /\ SE+28} : -
-\texttt{SP+28} : centaines/dizaines de knots (2 schémas d'encodage
-possibles). - \texttt{DC+28} : unités de knots + centaines de degrés du
-cap (2 schémas possibles). - \texttt{SE+28} : dizaines/unités de degrés
-du cap.
+La vitesse est comprise entre 0 et 799 knots, et le cap entre 0 et 360 degrés
+(0 degré représente un cap inconnu ou indéfini, et 360 degrés représente le
+nord vrai).
 
-\textbf{Algorithme de décodage} : - \texttt{SP\ =\ (SP+28)\ -\ 28}.
-Speed high = \texttt{SP\ ×\ 10}. Si \texttt{SP\ ≥\ 80}, soustraire 80. -
-\texttt{DC\ =\ (DC+28)\ -\ 28}. Quotient \texttt{DC/10} = unités de
-speed. Reste = centaines de degrés. - Speed = Speed\_high + unités. Si
-Speed ≥ 800 knots, soustraire 800. - Course = reste × 100 +
-\texttt{SE\ =\ (SE+28)\ -\ 28}. Si Course ≥ 400°, soustraire 400.
+La vitesse et le cap encodés sont répartis entre les trois octets comme suit :
+\end{aprssideblock}
 
-\section{Exemple complet de
-décodage}\label{exemple-complet-de-duxe9codage}
+\begin{aprsbodyblock}
+\begin{center}
+\small\sffamily\renewcommand{\arraystretch}{1.50}
+\setlength{\tabcolsep}{3pt}
+\makebox[\linewidth][c]{\hspace*{-8pt}%
+\begin{tabular}{|>{\centering\arraybackslash}p{0.29\linewidth}|>{\centering\arraybackslash}p{0.34\linewidth}|>{\centering\arraybackslash}p{0.27\linewidth}|}\hline
+\rowcolor{gray!20}\multicolumn{2}{|c|}{\chTenHead{Vitesse}}&\chTenHead{Cap}\\\hline
+\chTenHead{Vitesse encodée\newline (centaines/dizaines de knots)}&
+\chTenHead{Unités de vitesse encodées et\newline cap encodé (centaines de degrés)}&
+\chTenHead{Cap encodé\newline (dizaines/unités)}\\\hline
+\lit{SP+28}&\lit{DC+28}&\lit{SE+28}\\\hline
+\end{tabular}%
+\hspace*{8pt}}
+\end{center}
+\end{aprsbodyblock}
 
-Info field \texttt{\textasciigrave{}\ (\_f\ n\ "Oj/}, destination
-indiquant hémisphère ouest, Long Offset +100° :
+\chTenToc{Encodage SP+28}
+\begin{aprssideblock}{Encodage SP+28}
+L'octet \lit{SP+28} contient la vitesse encodée, en centaines/dizaines de
+knots, conformément au tableau suivant :
+\end{aprssideblock}
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{\textasciigrave{}} = DTI Mic-E current.
-\item
-  \texttt{(} = d+28 = 40. \texttt{40\ -\ 28\ =\ 12}. Long Offset +100 →
-  \textbf{longitude 112°}.
-\item
-  \texttt{\_} = m+28 = 95. \texttt{95\ -\ 28\ =\ 67}. \texttt{67\ ≥\ 60}
-  → -60 → \textbf{7 minutes}.
-\item
-  \texttt{f} = h+28 = 102. \texttt{102\ -\ 28\ =\ 74} → \textbf{74
-  centièmes}.
+\begin{aprsbodyblock}
+\sffamily\bfseries Encodage de la vitesse SP+28 (centaines/dizaines de knots)
+
+\smallskip\footnotesize\sffamily\normalfont
+\setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.65}
+\hspace*{-9.5pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{0.1495\linewidth}|>{\centering\arraybackslash}p{0.09\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.11\linewidth}|>{\centering\arraybackslash}p{0.065\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.065\linewidth}|}\hline
+\rowcolor{gray!20}\rule{0pt}{16pt}\chTenHead{Vitesse\newline knots}&\multicolumn{2}{c|}{\chTenHead{ASCII Char}}&\multicolumn{2}{c|}{\chTenHead{SP+28}}\\\hline
+0--9&\ttfamily l&\chTenBlack{0x1c}&108&28\\\hline
+10--19&\ttfamily m&\chTenBlack{0x1d}&109&29\\\hline
+20--29&\ttfamily n&\chTenBlack{0x1e}&110&30\\\hline
+30--39&\ttfamily o&\chTenBlack{0x1f}&111&31\\\hline
+40--49&\ttfamily p&\ttfamily V&112&32\\\hline
+50--59&\ttfamily q&\ttfamily !&113&33\\\hline
+60--69&\ttfamily r&\aprsorigtexttt{"}&114&34\\\hline
+70--79&\ttfamily s&\ttfamily \#&115&35\\\hline
+80--89&\ttfamily t&\ttfamily \$&116&36\\\hline
+90--99&\ttfamily u&\ttfamily \%&117&37\\\hline
+100--109&\ttfamily v&\ttfamily \&&118&38\\\hline
+110--119&\ttfamily w&\aprsorigtexttt{'}&119&39\\\hline
+120--129&\ttfamily x&\ttfamily (&120&40\\\hline
+130--139&\ttfamily y&\ttfamily )&121&41\\\hline
+140--149&\ttfamily z&\ttfamily *&122&42\\\hline
+150--159&\ttfamily \{&\ttfamily +&123&43\\\hline
+160--169&\ttfamily |&\ttfamily ,&124&44\\\hline
+170--179&\ttfamily \}&\ttfamily -&125&45\\\hline
+180--189&\ttfamily \textasciitilde&\ttfamily .&126&46\\\hline
+190--199&\chTenBlack{DEL}&\ttfamily /&127&47\\\hline
+\end{tabular}\hspace{20.5pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{0.1495\linewidth}|>{\centering\arraybackslash}p{0.11\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.065\linewidth}|}\hline
+\rowcolor{gray!20}\rule{0pt}{16pt}\chTenHead{Vitesse\newline knots}&\chTenHead{ASCII\newline Char}&\chTenHead{SP+28}\\\hline
+200--209&\ttfamily 0&48\\\hline
+210--219&\ttfamily 1&49\\\hline
+220--229&\ttfamily 2&50\\\hline
+230--239&\ttfamily 3&51\\\hline
+240--249&\ttfamily 4&52\\\hline
+250--259&\ttfamily 5&53\\\hline
+260--269&\ttfamily 6&54\\\hline
+270--279&\ttfamily 7&55\\\hline
+280--289&\ttfamily 8&56\\\hline
+290--299&\ttfamily 9&57\\\hline
+300--310&\ttfamily :&58\\\hline
+310--320&\ttfamily ;&59\\\hline
+\ldots&&\\\hline
+730--739&\ttfamily e&101\\\hline
+740--749&\ttfamily f&102\\\hline
+750--759&\ttfamily g&103\\\hline
+760--769&\ttfamily h&104\\\hline
+770--779&\ttfamily i&105\\\hline
+780--789&\ttfamily j&106\\\hline
+790--799&\ttfamily k&107\\\hline
+\end{tabular}
+\end{aprsbodyblock}
+
+\begin{aprsbodyblock}
+\textbf{Note :} les caractères ASCII représentés en blanc sur fond noir sont
+des caractères non imprimables.
+
+\textbf{Note :} pour les vitesses comprises entre 0 et 199 knots, deux schémas
+d'encodage coexistent. Il y a donc deux colonnes pour le caractère ASCII et
+deux colonnes pour les valeurs correspondantes de l'octet \lit{SP+28}.
+
+Par exemple, pour une vitesse de 73 knots (c'est-à-dire comprise entre 70 et
+79), l'octet \lit{SP+28} peut contenir soit \lit{s}, soit \lit{\#}, selon la
+méthode d'encodage utilisée. Les deux sont également valides.
+
+L'algorithme de décodage décrit plus loin traite indifféremment ces deux
+schémas d'encodage.
+\end{aprsbodyblock}
+
+\chTenToc{Encodage DC+28}
+\begin{aprssideblock}{Encodage DC+28}
+L'octet \lit{DC+28} contient les unités de vitesse encodées, ainsi que le cap
+encodé en centaines de degrés :
+\end{aprssideblock}
+
+\begin{center}
+\begin{minipage}{0.95\textwidth}
+\hspace*{14.035pt}\sffamily\bfseries Encodage vitesse / cap DC+28 (unités de knots/centaines de degrés)
+
+\smallskip\footnotesize\sffamily\normalfont
+\setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.63}
+\hspace*{14.535pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{38pt}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{45pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{32.5pt}|}\hline
+\rowcolor{gray!20}\chTenHead{Knots\newline (units)}&\chTenHead{Course\newline (deg)}&\multicolumn{2}{c|}{\chTenHead{ASCII Char}}&\multicolumn{2}{c|}{\chTenHead{DC+28}}\\[-1.6pt]\hline
+0&0--99&\ttfamily V&\chTenBlack{0x1c}&32&28\\\hline
+0&100--199&\ttfamily !&\chTenBlack{0x1d}&33&29\\\hline
+0&200--299&\aprsorigtexttt{"}&\chTenBlack{0x1e}&34&30\\\hline
+0&300--360&\ttfamily \#&\chTenBlack{0x1f}&35&31\\\hline
+1&0--99&\ttfamily *&\ttfamily \&&42&38\\\hline
+1&100--199&\ttfamily +&\aprsorigtexttt{'}&43&39\\\hline
+1&200--299&\ttfamily ,&\ttfamily (&44&40\\\hline
+1&300--360&\ttfamily -&\ttfamily )&45&41\\\hline
+2&0--99&\ttfamily 4&\ttfamily 0&52&48\\\hline
+2&100--199&\ttfamily 5&\ttfamily 1&53&49\\\hline
+2&200--299&\ttfamily 6&\ttfamily 2&54&50\\\hline
+2&300--360&\ttfamily 7&\ttfamily 3&55&51\\\hline
+3&0--99&\ttfamily >&\ttfamily :&62&58\\\hline
+3&100--199&\ttfamily ?&\ttfamily ;&63&59\\\hline
+3&200--299&\ttfamily @&\ttfamily <&64&60\\\hline
+3&300--360&\ttfamily A&\ttfamily =&65&61\\\hline
+4&0--99&\ttfamily H&\ttfamily D&72&68\\\hline
+4&100--199&\ttfamily I&\ttfamily E&73&69\\\hline
+4&200--299&\ttfamily J&\ttfamily F&74&70\\\hline
+4&300--360&\ttfamily K&\ttfamily G&75&71\\\hline
+\end{tabular}\hspace{13.5pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{38pt}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{45pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{23.5pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{34.5pt}|}\hline
+\rowcolor{gray!20}\chTenHead{Knots\newline (units)}&\chTenHead{Course\newline (deg)}&\multicolumn{2}{c|}{\chTenHead{ASCII Char}}&\multicolumn{2}{c|}{\chTenHead{DC+28}}\\[-1.6pt]\hline
+5&0--99&\ttfamily R&\ttfamily N&82&78\\\hline
+5&100--199&\ttfamily S&\ttfamily O&83&79\\\hline
+5&200--299&\ttfamily T&\ttfamily P&84&80\\\hline
+5&300--360&\ttfamily U&\ttfamily Q&85&81\\\hline
+6&0--99&\ttfamily \textbackslash&\ttfamily X&92&88\\\hline
+6&100--199&\ttfamily ]&\ttfamily Y&93&89\\\hline
+6&200--299&\ttfamily \textasciicircum&\ttfamily Z&94&90\\\hline
+6&300--360&\ttfamily \_&\ttfamily [&95&91\\\hline
+7&0--99&\ttfamily f&\ttfamily b&102&98\\\hline
+7&100--199&\ttfamily g&\ttfamily c&103&99\\\hline
+7&200--299&\ttfamily h&\ttfamily d&104&100\\\hline
+7&300--360&\ttfamily i&\ttfamily e&105&101\\\hline
+8&0--99&\ttfamily p&\ttfamily l&112&108\\\hline
+8&100--199&\ttfamily q&\ttfamily m&113&109\\\hline
+8&200--299&\ttfamily r&\ttfamily n&114&110\\\hline
+8&300--360&\ttfamily s&\ttfamily o&115&111\\\hline
+9&0--99&\ttfamily z&\ttfamily v&122&118\\\hline
+9&100--199&\ttfamily \{&\ttfamily w&123&119\\\hline
+9&200--299&\ttfamily |&\ttfamily x&124&120\\\hline
+9&300--360&\ttfamily \}&\ttfamily y&125&121\\\hline
+\end{tabular}
+\end{minipage}
+\end{center}
+
+\begin{aprsbodyblock}
+\textbf{Note :} les caractères ASCII représentés en blanc sur fond noir sont
+des caractères non imprimables.
+
+\textbf{Note :} deux schémas d'encodage coexistent pour l'octet \lit{DC+28}.
+Il y a donc deux colonnes pour le caractère ASCII et deux colonnes pour les
+valeurs correspondantes de l'octet \lit{DC+28}.
+
+Par exemple, pour une vitesse de 73 knots (c'est-à-dire unités = 3) et un cap
+de 294 degrés (c'est-à-dire compris entre 200 et 299), l'octet \lit{DC+28}
+peut contenir soit \lit{@}, soit \lit{<}, selon la méthode d'encodage utilisée.
+Les deux sont également valides.
+
+L'algorithme de décodage décrit plus loin traite indifféremment ces deux
+schémas d'encodage.
+\end{aprsbodyblock}
+
+\chTenToc{Encodage SE+28}
+\begin{aprssideblock}{Encodage SE+28}
+L'octet \lit{SE+28} contient les dizaines et unités de degrés encodées du cap :
+
+\par\smallskip
+\sffamily\bfseries Encodage du cap SE+28 (dizaines/unités de degrés)
+
+\smallskip\footnotesize\sffamily\normalfont
+\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.68}
+\hspace*{-3pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\rowcolor{gray!20}\chTenHead{\shortstack{Course\\(deg)}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\[7pt]\hline
+0&\chTenBlack{0x1c}&28\\\hline
+1&\chTenBlack{0x1d}&29\\\hline
+2&\chTenBlack{0x1e}&30\\\hline
+3&\chTenBlack{0x1f}&31\\\hline
+4&V&32\\\hline
+5&!&33\\\hline
+6&\aprsorigtexttt{"}&34\\\hline
+7&\#&35\\\hline
+8&\$&36\\\hline
+9&\%&37\\\hline
+10&\&&38\\\hline
+11&\aprsorigtexttt{'}&39\\\hline
+12&(&40\\\hline
+13&)&41\\\hline
+14&*&42\\\hline
+\end{tabular}\hspace{28pt}%
+\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\rowcolor{gray!20}\chTenHead{\shortstack{Long\\Mins}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\[7pt]\hline
+15&+&43\\\hline
+16&,&44\\\hline
+17&-&45\\\hline
+18&.&46\\\hline
+19&/&47\\\hline
+\ldots&&\\\hline
+91&w&119\\\hline
+92&x&120\\\hline
+93&y&121\\\hline
+94&z&122\\\hline
+95&\{&123\\\hline
+96&|&124\\\hline
+97&\}&125\\\hline
+98&\textasciitilde&126\\\hline
+99&\chTenBlack{DEL}&127\\\hline
+\end{tabular}
+\end{aprssideblock}
+
+\chTenToc{Exemple d'encodage Mic-E de la vitesse et du cap}
+\begin{aprssideblock}{Exemple d'encodage\\Mic-E de la vitesse\\et du cap}
+Pour une vitesse de 86 knots et un cap de 194 degrés, l'encodage est le suivant :
+
+\begin{description}
+\setlength{\itemsep}{0.55em}\setlength{\leftmargin}{3.3em}
+\item[\lit{SP+28} :] la vitesse est comprise entre 80 et 89 knots. D'après le
+  tableau d'encodage SP+28, l'octet \lit{SP+28} peut être soit \lit{t}, soit
+  \lit{\$}.
+\item[\lit{DC+28} :] les unités de vitesse valent 6, et le cap est compris
+  entre 100 et 199 degrés. D'après le tableau d'encodage DC+28, l'octet
+  \lit{DC+28} peut être soit \lit{]}, soit \lit{Y}.
+\item[\lit{SE+28} :] les dizaines et unités de degrés du cap valent 94.
+  D'après le tableau d'encodage SE+28, l'octet \lit{SE+28} sera \lit{z}.
+\end{description}
+\end{aprssideblock}
+
+\chTenToc{Décodage de la vitesse et du cap}
+\begin{aprssideblock}{Décodage de la\\vitesse et du cap}
+Pour décoder la vitesse et le cap :
+
+\begin{description}
+\setlength{\itemsep}{0.55em}\setlength{\leftmargin}{3.3em}
+\item[\lit{SP+28} :] pour obtenir la vitesse en dizaines de knots, soustraire
+  28 de la valeur \lit{SP+28} et multiplier par 10.
+\item[\lit{DC+28} :] soustraire 28 de la valeur \lit{DC+28} et diviser le
+  résultat par 10. Le quotient donne les unités de vitesse. Le reste donne le
+  cap en centaines de degrés.
+\item[\lit{SE+28} :] pour obtenir les dizaines et unités de degrés, soustraire
+  28 de la valeur \lit{SE+28}.
+\end{description}
+
+Enfin, effectuer les ajustements suivants sur la vitesse et le cap :
+
+\begin{itemize}\chTenItems
+\item si la vitesse calculée est $\ge 800$ knots, soustraire 800 ;
+\item si le cap calculé est $\ge 400$ degrés, soustraire 400.
+\end{itemize}
+\end{aprssideblock}
+
+\chTenToc{Exemple de décodage des données du champ Information}
+\begin{aprssideblock}{Exemple de décodage\\des données du champ\\Information}
+Si les 9 premiers octets du champ Information contiennent
+\lit{`(\_fn"Oj/}, et si la Destination Address indique que la station se trouve
+dans l'hémisphère ouest avec un Longitude Offset de +100 degrés, les données
+sont décodées comme suit :
+
+\begin{itemize}\chTenItems
+\item \lit{`} est l'APRS Data Type Identifier d'un paquet Mic-E contenant des
+  données GPS actuelles.
+\item \lit{(} est l'octet \lit{d+28}. Le caractère \texttt{(} a la valeur 40
+  en décimal. Soustraire 28 donne 12. Le Longitude Offset (dans la Destination
+  Address) est de +100 degrés ; la longitude vaut donc $100 + 12 = 112$ degrés.
+\item \lit{\_} est l'octet \lit{m+28}. Le caractère \texttt{\_} a la valeur
+  95 en décimal. Soustraire 28 donne 67. Cette valeur étant $\ge 60$, soustraire
+  60 donne une longitude de 7 minutes.
+\item \lit{f} est l'octet \lit{h+28}. Le caractère \texttt{f} a la valeur 102
+  en décimal. Soustraire 28 donne 74 centièmes de minute.
 \end{itemize}
 
-Longitude = \textbf{112° 7.74' W}.
+La longitude est donc de 112 degrés 7,74 minutes ouest.
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{n} = SP+28 = 110. \texttt{110\ -\ 28\ =\ 82}.
-  \texttt{82\ ≥\ 80} → -80 → 2 (dizaines). Speed high = 20 knots.
-\item
-  \texttt{"} = DC+28 = 34. \texttt{34\ -\ 28\ =\ 6}. Quotient
-  \texttt{6/10} = 0. Speed = 20 + 0 = \textbf{20 knots}. Reste 6, -4 → 2
-  → 200°.
-\item
-  \texttt{O} = SE+28 = 79. \texttt{79\ -\ 28\ =\ 51}. Course = 200 + 51
-  = \textbf{251°}.
+La vitesse et le cap sont calculés comme suit :
+
+\begin{itemize}\chTenItems
+\item \lit{n} est l'octet \lit{SP+28}. Le caractère \texttt{n} a la valeur
+  110 en décimal. Après soustraction de 28, le résultat vaut 82. Comme il est
+  $\ge 80$, soustraire encore 80, ce qui laisse 2 dizaines de knots.
+\item \lit{"} est l'octet \lit{DC+28}. Le caractère \texttt{"} a la valeur 34
+  en décimal. Soustraire 28 donne 6. La division par 10 donne un quotient de 0
+  (unités de vitesse). Ajouter au quotient (0) la première partie de la vitesse
+  multipliée par 10 (soit 20) donne une vitesse finale calculée de 20 knots.
+
+  Le reste de la division est 6. Soustraire 4 donne le cap en centaines de
+  degrés, soit 2.
+\item \lit{O} (lettre « O » majuscule) est l'octet \lit{SE+28}. Le caractère
+  \texttt{O} a la valeur 79 en décimal. Soustraire 28 donne 51. Ajouter cette
+  valeur au reste calculé ci-dessus, multiplié par 100 (soit 200), donne la
+  valeur finale de 251 degrés pour le cap.
 \end{itemize}
 
-Symbol : \texttt{j/} = jeep de la table primaire.
+Les deux derniers caractères (\lit{j/}) représentent le symbole jeep de la
+Primary Symbol Table.
+\end{aprssideblock}
 
-\section{Ambiguïté de position
-Mic-E}\label{ambiguuxeftuxe9-de-position-mic-e}
+\chTenToc{Ambiguïté de position Mic-E}
+\begin{aprssideblock}{Ambiguïté de\\position Mic-E}
+Comme indiqué au chapitre 6 (Formats de temps et de position), une station peut
+réduire la précision de sa position en introduisant une ambiguïté de position.
+Cela est également possible dans le format de données Mic-E.
 
-Comme au chapitre 6, en remplaçant des chiffres de latitude par le
-caractère marquant l'ambiguïté. Même ambiguïté appliquée à la longitude.
-Ex : destination \texttt{T4SQZZ} → 2 derniers chiffres de latitude
-ambigus, longitude tronquée aux minutes.
+L'ambiguïté de position est spécifiée pour la latitude (dans la Destination
+Address). Le même degré d'ambiguïté s'applique alors également à la longitude.
 
-\section{Télémétrie Mic-E}\label{tuxe9luxe9muxe9trie-mic-e}
+Par exemple, si la Destination Address est \lit{T4SQZZ}, les deux derniers
+chiffres de la latitude sont ambigus (représentés par \lit{ZZ}). Alors, si les
+données de longitude du champ Information sont \lit{(\_f}, comme dans l'exemple
+ci-dessus, les deux derniers chiffres de la longitude calculée sont ignorés :
+la longitude vaut donc 112 degrés 7 minutes.
+\end{aprssideblock}
 
-Si l'octet suivant le Symbol Table ID est un flag télémétrie
-(\texttt{\textasciigrave{}}, \texttt{\textquotesingle{}} ou
-\texttt{0x1d}), la télémétrie suit :
+\chTenToc{Données de télémétrie Mic-E}
+\begin{aprssideblock}{Données de\\télémétrie Mic-E}
+Le champ Information peut contenir, en option, soit des valeurs de télémétrie
+Mic-E, soit du texte de statut Mic-E.
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{\textasciigrave{}} : 2 valeurs hex imprimables (canaux 1 et
-  3).
-\item
-  \texttt{\textquotesingle{}} : 5 valeurs hex imprimables.
-\item
-  \texttt{0x1d} : 5 valeurs binaires (Rev.~0 beta uniquement).
-\end{itemize}
+Si l'octet qui suit le Symbol Table Identifier est l'un des caractères
+Telemetry Flag (\lit{`}, \lit{'}, ou \texttt{0x1d}), des données de
+télémétrie suivent :
+\end{aprssideblock}
 
-Format hex : 2 octets par canal, valeur 0-255. Ex \texttt{FE} = 254.
+\begin{center}
+\small\sffamily\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.88}
+\makebox[\textwidth][c]{\hspace*{5pt}%
+\begin{tabular}{|>{\centering\arraybackslash}p{0.14\textwidth}|*{5}{>{\centering\arraybackslash}p{0.045\textwidth}|}}\hline
+\multicolumn{6}{|l|}{\sffamily\bfseries\itshape Données de télémétrie Mic-E optionnelles}\\\hline
+\rowcolor{gray!20}\chTenHead{Telemetry\newline Flag}&\multicolumn{5}{c|}{\chTenHead{Canaux de données de télémétrie}}\\\hline
+\chTenHead{F}&\chTenHead{Ch 1}&\chTenHead{Ch 2}&\chTenHead{Ch 3}&\chTenHead{Ch 4}&\chTenHead{Ch 5}\\\hline
+\multicolumn{1}{r}{\makebox[0pt][r]{Bytes:\hspace{1em}}}1&1/2&1/2&1/2&1/2&1/2\\\hline
+\end{tabular}%
+\hspace*{-5pt}}
+\end{center}
 
-Ex \texttt{\textquotesingle{}7200007100} → 5 canaux hex : 114, 0, 0,
-113, 0.
+\begin{aprsbodyblock}
+Le Telemetry Flag F est l'un des suivants :
 
-\section{Status text Mic-E}\label{status-text-mic-e}
+\begin{tabular}{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
+\lit{`} & 2 valeurs de télémétrie hexadécimales imprimables suivent (canaux 1
+et 3) ; \\
+\lit{'} & 5 valeurs de télémétrie hexadécimales imprimables suivent ; \\
+\texttt{0x1d} & 5 valeurs de télémétrie binaires suivent (unités beta Rev. 0
+uniquement).
+\end{tabular}
 
-Alternative à la télémétrie. Longueur libre. Ne doit pas commencer par
-\texttt{\textasciigrave{}}, \texttt{\textquotesingle{}} ou
-\texttt{0x1d}. Peut contenir une position APRS standard qui remplacera
-la position Mic-E encodée (utile Mic-E sans GPS).
+Si F vaut \lit{`} ou \lit{'}, chaque canal nécessite 2 octets, contenant une
+représentation hexadécimale imprimable sur 2 chiffres d'une valeur comprise
+entre 0 et 255. Par exemple, 254 est représenté par \texttt{FE}.
 
-Les radios Kenwood insèrent automatiquement un code de type en 10ᵉ
-caractère de l'Info field : - Kenwood TH-D7 : \texttt{\textgreater{}} -
-Kenwood TM-D700 : \texttt{{]}}
+Si F vaut \texttt{0x1d}, chaque canal nécessite un octet contenant une
+valeur binaire de 8 bits.
 
-Ne pas confondre avec les DTIs APRS de tête. Les Kenwood n'affichent que
-20 (TH-D7) ou 28 (TM-D700) caractères de status.
+Par exemple, si les données de télémétrie sont \lit{'7200007100}, le caractère
+\lit{'} indique que 5 octets de télémétrie suivent, codés en hexadécimal :
 
-Le TM-D700 utilise \texttt{\textquotesingle{}} (apostrophe) au lieu de
-\texttt{\textasciigrave{}} (grave) pour Current GPS. Détection : si
-premier et 10ᵉ caractères = \texttt{\textquotesingle{}} et \texttt{{]}},
-très probablement un TM-D700.
+\begin{tabular}{@{}l@{}}
+\texttt{0x72 = 114 decimal}\\
+\texttt{0x00 = 0 decimal}\\
+\texttt{0x00 = 0 decimal}\\
+\texttt{0x71 = 113 decimal}\\
+\texttt{0x00 = 0 decimal}
+\end{tabular}
+\end{aprsbodyblock}
 
-\section{Locator Maidenhead dans Status
-Text}\label{locator-maidenhead-dans-status-text}
+\chTenToc{Texte de statut Mic-E}
+\begin{aprssideblock}{Texte de statut Mic-E}
+À la place des données de télémétrie, le paquet peut inclure du texte de statut
+Mic-E. Le texte de statut peut avoir toute longueur tenant dans le reste du
+champ Information.
 
-Ex : - \texttt{IO91SX/G\ Hello\ world} (Mic-E ou PIC-E) -
-\texttt{\textgreater{}IO91SX/G\ Hello\ world} (TH-D7) -
-\texttt{{]}IO91SX/G\ Hello\ world} (TM-D700)
+Le texte de statut Mic-E ne doit pas commencer par \lit{`}, \lit{'}, ou
+\texttt{0x1d}, faute de quoi il serait confondu avec des données de
+télémétrie.
 
-\texttt{/G} = symbole grid locator. Si suivi de texte, séparer par un
-espace.
+Il est possible d'inclure une position au format APRS standard dans le champ de
+texte de statut Mic-E. Une position appropriée amènera le logiciel d'affichage
+APRS à remplacer toutes les données de position encodées par le Mic-E. Cela est
+utile lorsqu'un Mic-E est utilisé sans récepteur GPS.
 
-\section{Altitude dans Status Text}\label{altitude-dans-status-text}
+\textbf{Note :} les radios Kenwood insèrent automatiquement un code de type
+spécial au début de la chaîne de texte de statut (c'est-à-dire au 10e caractère
+du champ Information) :
 
-Format \texttt{xxx\}}. \texttt{xxx} = mètres relatifs à -10 km sous le
-niveau moyen des mers (fosse la plus profonde), en base 91.
+\begin{tabular}{@{}ll@{}}
+Kenwood TH-D7: & \lit{>}\\
+Kenwood TM-D700: & \lit{]}
+\end{tabular}
 
-Exemple 200 pieds = 61 m → 10061 m au-dessus du datum :
+Ces caractères ne doivent pas être confondus avec l'APRS Data Type Identifier
+qui apparaît au début des rapports.
 
-\begin{verbatim}
-10061 / 91² = 1, reste 1780
- 1780 / 91  = 19, reste 51
-\end{verbatim}
+Il est prévu que d'autres appareils compatibles Mic-E reçoivent à l'avenir
+leurs propres codes de type.
 
-+33 : 34, 52, 84 → ASCII \texttt{"4T}. Suffixe \texttt{\}}. Résultat :
-\texttt{"4T\}}.
+\textbf{Note :} lorsque les radios Kenwood reçoivent le statut, elles ne
+peuvent afficher qu'un petit nombre de caractères de texte :
 
-Ex complets : \texttt{"4T\}} (Mic-E/PIC-E), \texttt{\textgreater{}"4T\}}
-(TH-D7), \texttt{{]}"4T\}} (TM-D700).
+\begin{tabular}{@{}ll@{}}
+Kenwood TH-D7: & 20 caractères\\
+Kenwood TM-D700: & 28 caractères
+\end{tabular}
 
-\section{Mic-E hors APRS}\label{mic-e-hors-aprs}
+\textbf{Note :} la radio Kenwood TM-D700 utilise l'apostrophe \lit{'} au lieu
+de l'accent grave \lit{`} comme APRS Data Type Identifier pour représenter les
+données GPS actuelles. Une méthode suggérée pour détecter cette situation
+consiste à examiner les premier et dixième caractères du champ Information :
+s'ils sont respectivement \lit{'} et \lit{]}, le paquet provient presque
+certainement d'un TM-D700.
+\end{aprssideblock}
 
-Certains octets Info sont binaires. Si le paquet reste dans APRS, pas de
-souci. Sur un réseau non 8-bit-clean (Internet), conversion nécessaire
-dans les deux sens.
+\chTenToc{Locator Maidenhead dans le champ de texte de statut Mic-E}
+\begin{aprssideblock}{Locator Maidenhead\\dans le champ de texte\\de statut Mic-E}
+Le champ de texte de statut Mic-E peut contenir un locator Maidenhead.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Si le locator est suivi d'un commentaire en texte clair, le premier caractère
+du texte doit être une espace. Par exemple :
+
+\begin{tabular}{@{}ll@{}}
+\aprsorigtexttt{IO91SX/G}\chTenLitSpace\aprsorigtexttt{Hello}\chTenSpace\aprsorigtexttt{world} & (depuis un Mic-E ou PIC-E)\\
+\aprsorigtexttt{>IO91SX/G}\chTenLitSpace\aprsorigtexttt{Hello}\chTenSpace\aprsorigtexttt{world} & (depuis un Kenwood TH-D7)\\
+\aprsorigtexttt{]IO91SX/G}\chTenLitSpace\aprsorigtexttt{Hello}\chTenSpace\aprsorigtexttt{world} & (depuis un Kenwood TM-D700)
+\end{tabular}
+
+(\lit{/G} est le symbole de grid locator).
+\end{aprssideblock}
+
+\chTenToc{Altitude dans le champ de texte de statut Mic-E}
+\begin{aprssideblock}{Altitude dans le champ\\de texte de statut\\Mic-E}
+Le champ de texte de statut Mic-E peut contenir l'altitude de la station.
+L'altitude est exprimée sous la forme \aprsorigtexttt{xxx}\lit{\}}, où
+\aprsorigtexttt{xxx} est en mètres
+par rapport à 10 km sous le niveau moyen de la mer (l'océan le plus profond),
+en base 91.
+
+Par exemple, pour calculer les caractères \aprsorigtexttt{xxx} pour une altitude de
+200 pieds :
+
+\begin{tabular}{@{}l@{}}
+200 pieds = 61 mètres = 10061 mètres par rapport au datum\\
+\(10061 / 91^2 = {}\)\lit{1}, reste 1780\\
+\(1780 / 91\phantom{^2} = {}\)\lit{19}, reste \lit{51}
+\end{tabular}
+
+L'ajout de 33 à chacune des valeurs surlignées donne 34, 52 et 84 pour les
+codes ASCII de \aprsorigtexttt{xxx}.
+
+La chaîne d'altitude de 4 caractères est donc \lit{"4T\}}.
+
+Quelques exemples :
+
+\begin{tabular}{@{}ll@{}}
+\aprsorigtexttt{"4T\}}\\
+\aprsorigtexttt{>"4T\}}\\
+\aprsorigtexttt{]"4T\}}
+\end{tabular}
+\end{aprssideblock}
+
+\chTenToc{Données Mic-E dans les réseaux non APRS}
+\begin{aprssideblock}{Données Mic-E dans\\les réseaux non APRS}
+Certaines parties du champ Information AX.25 Mic-E peuvent contenir des
+données binaires (c'est-à-dire des caractères ASCII non imprimables). Si un
+tel paquet reste limité au réseau APRS, cela ne devrait poser aucune
+difficulté.
+
+Toutefois, si le paquet doit être transmis par un réseau qui ne préserve pas
+fiablement les données binaires (Internet, par exemple), il est nécessaire de
+convertir les données dans un format qui les préservera.
+
+En outre, si le paquet revient ensuite sur le réseau APRS, il est alors
+nécessaire de reconvertir les données dans leur format d'origine.
+\end{aprssideblock}
+
+\let\chTenToc\relax
+\let\chTenHead\relax
+\let\chTenGray\relax
+\let\chTenBlack\relax
+\let\chTenItems\relax
+\endgroup

@@ -1,7 +1,10 @@
 \chapter[DONNÉES APRS DANS LE CHAMP INFORMATION AX.25]{Données APRS dans le champ Information
 AX.25}\label{donnuxe9es-aprs-dans-le-champ-information-ax.25}
 
-Le champ Information peut contenir tout ou partie de :
+\begin{aprssideblock}{Format générique\\des données}
+\phantomsection\addcontentsline{toc}{section}{Format générique des données}\label{format-guxe9nuxe9rique-des-donnuxe9es}
+En général, le champ Information AX.25 peut contenir tout ou partie des
+informations suivantes :
 
 \begin{itemize}
 \tightlist
@@ -14,92 +17,149 @@ Le champ Information peut contenir tout ou partie de :
 \item
   Comment
 \end{itemize}
+\end{aprssideblock}
 
-\section*{Format générique}\label{format-guxe9nuxe9rique}
+\begin{aprsbodyblock}
+{\small
+\setlength{\tabcolsep}{6pt}
+\setlength{\extrarowheight}{4pt}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}|l|l|l|l|}
+\hline
+\multicolumn{4}{|>{\columncolor{gray!20}}l|}{\bfseries\itshape Generic APRS Information Field}\\
+\hline
+\bfseries\itshape Data Type ID & \bfseries\itshape APRS Data & \bfseries\itshape APRS Data Extension & \bfseries\itshape Comment \\
+\hline
+\makebox[0pt][r]{Bytes:\hspace{1.2em}}1 & n & 7 & n \\
+\hline
+\end{tabular*}
+}
+\end{aprsbodyblock}
 
-\begin{longtable}[]{@{}lllll@{}}
-\toprule\noalign{}
-Champ & Data Type ID & APRS Data & APRS Data Extension & Comment \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Octets & 1 & n & 7 & n \\
-\end{longtable}
+\begin{aprssideblock}{APRS Data Type\\Identifier}
+\phantomsection\addcontentsline{toc}{section}{APRS Data Type Identifier}\label{aprs-data-type-identifier}
+Chaque paquet APRS contient un APRS Data Type Identifier (DTI). Celui-ci
+détermine le format du reste des données du champ Information, comme suit :
+\end{aprssideblock}
 
-\section*{APRS Data Type Identifier}\label{aprs-data-type-identifier}
+\vspace{8pt}
+\noindent\textbf{APRS Data Type Identifiers}\par\vspace{4pt}
+{\footnotesize
+\setlength{\tabcolsep}{4pt}
+\setlength{\arrayrulewidth}{0.75pt}
+\renewcommand{\arraystretch}{1.75}
+\noindent
+\begin{tabular}[t]{|>{\columncolor{gray!20}\centering\arraybackslash}p{26pt}|p{\dimexpr0.49\textwidth-46pt\relax}|}
+\hline
+\rowcolor{gray!20}
+\bfseries\itshape Ident & \multicolumn{1}{>{\columncolor{gray!20}}c|}{\bfseries\itshape Data Type} \\
+\hline
+\texttt{0x1c} & Current Mic-E Data (Rev 0 beta) \\
+\hline
+\texttt{0x1d} & Old Mic-E Data (Rev 0 beta) \\
+\hline
+! & Position sans timestamp (sans messagerie), ou Ultimeter 2000 WX Station \\
+\hline
+" & \emph{[Unused]} \\
+\hline
+\# & Peet Bros U-II Weather Station \\
+\hline
+\$ & Raw GPS data ou Ultimeter 2000 \\
+\hline
+\% & Agrelo DFJr / MicroFinder \\
+\hline
+\& & \emph{[Reserved --- Map Feature]} \\
+\hline
+\textquotesingle{} & Old Mic-E Data (mais \emph{Current} data pour TM-D700) \\
+\hline
+( & \emph{[Unused]} \\
+\hline
+) & Item \\
+\hline
+* & Peet Bros U-II Weather Station \\
+\hline
++ & \emph{[Reserved --- Shelter data with time]} \\
+\hline
+, & Invalid data ou test data \\
+\hline
+- & \emph{[Unused]} \\
+\hline
+. & \emph{[Reserved --- Space weather]} \\
+\hline
+/ & Position avec timestamp (sans messagerie) \\
+\hline
+\texttt{0–9} & \emph{[Do not use]} \\
+\hline
+: & Message \\
+\hline
+; & Object \\
+\hline
+\end{tabular}
+\hfill
+\begin{tabular}[t]{|>{\columncolor{gray!20}\centering\arraybackslash}p{26pt}|p{\dimexpr0.49\textwidth-46pt\relax}|}
+\hline
+\rowcolor{gray!20}
+\bfseries\itshape Ident & \multicolumn{1}{>{\columncolor{gray!20}}c|}{\bfseries\itshape Data Type} \\
+\hline
+\textless{} & Station Capabilities \\
+\hline
+= & Position sans timestamp (avec messagerie APRS) \\
+\hline
+\textgreater{} & Status \\
+\hline
+? & Query \\
+\hline
+@ & Position avec timestamp (avec messagerie APRS) \\
+\hline
+\texttt{A–S} & \emph{[Do not use]} \\
+\hline
+T & Telemetry data \\
+\hline
+\texttt{U–Z} & \emph{[Do not use]} \\
+\hline
+{[} & Maidenhead grid locator beacon (obsolète) \\
+\hline
+\textbackslash{} & \emph{[Unused]} \\
+\hline
+{]} & \emph{[Unused]} \\
+\hline
+\textasciicircum{} & \emph{[Unused]} \\
+\hline
+\_ & Weather Report (sans position) \\
+\hline
+\textasciigrave{} & Current Mic-E Data (\emph{non utilisé} sur TM-D700) \\
+\hline
+\texttt{a–z} & \emph{[Do not use]} \\
+\hline
+\{ & User-Defined APRS packet format \\
+\hline
+\textbar{} & \emph{[Do not use --- TNC stream switch character]} \\
+\hline
+\} & Third-party traffic \\
+\hline
+\textasciitilde{} & \emph{[Do not use --- TNC stream switch character]} \\
+\hline
+\end{tabular}
+}
 
-Chaque paquet APRS contient un DTI qui détermine le format du reste de
-l'Information field.
+\Needspace*{11\baselineskip}
+\begin{aprsbodyblock}
+Note : il existe une exception à l'exigence que le Data Type Identifier soit
+le premier caractère du champ Information --- il s'agit de la Position
+without Timestamp (indiquée par le DTI \lit{!}). Le caractère \lit{!} peut
+apparaître n'importe où jusqu'à la 40\textsuperscript{e} position de
+caractère incluse dans le champ Information. Cette variabilité est
+nécessaire pour prendre en charge les digipeaters TNC X1J, qui disposent
+d'une chaîne de texte non modifiable en début de champ.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Ident
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Type de données
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Ident
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Type de données
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-\texttt{0x1c} & Current Mic-E Data (Rev 0 beta) & \lit{\textless{}} &
-Station Capabilities \\
-\texttt{0x1d} & Old Mic-E Data (Rev 0 beta) & \lit{=} & Position sans
-timestamp (avec messagerie APRS) \\
-\lit{!} & Position sans timestamp (sans messagerie), ou Ultimeter
-2000 WX & \lit{\textgreater{}} & Status \\
-\lit{"} & {[}Inutilisé{]} & \lit{?} & Query \\
-\lit{\#} & Peet Bros U-II Weather Station & \lit{@} & Position
-avec timestamp (avec messagerie APRS) \\
-\lit{\$} & Raw GPS data ou Ultimeter 2000 & \texttt{A–S} & {[}Ne pas
-utiliser{]} \\
-\lit{\%} & Agrelo DFJr / MicroFinder & \lit{T} & Telemetry data \\
-\lit{\&} & {[}Réservé --- Map Feature{]} & \texttt{U–Z} & {[}Ne pas
-utiliser{]} \\
-\lit{\textquotesingle{}} & Old Mic-E Data (mais Current pour TM-D700)
-& \lit{{[}} & Maidenhead grid locator beacon (obsolète) \\
-\lit{(} & {[}Inutilisé{]} & \lit{\textbackslash{}} &
-{[}Inutilisé{]} \\
-\texttt{)} & Item & \texttt{{]}} & {[}Inutilisé{]} \\
-\texttt{*} & Peet Bros U-II Weather Station & \texttt{\^{}} &
-{[}Inutilisé{]} \\
-\texttt{+} & {[}Réservé --- Shelter data with time{]} & \texttt{\_} &
-Weather Report (sans position) \\
-\texttt{,} & Invalid data ou test data & \texttt{\textasciigrave{}} &
-Current Mic-E Data (pas TM-D700) \\
-\texttt{-} & {[}Inutilisé{]} & \texttt{a–z} & {[}Ne pas utiliser{]} \\
-\texttt{.} & {[}Réservé --- Space weather{]} & \texttt{\{} &
-User-Defined APRS packet format \\
-\texttt{/} & Position avec timestamp (sans messagerie) &
-\texttt{\textbackslash{}\textbar{}} & {[}Ne pas utiliser --- TNC stream
-switch{]} \\
-\texttt{0–9} & {[}Ne pas utiliser{]} & \texttt{\}} & Third-party
-traffic \\
-\texttt{:} & Message & \texttt{\textasciitilde{}} & {[}Ne pas utiliser
---- TNC stream switch{]} \\
-\texttt{;} & Object & & \\
-\end{longtable}
+Note : la radio Kenwood TM-D700 utilise le DTI \lit{\textquotesingle{}} pour
+les données Mic-E actuelles (\emph{current}). Cette radio n'utilise pas le
+DTI \lit{\textasciigrave{}}.
+\end{aprsbodyblock}
 
-\textbf{Notes} : - Exception au « DTI en premier caractère » : Position
-sans timestamp (\texttt{!}). Le \texttt{!} peut apparaître jusqu'à la
-40ᵉ position du champ Information. Support des digipeaters X1J TNC qui
-ont une chaîne non modifiable en début de champ. - La radio Kenwood
-TM-D700 utilise \texttt{\textquotesingle{}} pour du courant Mic-E, pas
-\texttt{\textasciigrave{}}.
-
-\section*{APRS Data et Data
-Extension}\label{aprs-data-et-data-extension}
-
-10 types principaux de données :
+\begin{aprssideblock}{APRS Data and\\Data Extension}
+\phantomsection\addcontentsline{toc}{section}{APRS Data and Data Extension}\label{aprs-data-and-data-extension}
+Il existe 10 types principaux d'APRS Data :
 
 \begin{itemize}
 \tightlist
@@ -108,13 +168,13 @@ Extension}\label{aprs-data-et-data-extension}
 \item
   Direction Finding
 \item
-  Objects et Items
+  Objects and Items
 \item
   Weather
 \item
   Telemetry
 \item
-  Messages, Bulletins et Announcements
+  Messages, Bulletins and Announcements
 \item
   Queries
 \item
@@ -125,108 +185,190 @@ Extension}\label{aprs-data-et-data-extension}
   Other
 \end{itemize}
 
-Certaines données peuvent aussi porter une APRS Data Extension. Data +
-extension suivent le DTI.
+Certaines de ces données peuvent également comporter une APRS Data
+Extension, qui fournit des informations supplémentaires.
 
-Tableau récapitulatif des combinaisons possibles :
+L'APRS Data et l'APRS Data Extension optionnelle suivent le Data Type
+Identifier.
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Type
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-APRS Data possible
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-APRS Data Extension possible
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Position & Time (DHM ou HMS), Lat/long, Compressed
-lat/long/course/speed/range/altitude, Symbol Table ID + Symbol Code,
-Mic-E longitude/speed/course/telemetry/status, NMEA brute, Raw weather &
-Course \& Speed, Power/Height/Gain/Directivity, Pre-Calculated Radio
-Range, Omni DF Signal Strength, Storm Data (in Comment) \\
-Direction Finding & Time (DHM ou HMS), Lat/long, Compressed
-lat/long/course/speed/range/altitude, Symbol Table ID + Symbol Code &
-Course \& Speed, PHG, PCR Range, Omni DF Signal Strength, Bearing +
-Number/Range/Quality (in Comment) \\
-Objects \& Items & Nom d'objet ou d'item, Time, Lat/long,
-Compressed\ldots, Symbol, Raw weather & Course \& Speed, PHG, PCR Range,
-Omni DF Signal Strength, Area Object, Storm Data (in Comment), Wind
-Direction \& Speed \\
-Weather & Time (MDHM), Lat/long, Compressed\ldots, Symbol, Raw weather &
-Course \& Speed, PHG, PCR Range, Omni DF, Area Object, Wind Direction \&
-Speed \\
-Telemetry & Telemetry (non Mic-E) & --- \\
-Messages / Bulletins & Addressee, Message Text, Message Identifier,
-Message Acknowledgement, Bulletin ID, Announcement ID, Group Bulletin ID
-& --- \\
-Queries & Query Type, Query Target Footprint, Addressee (Directed Query)
-& --- \\
-Responses & Position, Object/Item, Weather, Status, Message, Digipeater
-Trace, Stations Heard, Heard Statistics, Station Capabilities & --- \\
-Status & Time (DHM zulu), Status text, Meteor Scatter Beam
-Heading/Power, Maidenhead Locator, Altitude (Mic-E), E-mail message &
---- \\
-Other & Third-Party forwarding, Invalid Data / Test Data & --- \\
-\end{longtable}
+Le tableau de la page suivante présente une liste complète de tous les
+différents types possibles d'APRS Data et d'APRS Data Extension.
+\end{aprssideblock}
 
-\section*{Comment Field}\label{comment-field}
+\begin{center}
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{2.10}
+\setlength{\arrayrulewidth}{0.75pt}
+\begin{tabular}{|>{\columncolor{gray!20}\raggedleft\arraybackslash\bfseries}m{0.15\linewidth}|>{\raggedright\arraybackslash}m{0.38\linewidth}|>{\raggedright\arraybackslash}m{0.38\linewidth}|}
+\hline
+\rowcolor{gray!20}
+ & \multicolumn{1}{c|}{\bfseries\itshape Possible APRS Data} & \multicolumn{1}{c|}{\bfseries\itshape Possible APRS Data Extension} \\
+\hline
+Position &
+Time (DHM or HMS)\newline
+Lat/long coordinates\newline
+Compressed lat/long/course/speed/radio range/altitude\newline
+Symbol Table ID and Symbol Code\newline
+Mic-E longitude, speed and course, telemetry or status\newline
+Raw GPS NMEA sentence\newline
+Raw weather station data &
+Course and Speed\newline
+Power, Effective Antenna Height/Gain/Directivity\newline
+Pre-Calculated Radio Range\newline
+Omni DF Signal Strength\newline
+Storm Data (in Comment field) \\
+\hline
+Direction Finding &
+Time (DHM or HMS)\newline
+Lat/long coordinates\newline
+Compressed lat/long/course/speed/radio range/altitude\newline
+Symbol Table ID and Symbol Code &
+Course and Speed\newline
+Power, Effective Antenna Height/Gain/Directivity\newline
+Pre-Calculated Radio Range\newline
+Omni DF Signal Strength\newline
+Bearing and Number/Range/Quality (in Comment field) \\
+\hline
+Objects and Items &
+Object name\newline
+Item name\newline
+Time (DHM or HMS)\newline
+Lat/long coordinates\newline
+Compressed lat/long/course/speed/radio range/altitude\newline
+Symbol Table ID and Symbol Code\newline
+Raw weather station data &
+Course and Speed\newline
+Power, Effective Antenna Height/Gain/Directivity\newline
+Pre-Calculated Radio Range\newline
+Omni DF Signal Strength\newline
+Area Object\newline
+Storm Data (in Comment field) \\
+\hline
+Weather &
+Time (MDHM)\newline
+Lat/long coordinates\newline
+Compressed lat/long/course/speed/radio range/altitude\newline
+Symbol Table ID and Symbol Code\newline
+Raw weather station data &
+Wind Direction and Speed\newline
+Storm Data (in Comment field) \\
+\hline
+Telemetry &
+Telemetry (non Mic-E) & \\
+\hline
+Messages, Bulletins and Announcements &
+Addressee\newline
+Message Text\newline
+Message Identifier\newline
+Message Acknowledgement\newline
+Bulletin ID, Announcement ID\newline
+Group Bulletin ID & \\
+\hline
+Queries &
+Query Type\newline
+Query Target Footprint\newline
+Addressee (Directed Query) & \\
+\hline
+Responses &
+Position\newline
+Object/Item\newline
+Weather\newline
+Status\newline
+Message\newline
+Digipeater Trace\newline
+Stations Heard\newline
+Heard Statistics\newline
+Station Capabilities &
+Course and Speed\newline
+Power, Effective Antenna Height/Gain/Directivity\newline
+Pre-Calculated Radio Range\newline
+Omni DF Signal Strength\newline
+Area Object\newline
+Wind Direction and Speed \\
+\hline
+Status &
+Time (DHM zulu)\newline
+Status text\newline
+Meteor Scatter Beam Heading/Power\newline
+Maidenhead Locator (Grid Square)\newline
+Altitude (Mic-E)\newline
+E-mail message & \\
+\hline
+Other &
+Third-Party forwarding\newline
+Invalid Data/Test Data & \\
+\hline
+\end{tabular}
+}
+\end{center}
 
-En général, tout paquet APRS peut contenir un texte libre (par ex.
-message beacon) dans l'Information field, immédiatement après les APRS
-Data ou l'extension. Pas de séparateur sauf mention contraire.
+\begin{aprssideblock}{Comment Field}
+\phantomsection\addcontentsline{toc}{section}{Comment Field}\label{comment-field}
+En général, tout paquet APRS peut contenir un commentaire en texte libre
+(tel qu'un message de beacon) dans le champ Information, immédiatement après
+les APRS Data ou l'APRS Data Extension.
 
-Le commentaire peut contenir n'importe quels caractères ASCII
-imprimables sauf \texttt{\textbar{}} et \texttt{\textasciitilde{}}
-(réservés au TNC channel switching).
+Il n'y a pas de séparateur entre les données APRS et le commentaire, sauf
+mention contraire.
 
-Longueur max dépendante du type de rapport --- détails dans la
-description de chaque rapport.
+Le commentaire peut contenir tout caractère ASCII imprimable (à l'exception
+de \lit{\textbar{}} et \lit{\textasciitilde{}}, réservés au TNC channel
+switching).
 
-Dans certains cas, le champ Comment peut contenir des données APRS
-supplémentaires :
+La longueur maximale du champ Comment dépend du rapport concerné --- les
+détails figurent dans la description de chaque rapport.
+
+Dans certains cas particuliers, le champ Comment peut également contenir des
+données APRS supplémentaires :
 
 \begin{itemize}
 \tightlist
 \item
-  Altitude en texte de commentaire (chapitre 6), ou dans le texte de
-  statut Mic-E (chapitre 10).
+  \textbf{Altitude} dans le texte de commentaire (voir chapitre 6 : Formats
+  de temps et de position), ou dans le texte de statut Mic-E (voir chapitre
+  10 : Format Mic-E).
 \item
-  Maidenhead Locator en Mic-E status (chapitre 10) ou Status Report
-  (chapitre 16).
+  \textbf{Maidenhead Locator} (grid square), dans un champ de texte de
+  statut Mic-E (voir chapitre 10 : Format Mic-E) ou dans un Status Report
+  (voir chapitre 16 : Rapports de statut).
 \item
-  Bearing + Number/Range/Quality (\texttt{/BRG/NRQ}), dans les DF
-  reports (chapitre 7).
+  Les paramètres \textbf{Bearing and Number/Range/Quality}
+  (\texttt{/BRG/NRQ}), dans les DF reports (voir chapitre 7 : Extensions de
+  données APRS).
 \item
-  Area Object Line Widths (chapitre 11).
+  \textbf{Area Object Line Widths} (voir chapitre 11 : Rapports d'Objets et
+  d'Items).
 \item
-  Signpost Objects (chapitre 11).
+  \textbf{Signpost Objects} (voir chapitre 11 : Rapports d'Objets et
+  d'Items).
 \item
-  Weather et Storm Data (chapitre 12).
+  \textbf{Weather and Storm Data} (voir chapitre 12 : Rapports météo).
 \item
-  Beam Heading \& Power dans les Status Reports (chapitre 16).
+  \textbf{Beam Heading and Power}, dans les Status Reports (voir chapitre
+  16 : Rapports de statut).
 \end{itemize}
+\end{aprssideblock}
 
-\section*{Notation Base-91}\label{notation-base-91}
+\begin{aprssideblock}{Base-91\\Notation}
+\phantomsection\addcontentsline{toc}{section}{Base-91 Notation}\label{notation-base-91}
+Deux formats de données APRS utilisent la notation base-91 : les
+coordonnées lat/long au format compressé (voir chapitre 9 : Formats
+compressés de rapport de position) et l'altitude au format Mic-E (voir
+chapitre 10 : Format Mic-E).
 
-Deux formats APRS utilisent la notation base-91 : lat/long compressées
-(chapitre 9) et altitude Mic-E (chapitre 10).
+Les données base-91 sont compressées en une courte chaîne de caractères.
+Tous les caractères sont des caractères ASCII imprimables, avec des codes de
+caractère compris entre 33 et 124 en décimal (c'est-à-dire de \lit{!} à
+\lit{\textbar{}}).
 
-Les données base-91 sont compressées en une courte chaîne de caractères
-ASCII imprimables, codes 33--124 décimal (\texttt{!} à
-\texttt{\textbar{}}).
+Pour calculer la chaîne de caractères ASCII base-91 correspondant à une
+valeur de donnée donnée, cette valeur est divisée par des puissances de 91
+progressivement décroissantes jusqu'à ce que le reste soit inférieur à 91. À
+chaque étape, 33 est ajouté au modulo de la division pour obtenir le code de
+caractère ASCII correspondant.
 
-Pour calculer la chaîne base-91 d'une valeur, on divise par des
-puissances décroissantes de 91 jusqu'à ce que le reste soit \textless{}
-91. À chaque étape, ajouter 33 au modulo pour obtenir le code ASCII.
-
-Exemple pour 12345678 :
+Par exemple, pour une valeur de donnée de 12345678 :
 
 \begin{verbatim}
 12345678 / 91³ = modulo 16, reste 288542
@@ -234,17 +376,21 @@ Exemple pour 12345678 :
 6988     / 91¹ = modulo 76, reste 72
 \end{verbatim}
 
-Codes ASCII : 49 (=16+33), 67 (=34+33), 109 (=76+33), 105 (=72+33) →
-chaîne \texttt{1Cmi}.
+Les quatre codes de caractère ASCII sont donc 49 (c'est-à-dire 16+33), 67
+(c'est-à-dire 34+33), 109 (c'est-à-dire 76+33) et 105 (c'est-à-dire 72+33),
+correspondant à la chaîne ASCII \texttt{1Cmi}.
+\end{aprssideblock}
 
-\section*{Unités de données APRS}\label{unituxe9s-de-donnuxe9es-aprs}
+\begin{aprssideblock}{APRS Data\\Units}
+\phantomsection\addcontentsline{toc}{section}{APRS Data Units}\label{unituxe9s-de-donnuxe9es-aprs}
+Pour des raisons historiques, il existe un certain manque de cohérence entre
+les unités de données dans les paquets APRS --- certaines vitesses sont
+exprimées en knots (nœuds), d'autres en miles per hour (miles par heure) ;
+certaines altitudes sont exprimées en pieds, d'autres en mètres, et ainsi de
+suite. Il est souligné que cette spécification décrit les unités de données
+telles qu'elles sont transmises sur l'air (\emph{on-air}). Il incombe aux
+applications APRS de convertir les unités on-air en unités plus appropriées
+si nécessaire.
 
-Pour des raisons historiques, il y a un manque de cohérence dans les
-unités : certaines vitesses en knots, d'autres en miles/h ; altitudes en
-pieds ou en mètres, etc. Cette spécification décrit les unités
-\emph{telles qu'elles sont transmises on-air}. Il incombe aux
-applications APRS de les convertir si besoin.
-
-Le datum GPS par défaut est WGS 1984.
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+Le datum terrestre GPS par défaut est le World Geodetic System (WGS) 1984.
+\end{aprssideblock}

@@ -2,7 +2,6 @@
 
 \begin{aprssideblock}{Protocoles}
 \phantomsection\addcontentsline{toc}{section}{Protocoles}\label{protocoles}
-
 Au niveau lien, APRS utilise le protocole AX.25 (voir référence
 \emph{Amateur Packet-Radio Link-Layer Protocol} en annexe 6),
 exclusivement en trames UI (Unnumbered Information). Cela signifie
@@ -16,15 +15,15 @@ des stations nommées, avec accusé de réception attendu.
 
 \begin{aprssideblock}{La trame\\AX.25}
 \phantomsection\addcontentsline{toc}{section}{La trame AX.25}\label{la-trame-ax.25}
-
 Toutes les transmissions APRS utilisent des trames AX.25 UI avec 9
 champs :
 \end{aprssideblock}
 
+\vspace{8pt}
 \begin{center}
 {\scriptsize
 \setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.45}
+\renewcommand{\arraystretch}{1.75}
 \makebox[0.11\textwidth][r]{\vphantom{\begin{tabular}{|c|}\hline X\\\hline X\\\hline X\\\hline\end{tabular}}}%
 \begin{tabular*}{0.89\textwidth}{@{\extracolsep{\fill}}|c|c|c|c|c|c|c|c|c|}
 \multicolumn{9}{|>{\columncolor{black}}l|}{\textcolor{white}{\bfseries AX.25 UI-FRAME FORMAT}}\\
@@ -43,31 +42,35 @@ champs :
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Flag} --- bit sequence \texttt{0x7e} séparant chaque trame, à
-  chaque extrémité.
+  \textbf{Flag} --- le champ Flag à chaque extrémité de la trame est la
+  séquence de bits \texttt{0x7e} qui sépare chaque trame.
 \item
-  \textbf{Destination Address} --- peut contenir un indicatif de
-  destination APRS ou des données APRS encodées pour respecter le format
-  AX.25 standard (6 alphanumériques + SSID). SSID non nul = chemin
-  digipeater APRS générique.
+  \textbf{Destination Address} --- ce champ peut contenir un indicatif de
+  destination APRS ou des données APRS. Les données APRS sont encodées de
+  manière à garantir que le champ soit conforme au format d'indicatif
+  AX.25 standard (c'est-à-dire 6 caractères alphanumériques plus SSID).
+  Si le SSID est non nul, il spécifie un chemin digipeater APRS
+  générique.
 \item
-  \textbf{Source Address} --- indicatif et SSID de la station émettrice.
-  Dans certains cas, un SSID non nul spécifie un code de symbole
-  d'affichage.
+  \textbf{Source Address} --- ce champ contient l'indicatif et le SSID
+  de la station émettrice. Dans certains cas, si le SSID est non nul, le
+  SSID peut spécifier un code de symbole d'affichage APRS.
 \item
-  \textbf{Digipeater Addresses} --- 0 à 8 indicatifs de digipeaters.
-  Peuvent être remplacés par un chemin APRS générique spécifié dans le
-  SSID de destination.
+  \textbf{Digipeater Addresses} --- de zéro à 8 indicatifs de
+  digipeaters peuvent être inclus dans ce champ. Note : ces adresses de
+  digipeaters peuvent être remplacées par un chemin APRS générique
+  (spécifié dans le SSID de Destination Address).
 \item
-  \textbf{Control Field} --- mis à \texttt{0x03} (UI-frame).
+  \textbf{Control Field} --- ce champ est mis à \texttt{0x03} (UI-frame).
 \item
-  \textbf{Protocol ID} --- mis à \texttt{0xf0} (pas de protocole de
-  couche 3).
+  \textbf{Protocol ID} --- ce champ est mis à \texttt{0xf0} (pas de
+  protocole de couche 3).
 \item
-  \textbf{Information Field} --- données APRS. Le premier caractère est
-  le Data Type Identifier qui précise la nature du contenu.
+  \textbf{Information Field} --- ce champ contient davantage de données
+  APRS. Le premier caractère de ce champ est l'APRS Data Type
+  Identifier, qui précise la nature des données qui suivent.
 \item
-  \textbf{FCS} --- Frame Check Sequence sur 16 bits pour intégrité de la
-  trame.
+  \textbf{FCS} --- le FCS est une séquence de 16 bits utilisée pour
+  vérifier l'intégrité d'une trame reçue.
 \end{itemize}
 \end{aprssideblock}

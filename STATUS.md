@@ -1,0 +1,214 @@
+# État de la traduction et point de reprise
+
+## État général
+
+Le projet compile et contient une traduction de toutes les parties du document,
+mais cette présence ne signifie pas que la traduction est complète ou fidèle.
+Une partie du contenu hérité a été condensée, reformulée ou mise en page sans
+respecter l'original. Aucun chapitre non contrôlé phrase par phrase ne doit être
+considéré comme validé.
+
+Le dépôt Git a été initialisé sur la branche `main`. Le commit de référence
+actuel est :
+
+`627a4be Initial import of French APRS protocol reference`
+
+`AGENTS.md`, `README.md` et ce fichier décrivent la reprise, mais ne doivent pas
+être commités sans demande explicite de l'utilisateur.
+
+## Travail déjà effectué
+
+Les éléments suivants ont été travaillés au cours de la session précédente :
+
+- pages liminaires, pagination romaine et début de la pagination arabe ;
+- en-têtes et pieds de page alternés, logo APRS et typographie générale ;
+- table des matières et casse de son titre ;
+- démarrage des chapitres et annexes sur une nouvelle page ;
+- chapitres 1 à 4, avec reprises de contenu et de mise en page ;
+- tableau du format de trame AX.25 au chapitre 3 ;
+- tableaux SSID du chapitre 4 ;
+- plusieurs tableaux et exemples des chapitres suivants ;
+- annexe 7 répartie sur trois tableaux/pages ;
+- chapitre 5, restauré intégralement (voir ci-dessous) ;
+- chapitre 6, restauré intégralement (voir ci-dessous).
+
+Les chapitres 4, 5 et 6 ont fait l'objet d'une comparaison textuelle
+complète avec l'original et d'une restauration phrase par phrase. Les autres
+éléments de la liste ont été travaillés, mais ne doivent pas être déclarés
+intégralement conformes sans un nouveau contrôle systématique.
+
+## Chapitre 5 : restauré et contrôlé
+
+Fichier français : `chapters/05-info-field.tex`. Pages imprimées de
+l'original : 17 à 21.
+
+Corrections appliquées lors de cette session :
+
+- passage de `\section*{}` à la structure `aprssideblock`/`aprsbodyblock`
+  utilisée dans les chapitres 3 et 4, pour restituer les six libellés en
+  marge (`Generic Data Format`, `APRS Data Type Identifier`, `APRS Data and
+  Data Extension`, `Comment Field`, `Base-91 Notation`, `APRS Data Units`),
+  conformes à la table des matières originale ;
+- ajout du tableau encadré `Generic APRS Information Field` (absent) ;
+- correction de l'identifiant littéral `|` (codé à tort `\|`) dans le tableau
+  des DTI, et correction de la note TM-D700 tronquée ;
+- séparation des deux notes DTI en deux paragraphes distincts (elles étaient
+  fusionnées en une liste à tirets) ;
+- restauration intégrale du tableau `Possible APRS Data` /
+  `Possible APRS Data Extension` : suppression de `Wind Direction and Speed`
+  attribué à tort à `Objects and Items`, retrait des extensions parasites de
+  la ligne `Weather`, restauration des six extensions de `Responses`
+  (supprimées et remplacées par `---`), et dénominations complètes au lieu
+  des abréviations (`PHG`, `PCR Range`, etc.) ;
+- restauration des titres complets de chapitre dans les renvois du
+  `Comment Field` (au lieu du seul numéro) ;
+- ajout de la phrase finale manquante de `Base-91 Notation` (calcul des
+  quatre codes ASCII) ;
+- restitution intégrale et non condensée de `Comment Field`, `Base-91
+  Notation` et `APRS Data Units`.
+
+Compilé avec `make`, contrôlé phrase par phrase par comparaison avec
+`pdftotext -layout` et visuellement par rendu `pdftoppm` des pages
+correspondantes. Le chapitre occupe désormais 6 pages imprimées (17 à 22)
+contre 5 dans l'original ; le contenu de chaque page correspond à son
+équivalent anglais (le texte français est structurellement plus long, ce que
+`AGENTS.md` autorise explicitement). Aucun avertissement LaTeX significatif
+(overfull/underfull) ne subsiste dans la zone du chapitre.
+
+## Chapitre 6 : restauré et contrôlé
+
+Fichier français : `chapters/06-time-position.tex`. Pages imprimées de
+l'original : 22 à 26.
+
+Erreurs techniques corrigées :
+
+- le caractère d'ambiguïté de position était la **lettre `V`** (`4903.5VN`,
+  `49VV.VVN`…) alors que l'original transmet un **espace** (glyphe espace
+  surligné) ; remplacé par `\lit{~}` ;
+- exemple Maidenhead corrompu : `IO91SX/(` → `IO91SX/-` ;
+- « generally (but not necessarily) fixed stations » : la nuance
+  « (mais pas nécessairement) » avait été supprimée.
+
+Omissions restaurées : phrase « Times can be expressed in zulu (UTC/GMT) or
+local time », phrase d'introduction du rectangle englobant, les trois
+marqueurs « Note : », les gloses parenthétiques (« i.e. degrees, minutes and
+hundredths of a minute north/west », « i.e. reports that do not contain
+station position information », « as above », « in this case indicating use
+of the Primary Symbol Table »), les qualificatifs perdus (« fixed
+8-character / 9-character field », « stand-alone », « display Symbol Table
+Identifier », « navigation equipment such as », « in the location field »,
+« if required », « indeterminate »), et les titres de chapitres dans les
+renvois (chapitre 20 : Symboles APRS, chapitre 10 : Format de données Mic-E).
+
+Reformulations corrigées : la paraphrase inventée « la vision "émission =
+maintenant" côté récepteur », la notation `JJHHMM` inventée, les heures
+reformatées (« 2345 hours » → « 23:45 »), l'ajout « différé » dans le tableau
+des DTI.
+
+Mise en page rétablie : les dix intertitres passent de `\section{}` aux
+libellés en marge `aprssideblock` conformes à l'original et aux chapitres 1
+à 5 ; les paragraphes convertis en listes à puces sont redevenus des
+paragraphes ; le rectangle englobant retrouve ses quatre lignes alignées ; la
+section Altitude retrouve sa liste de deux puces suivie de deux paragraphes
+distincts ; l'en-tête inventé `Sentence | Signification` du tableau NMEA est
+supprimé (simple liste indentée comme l'original) ; le filet décoratif final,
+absent de l'original, est retiré.
+
+Environnement `aprsexample` et macro `\exgap` ajoutés dans `aprs101-fr.tex`
+pour les blocs d'exemples indentés de l'original.
+
+Compilé avec `make`, contrôlé phrase par phrase (`pdftotext -layout`) et
+visuellement page par page (`pdftoppm`). Le chapitre occupe 4 pages imprimées
+(20 à 23) contre 5 dans l'original, sans perte de contenu.
+
+## Travail restant
+
+1. Auditer chaque chapitre 7 à 20, puis toutes les annexes, sans faire
+   confiance au seul fait que du texte français existe déjà.
+2. Pour chaque chapitre, relever séparément les omissions, les traductions
+   incorrectes, les erreurs techniques et les écarts de mise en page.
+3. Obtenir l'aval de l'utilisateur avant chaque correction qui n'a pas déjà été
+   explicitement demandée.
+4. Compiler, rendre les pages originales et françaises en images, puis vérifier
+   visuellement tableaux, filets, fonds, marges, débordements et pagination.
+5. Effectuer à la fin un contrôle global de complétude et de cohérence de la
+   table des matières, des renvois, des en-têtes, des pieds de page et des pages.
+
+## Problèmes rencontrés à ne pas reproduire
+
+- Résumer un texte technique au lieu de le traduire.
+- Présenter une reformulation comme une traduction fidèle.
+- Supprimer du contenu pour faire tenir la traduction dans moins de pages.
+- Modifier une partie déjà validée pendant une correction locale.
+- Transformer la structure originale d'un tableau pour faciliter le LaTeX.
+- Déduire la mise en page depuis `pdftotext` sans regarder les pages originales.
+- Déclarer un chapitre conforme après une simple compilation.
+- Appliquer une correction supplémentaire sans aval.
+
+Les règles détaillées et impératives figurent dans `AGENTS.md`.
+
+## Point de reprise au 9 août 2026
+
+État réel, vérifié :
+
+- **Chapitre 5 — NON terminé.** Le grand tableau `Possible APRS Data` a ses
+  trois colonnes en `m{}` : les libellés de gauche sont bien centrés, mais les
+  colonnes de données sont centrées verticalement alors que l'original les cale
+  en haut. Pistes déjà écartées par la mesure : `m{}` avec colonnes `p{}` (les
+  `p{}` calent la 1re ligne sur la ligne de base, le surplus part en profondeur,
+  `m{}` centre sur l'axe → le libellé remonte en haut) ; `tabularray` en
+  `Q[m]`, `valign=m` et `\SetCell{m}` (trois variantes testées, aucune ne
+  centre). Piste non testée : table imbriquée (colonnes 2+3 dans un `tabular`
+  interne non aligné, donc centré comme boîte et remplissant la ligne).
+- **Chapitre 6 — terminé et contrôlé.**
+- **Chapitre 7 — restauré**, contenu vérifié phrase par phrase contre les pages
+  27 à 31 de l'original. Restent :
+  - `VVV/VVV` en lettres littérales (3 occurrences) — l'original transmet des
+    **espaces surlignés** ; à remplacer par `\lit{~~~/~~~}` ;
+  - surlignage `\lit` manquant : `000/000`, `.../...`, le `/` de `CSE/SPD` et
+    `DIR/SPD` (liste à puces et corps), les préfixes `PHG`/`RNG`/`DFS`, les
+    codes `p h g d` et les exposants des formules, les `/` de `/BRG/NRQ` ;
+  - 4 `\newpage` forcés qui figent la pagination.
+  - Tableaux Q : filets portés à 1 pt le 9 août (bord gauche invisible avant,
+    `\cellcolor` remplacé par `\columncolor`). `phgd`/`shgd` volontairement
+    laissés à 0,60 pt.
+- **Chapitres 8 à 20 et annexes : non audités.**
+
+Rappels de méthode coûteux à réapprendre :
+
+- Fichiers de travail dans `prepa_aprs101/`, jamais `/tmp` (règle `CLAUDE.md`) —
+  les rendus y sont déjà, les réutiliser au lieu de régénérer.
+- Pour juger un filet ou un fond, mesurer les pixels du filet lui-même, pas des
+  abscisses déduites de `pdftotext`. Vérifier avant d'annoncer.
+
+## Carte des dégâts restants (relevé du 9 août 2026)
+
+Relevé par grep des signatures pandoc. Colonnes : occurrences de
+`\real{0.` ou `minipage}[b]` (= longtable pandoc brut), `\section*`,
+`\rule{0.5\linewidth}` (filet décoratif absent de l'original), `VVV`,
+`\lit{`, `aprssideblock`.
+
+- **Aucun `aprssideblock` des chapitres 08 à 21** : la structure en libellés
+  de marge reste entièrement à faire sur 14 fichiers.
+- **Encore en sortie pandoc brute** : `08-position-df-reports` (50 occurrences
+  + 7 `\section*`, le plus abîmé), `09-compressed-position` (32 + 11),
+  `10-mic-e` (16, et zéro `\lit` sur 341 lignes — suspect pour un chapitre
+  plein de caractères de protocole). Plus marginalement `15-queries` (10) et
+  `20-symbols` (4).
+- **Filet décoratif final dans 14 fichiers**, dont `01-introduction` et
+  `00-front-matter` pourtant réputés repris. Correction triviale en batch.
+- **`VVV` résiduels** : `12-weather` (1), `21-appendices` (2). Le chapitre 7
+  est propre.
+
+Ordre d'attaque suggéré :
+
+1. Batch : les 14 `\rule{0.5\linewidth}` + les 3 `VVV` restants.
+2. Les courts, presque gratuits : `16-status` (69 l.), `17-tunneling` (94),
+   `18-user-defined` (38), `19-other-packets` (28).
+3. Le gros œuvre : chapitres 08, 09, 10.
+4. `21-appendices` (888 lignes) en dernier.
+
+Méthode retenue pour la suite : **séparer les passes**. Fidélité du texte sur
+tous les chapitres d'abord ; typographie fine (surlignages, filets,
+alignements verticaux) en une seule passe finale sur tout le document. C'est
+le mélange des deux qui a fait dérailler la session du 9 août.
