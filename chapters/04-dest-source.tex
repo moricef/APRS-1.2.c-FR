@@ -3,26 +3,194 @@ AX.25}\label{donnuxe9es-aprs-dans-les-champs-destination-et-source-ax.25}
 
 \begin{aprssideblock}{Le champ\\Destination Address\\AX.25}
 \phantomsection\addcontentsline{toc}{section}{Le champ Destination Address AX.25}\label{le-champ-destination-address-ax.25}
-Le champ Destination Address AX.25 peut contenir 6 types d'information APRS :
+Le nom «~destination~» est source de confusion pour beaucoup. Le terme
+«~destination~» vient d'AX.25, où il désigne la destination du paquet.
+APRS est envoyé à tout le monde, plutôt qu'à une station particulière.
+APRS utilise ce champ à d'autres fins :
 
 \begin{itemize}
 \tightlist
 \item
+  Un numéro de version de logiciel (ou d'appareil) APRS.
+\item
+  Des données encodées Mic-E.
+\item
   Une adresse APRS générique.
 \item
   Une adresse APRS générique avec un symbole.
-\item
-  Un numéro de version de logiciel APRS.
-\item
-  Des données encodées Mic-E.
 \item
   Un Maidenhead Grid Locator (obsolète).
 \item
   Une adresse Alternate Net (ALTNET).
 \end{itemize}
 
-Dans chacun de ces cas, le SSID de Destination Address peut spécifier un chemin
-digipeater APRS générique.
+Dans chacun de ces cas, le SSID de Destination Address peut spécifier un
+chemin digipeater APRS générique.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Numéro de version\\du logiciel APRS}
+\phantomsection\addcontentsline{toc}{section}{Numéro de version du logiciel APRS}\label{numuxe9ro-de-version-de-logiciel-aprs}
+Le champ Destination Address AX.25 contient le plus souvent le numéro de
+version du logiciel ou de l'appareil APRS exécuté par la station. La
+connaissance du numéro de version peut être utile lors du dépannage.
+
+Voici quelques exemples anciens. La partie variable (\texttt{xxx})
+contient souvent un numéro de version du logiciel.
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+{\ttfamily \lit{APC}xxx} & APRS/CE, Windows CE \\
+{\ttfamily \lit{APD}xxx} & Linux aprsd server \\
+{\ttfamily \lit{APE}xxx} & PIC-Encoder \\
+{\ttfamily \lit{API}xxx} & Icom radios \\
+{\ttfamily \lit{APK}xxx} & Kenwood radios \\
+{\ttfamily \lit{APM}xxx} & MacAPRS \\
+{\ttfamily \lit{APP}xxx} & pocketAPRS \\
+{\ttfamily \lit{APR}xxx} & APRSdos \\
+{\ttfamily \lit{APS}xxx} & APRS+SA \\
+{\ttfamily \lit{APW}xxx} & WinAPRS \\
+{\ttfamily \lit{APX}xxx} & X-APRS \\
+{\ttfamily \lit{APY}xxx} & Yaesu radios \\
+{\ttfamily \lit{APZ}xxx} & Expérimental \\
+\end{tabular}
+\end{center}
+
+Par exemple, une station utilisant la version 3.2.6 de MacAPRS pourrait
+utiliser l'identifiant de version \texttt{APM326}.
+
+Les développeurs de nouveaux produits doivent obtenir un identifiant
+logiciel/appareil unique pour identifier le produit qui crée le paquet.
+La liste traditionnelle à \url{http://aprs.org/aprs11/tocalls.txt}
+n'est plus maintenue. L'emplacement actuel est
+\url{https://github.com/aprsorg/aprs-deviceid}.
+
+La destination expérimentale \lit{APZ}xxx est réservée à un usage
+temporaire uniquement pendant le développement d'un produit, avant
+qu'une adresse APRS Software Version spéciale ne lui soit attribuée.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Données Mic-E\\encodées}
+\phantomsection\addcontentsline{toc}{section}{Données Mic-E encodées}\label{donnuxe9es-mic-e-encoduxe9es}
+Une autre utilisation possible du champ Destination Address AX.25
+consiste à y placer des données encodées Mic-E. Ces données comprennent :
+
+\begin{itemize}
+\tightlist
+\item
+  La latitude de la station.
+\item
+  Un indicateur West/East et un indicateur Longitude Offset, utilisés
+  dans les calculs de longitude.
+\item
+  Un Position Comment.
+\item
+  Le chemin digipeater APRS.
+\end{itemize}
+
+Ces données sont utilisées avec les données associées dans le champ
+Information AX.25 pour fournir un Position Report complet et d'autres
+informations sur la station (voir chapitre 10 : Format de données
+Mic-E).
+
+Le reste de ces utilisations est déjà déclaré obsolète ou devrait
+probablement l'être.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Adresse générique\\avec symbole}
+\phantomsection\addcontentsline{toc}{section}{Adresse générique avec symbole}\label{adresse-guxe9nuxe9rique-avec-symbole}
+APRS peut également utiliser ce champ pour le symbole d'affichage.
+C'était destiné aux tout premiers trackers, aux ressources
+extrêmement limitées. Ils transmettaient des trames GPS NMEA brutes
+plutôt que de formater les données en rapports de position.
+
+Ces adresses spéciales sont
+{\ttfamily \lit{GPS}xyz},
+{\ttfamily \lit{GPS}Cnn},
+{\ttfamily \lit{GPS}Enn},
+{\ttfamily \lit{SPC}xyz} et
+{\ttfamily \lit{SYM}xyz},
+et sont destinées aux cas dans lesquels il est impossible d'inclure le
+symbole dans le champ Information AX.25.
+
+Les adresses {\ttfamily \lit{GPS}…} ci-dessus sont destinées à un usage
+général.
+
+Les adresses {\ttfamily \lit{SPC}…} sont destinées aux événements
+spéciaux.
+
+Les adresses {\ttfamily \lit{SYM}…} sont réservées à un usage futur.
+
+Les caractères \texttt{xy} et \texttt{nn} désignent des entrées des
+tables de symboles APRS. Le caractère \texttt{z} spécifie un overlay de
+symbole. Voir le chapitre 20 : Symboles APRS et l'annexe 2 pour plus
+d'informations.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Chemin digipeater\\APRS générique\\(obsolète)}
+\phantomsection\addcontentsline{toc}{section}{Chemin digipeater APRS générique (obsolète)}\label{chemin-digipeater-aprs-guxe9nuxe9rique}
+Le SSID dans le champ Destination Address de tous les paquets peut être
+utilisé pour spécifier le chemin digipeater APRS.
+
+Si le SSID de Destination Address est \texttt{-0}, le paquet suit le
+chemin digipeater AX.25 standard («~VIA~») contenu dans le champ
+Digipeater Addresses de la trame AX.25.
+
+Si le SSID de Destination Address est non nul, le paquet suit l'un des
+15 chemins digipeater APRS génériques.
+
+Le champ SSID dans la Destination Address (c'est-à-dire dans le
+7\textsuperscript{e} octet d'adresse) est encodé comme suit :
+
+{\sffamily\bfseries Chemins digipeater APRS dans le SSID de Destination Address}
+
+\begin{center}
+{\small
+\setlength{\arrayrulewidth}{0.75pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|l|c|l|}
+\hline
+\rowcolor{gray!20}
+\bfseries SSID & \bfseries Chemin & \bfseries SSID & \bfseries Chemin \\
+\hline
+\texttt{-0}  & Use VIA path   & \texttt{-8}  & North path \\
+\hline
+\texttt{-1}  & WIDE-1         & \texttt{-9}  & South path \\
+\hline
+\texttt{-2}  & WIDE-2         & \texttt{-10} & East path \\
+\hline
+\texttt{-3}  & WIDE-3         & \texttt{-11} & West path \\
+\hline
+\texttt{-4}  & WIDE-4         & \texttt{-12} & North path + WIDE \\
+\hline
+\texttt{-5}  & WIDE-5         & \texttt{-13} & South path + WIDE \\
+\hline
+\texttt{-6}  & WIDE-6         & \texttt{-14} & East path + WIDE \\
+\hline
+\texttt{-7}  & WIDE-7         & \texttt{-15} & West path + WIDE \\
+\hline
+\end{tabular}
+}
+\end{center}
+
+Il s'agissait d'un bricolage pour un tout premier tracker APRS aux
+ressources de calcul extrêmement limitées, avec 4 interrupteurs DIP pour
+régler le SSID de destination. Cela remonte à de nombreuses années avant
+la création du paradigme WIDEn-N.
+
+Nous n'avons connaissance d'aucune implémentation contemporaine. Le
+consensus de la communauté est que cette fonctionnalité doit être
+considérée comme obsolète.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Maidenhead Grid\\Locator dans\\Destination Address\\(obsolète)}
+\phantomsection\addcontentsline{toc}{section}{Maidenhead Grid Locator dans Destination Address (obsolète)}\label{maidenhead-grid-locator-en-destination}
+Le champ Destination Address AX.25 peut contenir un Maidenhead Grid
+Locator à 6 caractères. Par exemple : \texttt{IO91SX}. Ce format est
+généralement utilisé par les opérateurs meteor scatter et satellite qui
+doivent conserver des paquets aussi courts que possible.
+
+Ce format est maintenant obsolète.
 \end{aprssideblock}
 
 \begin{aprssideblock}{Adresses génériques\\de destination APRS}
@@ -32,235 +200,52 @@ APRS utilise les adresses génériques de type beacon suivantes :
 \begin{center}
 \ttfamily
 \begin{tabular}{lllllll}
-\lit{AIR}*† & \lit{CQ}* & \lit{DX}* & \lit{MAIL}* & \lit{RTCM}* & \lit{SYM}* & \lit{WX}* \\
-\lit{ALL}* & \lit{DF}* & \lit{GPS}* & \lit{MICE}* & \lit{SKY}* & \lit{TEL}* & \lit{ZIP}*† \\
-\lit{AP}* & \lit{DGPS}* & \lit{ID}* & \lit{QST}* & \lit{SPACE}* & \lit{TEST}* & \\
-\lit{BEACON} & \lit{DRILL}* & \lit{JAVA}* & \lit{QTH}* & \lit{SPC}* & \lit{TLM}* & \\
+\lit{DGPS}* & \lit{ALL}* & \lit{AP}* & \lit{BEACON} & \lit{CQ}* & \lit{GPS}* & \lit{DF}* \\
+\lit{QST}* & \lit{DRILL}* & \lit{DX}* & \lit{ID}* & \lit{JAVA}* & \lit{MAIL}* & \lit{MICE}* \\
+& \lit{QTH}* & \lit{RTCM}* & \lit{SKY}* & \lit{SPACE}* & \lit{SPC}* & \lit{SYM}* \\
+\lit{TEL}* & \lit{TEST}* & \lit{TLM}* & \lit{WX}* & & & \\
 \end{tabular}
 \end{center}
 
-L'astérisque est un joker permettant d'étendre l'adresse jusqu'à un total de
-6 caractères alphanumériques. Ainsi, par exemple, \texttt{WX1}, \texttt{WX12}
-et \texttt{WX12CD} sont toutes des adresses de destination APRS valides.
-
-† Les adresses {\ttfamily \lit{AIR}*} et {\ttfamily \lit{ZIP}*} sont en cours
-d'abandon, mais sont actuellement nécessaires pour assurer la compatibilité
-avec les versions antérieures.
+L'astérisque est un joker permettant d'étendre l'adresse jusqu'à un
+total de 6 caractères alphanumériques. Ainsi, par exemple,
+\texttt{WX1}, \texttt{WX12} et \texttt{WX12CD} sont toutes des adresses
+de destination APRS valides.
 
 Toutes ces adresses ont un SSID de \texttt{-0}. Les SSID non nuls sont
 réservés au digipeating APRS générique.
 
-Ces adresses sont copiées par tous. Tous les logiciels APRS doivent accepter
-les paquets comportant ces adresses de destination.
+Ces adresses sont copiées par tous. Tous les logiciels APRS doivent
+accepter les paquets comportant ces adresses de destination.
 
-L'adresse \lit{GPS}, c'est-à-dire l'adresse exacte à 3 lettres \lit{GPS} et
-non {\ttfamily \lit{GPS}*}, est spécifiquement destinée aux trackers qui
-envoient des positions latitude/longitude par l'intermédiaire de digipeaters
-capables de convertir les positions au format de données compressées.
+Les adresses \lit{DGPS} et \lit{RTCM} sont utilisées par les stations
+de correction GPS différentielle. La plupart des logiciels
+n'exploitent pas les paquets utilisant ces adresses, si ce n'est pour
+les transmettre à un récepteur GPS connecté.
 
-Les adresses \lit{DGPS} et \lit{RTCM} sont utilisées par les stations de
-correction GPS différentielle. La plupart des logiciels n'exploitent pas les
-paquets utilisant ces adresses, si ce n'est pour les transmettre à un
-récepteur GPS connecté.
+L'adresse \lit{SKY} est utilisée pour les stations Skywarn.
 
-L'adresse \lit{SKY} est utilisée par les stations Skywarn.
-
-Les paquets adressés à {\ttfamily \lit{SPC}L} sont destinés aux événements
-spéciaux. Les logiciels APRS peuvent afficher ces paquets à l'exclusion de
-tous les autres, afin de réduire à l'écran l'encombrement produit par les
-autres stations ne participant pas à l'événement spécial.
+Les paquets adressés à {\ttfamily \lit{SPC}L} sont destinés aux
+événements spéciaux. Les logiciels APRS peuvent afficher ces paquets à
+l'exclusion de tous les autres, afin de réduire à l'écran
+l'encombrement produit par les autres stations ne participant pas à
+l'événement spécial.
 
 Les adresses \lit{TEL} et \lit{TLM} sont utilisées par les stations de
 télémétrie.
 \end{aprssideblock}
 
-\begin{aprssideblock}{Adresse générique\\avec symbole}
-\phantomsection\addcontentsline{toc}{section}{Adresse générique avec symbole}\label{adresse-guxe9nuxe9rique-avec-symbole}
-APRS utilise plusieurs des adresses génériques énumérées ci-dessus d'une
-manière particulière, afin de spécifier non seulement une adresse, mais aussi
-un symbole d'affichage. Ces adresses particulières sont
-{\ttfamily \lit{GPS}xyz}, {\ttfamily \lit{GPS}Cnn},
-{\ttfamily \lit{GPS}Enn}, {\ttfamily \lit{SPC}xyz} et
-{\ttfamily \lit{SYM}xyz}. Elles sont destinées aux cas dans lesquels il est
-impossible d'inclure le symbole dans le champ Information AX.25.
-
-Les adresses {\ttfamily \lit{GPS}…} ci-dessus sont destinées à un usage
-général.
-
-Les adresses {\ttfamily \lit{SPC}…} sont destinées aux événements spéciaux.
-
-Les adresses {\ttfamily \lit{SYM}…} sont réservées à un usage futur.
-
-Les caractères \texttt{xy} et \texttt{nn} désignent des entrées des tables de
-symboles APRS. Le caractère \texttt{z} spécifie un overlay de symbole. Voir le
-chapitre 20 : Symboles APRS et l'annexe 2 pour plus d'informations.
-\end{aprssideblock}
-
-\begin{aprssideblock}{Numéro de version\\du logiciel APRS}
-\phantomsection\addcontentsline{toc}{section}{Numéro de version du logiciel APRS}\label{numuxe9ro-de-version-de-logiciel-aprs}
-Le champ Destination Address AX.25 peut contenir le numéro de version du
-logiciel APRS exécuté par la station. La connaissance du numéro de version
-peut être utile lors du débogage.
-
-Les types de versions logicielles suivants sont réservés (\texttt{xx} et
-\texttt{xxx} indiquent un numéro de version) :
-
-\begin{center}
-\begin{tabular}{@{}ll@{}}
-{\ttfamily \lit{APC}xxx} & APRS/CE, Windows CE \\
-{\ttfamily \lit{APD}xxx} & Linux aprsd server \\
-{\ttfamily \lit{APE}xxx} & PIC-Encoder \\
-{\ttfamily \lit{API}xxx} & Icom radios (futur) \\
-{\ttfamily \lit{APIC}xx} & ICQ messaging \\
-{\ttfamily \lit{APK}xxx} & Kenwood radios \\
-{\ttfamily \lit{APM}xxx} & MacAPRS \\
-{\ttfamily \lit{APP}xxx} & pocketAPRS \\
-{\ttfamily \lit{APR}xxx} & APRSdos \\
-\lit{APRS} & anciennes versions d'APRSdos \\
-{\ttfamily \lit{APRS}M} & anciennes versions de MacAPRS \\
-{\ttfamily \lit{APRS}W} & anciennes versions de WinAPRS \\
-{\ttfamily \lit{APS}xxx} & APRS+SA \\
-{\ttfamily \lit{APW}xxx} & WinAPRS \\
-{\ttfamily \lit{APX}xxx} & X-APRS \\
-{\ttfamily \lit{APY}xxx} & Yaesu radios (futur) \\
-{\ttfamily \lit{APZ}xxx} & Expérimental \\
-\end{tabular}
-\end{center}
-
-Cette table sera complétée par l'APRS Working Group.
-Par exemple, une station utilisant la version 3.2.6 de MacAPRS pourrait
-utiliser l'indicatif de destination {\ttfamily \lit{APM}326}.
-La destination expérimentale est réservée à un usage temporaire seulement
-pendant le développement d'un produit, avant qu'une adresse spéciale APRS
-Software Version lui soit attribuée.
-\end{aprssideblock}
-
-\begin{aprssideblock}{Données Mic-E\\encodées}
-\phantomsection\addcontentsline{toc}{section}{Données Mic-E encodées}\label{donnuxe9es-mic-e-encoduxe9es}
-Une autre utilisation possible du champ Destination Address AX.25 consiste à
-y placer des données encodées Mic-E. Ces données comprennent :
-
-\begin{itemize}
-\tightlist
-\item
-  La latitude de la station.
-\item
-  Un indicateur West/East et un indicateur Longitude Offset, utilisés dans les
-  calculs de longitude.
-\item
-  Un Message Code.
-\item
-  Le chemin digipeater APRS.
-\end{itemize}
-
-Ces données sont utilisées avec les données associées dans le champ
-Information AX.25 pour fournir un Position Report complet et d'autres
-informations sur la station (voir chapitre 10 : Format de données Mic-E).
-\end{aprssideblock}
-
-\begin{aprssideblock}{Maidenhead Grid\\Locator dans\\Destination Address}
-\phantomsection\addcontentsline{toc}{section}{Maidenhead Grid Locator dans Destination Address}\label{maidenhead-grid-locator-en-destination}
-Le champ Destination Address AX.25 peut contenir un Maidenhead Grid Locator à
-6 caractères. Par exemple : \texttt{IO91SX}. Ce format est généralement
-utilisé par les opérateurs meteor scatter et satellite qui doivent conserver
-des paquets aussi courts que possible.
-Ce format est maintenant obsolète.
-\end{aprssideblock}
-
-\begin{aprssideblock}{Alternate Nets}
-\phantomsection\addcontentsline{toc}{section}{Alternate Nets}\label{alternate-nets}
-Toute autre adresse de destination ne figurant pas dans la liste
-générique spécifique ni dans les autres catégories mentionnées ci-dessus
-peut être utilisée dans des Alternate Nets (ALTNETs) par des groupes
-d'individus à des fins spéciales. Ils peuvent ainsi utiliser
-l'infrastructure APRS pour une variété d'expérimentations sans encombrer
-les cartes et les listes des autres stations APRS. Seules les stations
-utilisant la même adresse ALTNET devraient voir leurs données.
-\end{aprssideblock}
-
-\begin{aprssideblock}{Chemin digipeater\\APRS générique}
-\phantomsection\addcontentsline{toc}{section}{Chemin digipeater APRS générique}\label{chemin-digipeater-aprs-guxe9nuxe9rique}
-Le SSID dans le champ Destination Address de tous les paquets est encodé
-pour spécifier le chemin digipeater APRS.
-
-Si le SSID de Destination Address est \texttt{-0}, le paquet suit le
-chemin digipeater AX.25 standard (« VIA ») contenu dans le champ
-Digipeater Addresses de la trame AX.25.
-
-Si le SSID de Destination Address est non nul, le paquet suit l'un des 15
-chemins digipeater APRS génériques.
-
-Le champ SSID dans la Destination Address, c'est-à-dire dans le 7e octet
-d'adresse, est encodé comme suit :
-
-{\sffamily\bfseries Chemins digipeater APRS dans le SSID de Destination Address}
-
-\begin{flushleft}
-\begin{tikzpicture}[x=1cm,y=1cm,baseline=(current bounding box.north)]
-  \def\rowheight{0.48}
-  \def\ssidwidth{1.20}
-
-  \begin{scope}
-    \def\tablewidth{4.70}
-    \fill[gray!20] (0,0) rectangle (\tablewidth,-\rowheight);
-    \fill[gray!20] (0,-\rowheight) rectangle (\ssidwidth,{-9*\rowheight});
-    \foreach \line in {0,...,9}
-      \draw[line width=0.5pt] (0,{-\line*\rowheight}) -- (\tablewidth,{-\line*\rowheight});
-    \draw[line width=1.5pt] (0,{-2*\rowheight}) -- (\tablewidth,{-2*\rowheight});
-    \draw[line width=1.5pt] (0,{-7*\rowheight}) -- (\tablewidth,{-7*\rowheight});
-    \draw[line width=0.5pt] (0,0) -- (0,{-9*\rowheight});
-    \draw[line width=1.5pt] (\ssidwidth,0) -- (\ssidwidth,{-9*\rowheight});
-    \draw[line width=0.5pt] (\tablewidth,0) -- (\tablewidth,{-9*\rowheight});
-
-    \node[font=\sffamily\bfseries] at ({\ssidwidth/2},{-0.5*\rowheight}) {SSID};
-    \node[font=\sffamily\bfseries] at ({(\ssidwidth+\tablewidth)/2},{-0.5*\rowheight}) {Chemin};
-    \foreach \ssid [count=\row from 1] in {0,1,2,3,4,5,6,7}
-      \node[font=\ttfamily] at ({\ssidwidth/2},{-(\row+0.5)*\rowheight}) {-\ssid};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-1.5*\rowheight}) {Use VIA path};
-    \foreach \wide [count=\row from 2] in {1,2,3,4,5,6,7}
-      \node[anchor=west,font=\ttfamily] at ({\ssidwidth+0.16},{-(\row+0.5)*\rowheight}) {WIDE\wide-\wide};
-  \end{scope}
-
-  \begin{scope}[xshift=5.05cm]
-    \def\tablewidth{5.05}
-    \fill[gray!20] (0,0) rectangle (\tablewidth,-\rowheight);
-    \fill[gray!20] (0,-\rowheight) rectangle (\ssidwidth,{-9*\rowheight});
-    \foreach \line in {0,...,9}
-      \draw[line width=0.5pt] (0,{-\line*\rowheight}) -- (\tablewidth,{-\line*\rowheight});
-    \draw[line width=1.5pt] (0,{-2*\rowheight}) -- (\tablewidth,{-2*\rowheight});
-    \draw[line width=1.5pt] (0,{-7*\rowheight}) -- (\tablewidth,{-7*\rowheight});
-    \draw[line width=0.5pt] (0,0) -- (0,{-9*\rowheight});
-    \draw[line width=1.5pt] (\ssidwidth,0) -- (\ssidwidth,{-9*\rowheight});
-    \draw[line width=0.5pt] (\tablewidth,0) -- (\tablewidth,{-9*\rowheight});
-
-    \node[font=\sffamily\bfseries] at ({\ssidwidth/2},{-0.5*\rowheight}) {SSID};
-    \node[font=\sffamily\bfseries] at ({(\ssidwidth+\tablewidth)/2},{-0.5*\rowheight}) {Chemin};
-    \foreach \ssid [count=\row from 1] in {8,9,10,11,12,13,14,15}
-      \node[font=\ttfamily] at ({\ssidwidth/2},{-(\row+0.5)*\rowheight}) {-\ssid};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-1.5*\rowheight}) {North path};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-2.5*\rowheight}) {South path};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-3.5*\rowheight}) {East path};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-4.5*\rowheight}) {West path};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-5.5*\rowheight}) {North path + WIDE};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-6.5*\rowheight}) {South path + WIDE};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-7.5*\rowheight}) {East path + WIDE};
-    \node[anchor=west] at ({\ssidwidth+0.16},{-8.5*\rowheight}) {West path + WIDE};
-  \end{scope}
-\end{tikzpicture}
-\end{flushleft}
-\end{aprssideblock}
-
 \begin{aprssideblock}{SSID de Source\\Address\\pour spécifier\\les symboles}
 \phantomsection\addcontentsline{toc}{section}{SSID de Source Address pour spécifier les symboles}\label{ssid-de-source-address-pour-spuxe9cifier-des-symboles}
-Le champ Source Address AX.25 contient l'indicatif et le SSID de la station
-d'origine. Si le SSID est \texttt{-0}, APRS ne le traite d'aucune manière
-particulière.
+Le champ Source Address AX.25 contient l'indicatif et le SSID de la
+station d'origine. Si le SSID est \texttt{-0}, APRS ne le traite
+d'aucune manière particulière.
 
-Si, en revanche, le SSID de Source Address est non nul, APRS l'interprète
-comme une icône d'affichage. Cette utilisation est exclusivement destinée aux
-trackers autonomes pour lesquels il n'existe aucune autre méthode permettant
-de spécifier un symbole d'affichage ou une adresse de destination, par exemple
-les trackers MIM ou NMEA.
+Si, en revanche, le SSID de Source Address est non nul, APRS
+l'interprète comme une icône d'affichage. Cette utilisation est
+exclusivement destinée aux trackers autonomes pour lesquels il n'existe
+aucune autre méthode permettant de spécifier un symbole d'affichage ou
+une adresse de destination, par exemple les trackers MIM ou NMEA.
 
 Pour plus d'informations, voir le chapitre 20 : Symboles APRS.
 \end{aprssideblock}

@@ -238,3 +238,65 @@ Méthode retenue pour la suite : **séparer les passes**. Fidélité du texte su
 tous les chapitres d'abord ; typographie fine (surlignages, filets,
 alignements verticaux) en une seule passe finale sur tout le document. C'est
 le mélange des deux qui a fait dérailler la session du 9 août.
+
+## Audit APRS12c — 11 août 2026
+
+Comparaison systématique de `APRS12c.pdf` (157 pages) avec les fichiers
+français actuels. Colonnes : pages dans la VO, lignes dans le `.tex`,
+occurrences de motifs pandoc (`\real{}`, `minipage[b]`), nombre de libellés
+en marge (`aprssideblock`).
+
+| Fichier | Pages VO | Lignes | Pandoc | Sideblk | Statut |
+|---|---|---|---|---|---|
+| `00-front-matter` | 1–4 | 315 | 0 | 14 | **Revu 11/08** |
+| `00-foreword` | 3–5 | 47 | 0 | — | **Revu 11/08** |
+| `01-introduction` | 6–7 | 119 | 0 | 4 | À vérifier |
+| `02-design-philosophy` | 8–11 | 165 | 0 | 8 | À vérifier |
+| `03-aprs-and-ax25` | 12–14 | 76 | 0 | 6 | À vérifier |
+| `04-dest-source` | 15–19 | 266 | 0 | 18 | À vérifier |
+| `05-info-field` | 17–23 | 398 | 0 | 12 | À vérifier |
+| `06-time-position` | 22–27 | 310 | 0 | 20 | À vérifier |
+| `07-data-extensions` | 27–31 | 362 | 0 | 16 | À vérifier |
+| `08-position-df-reports` | 32–35 | 380 | 0 | 4 | À vérifier |
+| `09-compressed-position` | 36–41 | 517 | 0 | 22 | À vérifier |
+| `10-mic-e` | 42–56 | 1015 | 0 | 48 | À vérifier |
+| `11-objects-items` | 57–61 | 212 | 0 | 0 | **Non audité** |
+| `12-weather` | 62–67 | 235 | 0 | 0 | **Non audité** |
+| `13-telemetry` | 68–70 | 152 | 0 | 0 | **Non audité** |
+| `14-messages` | 71–76 | 171 | 0 | 0 | **Non audité** |
+| `15-queries` | 77–79 | 138 | 10 | 0 | **Non audité** |
+| `16-status` | 80–82 | 68 | 0 | 0 | **Non audité** |
+| `17-tunneling` | 83–86 | 93 | 0 | 0 | **Non audité** |
+| `18-user-defined` | — | 37 | 0 | 0 | À remplacer (ch18 APRS12c) |
+| `19-other-packets` | 99 | 27 | 0 | 0 | À vérifier |
+| `20-symbols` | 100–103 | 139 | 4 | 0 | **Non audité** |
+| `21-appendices` | 105–127 | 889 | 0 | 0 | **À réécrire** |
+
+### Nouvelles sections APRS12c dans des chapitres existants
+
+| Chapitre | Section | Page VO |
+|---|---|---|
+| Ch2 | **APRS Voice Alert** | 11 |
+| Ch3 | **Channel Access** | 13 |
+| Ch5 | **APRS Precision** | 21 |
+| Ch5 | **Datum Option** | 21 |
+| Ch7 | **PHGR "probes"** | 28 |
+
+### Chapitre 18 — APRS Frequency Specification
+
+Pages 87–96 de la VO. **N'existe pas** dans la version française. Fichier
+actuel `18-user-defined.tex` correspond à l'ancien chapitre 18 de
+APRS101, devenu chapitre 19 dans APRS12c.
+
+### Annexes
+
+APRS12c compte 7 annexes (pages 105–127). Contenu différent de APRS101,
+notamment l'annexe 1 (`APRS Data Formats`). À réécrire intégralement.
+
+### Ordre de travail
+
+1. Créer `chapters/18-frequency-spec.tex` (p. 87–96)
+2. Vérifier chapitres 1–10 + 19 contre APRS12c section par section
+3. Ajouter les 5 nouvelles sections dans les chapitres 2, 3, 5, 7
+4. Auditer + restaurer chapitres 11–17, 20
+5. Réécrire les annexes

@@ -39,6 +39,7 @@
 \usepackage{titlesec}
 \usepackage{longtable,booktabs,array,hhline}
 \usepackage{tabularray}
+\usepackage[normalem]{ulem}
 \usepackage{needspace}
 \usepackage{calc}
 \usepackage{etoolbox}
@@ -187,9 +188,9 @@
   filecolor={Maroon},
   citecolor={Blue},
   urlcolor={blue},
-  pdftitle={Référence du protocole APRS 1.0 --- Traduction française},
-  pdfauthor={APRS Working Group (trad.)},
-  pdfsubject={APRS Protocol Reference 1.0.1},
+  pdftitle={Référence du Protocole APRS 1.2 --- Traduction française},
+  pdfauthor={APRS Working Group (trad. Fabrice Morel, F4MLV)},
+  pdfsubject={UNOFFICIAL APRS Protocol Reference 1.2},
   pdfcreator={LaTeX/lualatex}}
 
 \pagestyle{fancy}
@@ -197,8 +198,8 @@
 \fancyhead[LE,RO]{\sffamily\bfseries\thepage}
 \fancyhead[LO,RE]{\sffamily\bfseries\nouppercase{\leftmark}}
 \newcommand{\APRSFooterLogo}{\raisebox{-0.42\height}{\includegraphics[height=16pt]{figures/aprs-logo.png}}}
-\fancyfoot[LO]{\APRSFooterLogo\hspace{0.6em}\sffamily\small\textbf{Référence du protocole APRS --- Version du protocole 1.0}}
-\fancyfoot[RE]{\sffamily\small\textbf{Référence du protocole APRS --- Version du protocole 1.0}\hspace{0.6em}\APRSFooterLogo}
+\fancyfoot[LO]{\APRSFooterLogo\hspace{0.6em}\sffamily\small\textbf{Référence du Protocole APRS 1.2 --- Compilation Non Officielle}}
+\fancyfoot[RE]{\sffamily\small\textbf{Référence du Protocole APRS 1.2 --- Compilation Non Officielle}\hspace{0.6em}\APRSFooterLogo}
 \fancyfoot[LE,RO]{\sffamily\scriptsize Document Version 1.0.1 : 29 août 2000}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
@@ -221,23 +222,27 @@
 \vspace*{4.0em}
 \hspace*{0.16\textwidth}%
 \begin{minipage}{0.55\textwidth}
-{\Large\bfseries AUTOMATIC POSITION\par}
+{\Large\bfseries AUTOMATIC PACKET\par}
 {\Large\bfseries REPORTING SYSTEM\par}
 \vspace{3.8em}
-{\LARGE\bfseries APRS PROTOCOL\par}
-{\LARGE\bfseries REFERENCE\par}
+{\LARGE\bfseries RÉFÉRENCE DU\par}
+{\LARGE\bfseries PROTOCOLE APRS\par}
 \vspace{1.2em}
-{\large Protocol Version 1.0\par}
+{\large Version du Protocole 1.2\par}
 \vspace{4.0em}
 \begin{tabular}{@{}r@{\hspace{1em}}l@{}}
-Authors & The APRS Working Group \\
-Document Version & Approved Version 1.0.1 \\
-Filename & aprs101.pdf \\
-Date of Issue & 29 August 2000 \\
+Auteurs & The APRS Working Group \\
+Version du Document & Brouillon 1.2 c \\
+Fichier & APRS12c.pdf \\
+Date de Publication & Novembre 2024 \\
 Copyright & \copyright{}2000 APRS Working Group \\
- & All rights reserved \\
-Technical Editor & Ian Wade, G3NRW \\
+ & Tous droits réservés \\
+Éditeur Technique v1.0 & Ian Wade, G3NRW \\
+\hspace{2em}v1.2 & John Langner, WB2OSZ \\
 \end{tabular}
+\vspace{2em}
+
+{\footnotesize Cette compilation indépendante n'est pas affiliée à l'APRS Working Group.}
 \end{minipage}
 \end{titlepage}
 \clearpage

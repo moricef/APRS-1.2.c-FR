@@ -100,11 +100,14 @@ Plusieurs algorithmes en usage :
   réessayer une fois de transmettre.
 \item
   \textbf{Time-Out} --- période au-delà de laquelle on peut
-  raisonnablement considérer qu'une station n'existe plus ou est off-air
-  si aucun paquet n'a été entendu. Défaut nominal : 2 heures. Ce
-  time-out n'est pas utilisé dans les algorithmes de transmission mais
-  sert à décider quand cesser d'afficher une station comme « active ».
-  Sur HF, les signaux vont et viennent --- décisions plus flexibles.
+  raisonnablement considérer qu'une station n'existe plus ou est hors
+  de l'air si aucun paquet n'a été entendu. Une période de 80 minutes
+  est suggérée comme time-out nominal par défaut pour tenir compte des
+  stations via satellites. Ce time-out n'est pas utilisé dans les
+  algorithmes de transmission, mais sert dans certains programmes à
+  décider quand cesser d'afficher une station comme « active ». Noter
+  qu'en HF, les signaux vont et viennent --- les décisions d'activité
+  demandent plus de flexibilité.
 \end{itemize}
 \end{aprssideblock}
 
@@ -112,41 +115,116 @@ Plusieurs algorithmes en usage :
 \phantomsection\addcontentsline{toc}{section}{Digipeating générique}\label{digipeating-guxe9nuxe9rique}
 La puissance d'APRS sur le terrain vient de l'usage du digipeating
 générique : les paquets se propagent sans connaissance a priori du
-réseau. Six techniques ont évolué depuis 1992 :
+réseau.
+
+\textbf{Ne pas utiliser RELAY, TRACE ou WIDE simple}, comme on peut le
+voir dans des documentations obsolètes, car ils sont dépréciés depuis
+environ 2004.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  \textbf{RELAY} --- tout TNC APRS VHF est supposé avoir l'alias
-  \texttt{RELAY}, utilisable comme digipeater par n'importe qui.
+  Les digipeaters examinent la première adresse non utilisée dans le
+  chemin \emph{via} d'un paquet. Ils répondent toujours à leur propre
+  nom.
 \item
-  \textbf{ECHO} --- les stations HF utilisent l'alias \texttt{ECHO}
-  comme alternative à \texttt{RELAY}. Attention à la propagation HF qui
-  peut causer des interférences sur une vaste zone --- usage
-  parcimonieux.
+  \textbf{WIDEn-N} --- plutôt que d'utiliser des noms de digipeaters
+  spécifiques, la procédure normale consiste à utiliser des alias
+  génériques. Un chemin \emph{via} typique est
+  «~\texttt{WIDE1-1,WIDE2-1}~». Typiquement, les digipeaters «~fill-in~»
+  à courte portée répondent uniquement à \texttt{WIDE1-*}. Ceux ayant
+  une couverture très large répondent à \texttt{WIDE2-*}.
+
+  Dans ce contexte, le SSID est en réalité un compteur d'utilisations
+  restantes. Par exemple, \texttt{WIDE2-2} équivaut à
+  \texttt{WIDE2-1,WIDE2-1}.
+
+  Si la configuration du digipeater contient le motif du préfixe, le
+  traitement dépend de la valeur du SSID, représentée ici par N :
+
+  \begin{itemize}
+  \tightlist
+  \item
+    $N = 0$ : ne pas digipeater.
+  \item
+    $N = 1$ : digipeater et remplacer la forme générique par
+    l'indicatif du digipeater. Les digipeaters doivent toujours
+    s'identifier et marquer leur adresse comme utilisée, afin que le
+    chemin réellement emprunté soit connu.
+  \item
+    $N \ge 2$ : décrémenter N et laisser l'adresse dans le chemin. La
+    laisser marquée comme non utilisée. Insérer l'indicatif du
+    digipeater avant elle et marquer cet indicatif comme utilisé.
+  \end{itemize}
+
+  La liste des stations, dans la partie utilisée du chemin \emph{digi
+  via} (avant le caractère «~\texttt{*}~» en format de supervision
+  lisible), révèle le chemin emprunté par le paquet.
+
+  Tous les digipeaters conservent une copie de chaque paquet
+  retransmis pendant une courte durée, typiquement environ 28
+  secondes. Un paquet identique, en ignorant le chemin \emph{via},
+  ne sera pas retransmis durant cette période. Pour plus d'efficacité,
+  de nombreuses implémentations conservent un checksum plutôt que le
+  paquet entier.
+
+  Un digipeater ne doit rien modifier d'autre que le chemin
+  \emph{via}. Toute autre modification empêcherait la détection des
+  doublons.
+
 \item
-  \textbf{WIDE} --- tout digipeater en hauteur est supposé avoir l'alias
-  \texttt{WIDE} pour couvrir plus loin.
+  \textbf{SSn-N} --- les digipeaters peuvent aussi être configurés pour
+  répondre à d'autres préfixes représentant des régions géographiques ou
+  des événements spéciaux. Aux États-Unis, les régions peuvent
+  correspondre à un État, un comté ou une section ARRL. Par exemple,
+  \texttt{MDn-N} peut être utilisé pour le Maryland. En Europe, les
+  régions sont basées sur une combinaison de deux normes ISO :
+  ISO 3166-1 pour le code pays et ISO 3166-2 pour le code de
+  subdivision.
+
 \item
-  \textbf{TRACE} --- tout digipeater en hauteur pratiquant la
-  substitution d'indicatif est supposé avoir l'alias \texttt{TRACE}. Ces
-  digipeaters s'auto-identifient dans les paquets qu'ils digipeatent en
-  substituant leur indicatif à \texttt{RELAY}, \texttt{WIDE} ou
-  \texttt{TRACE}.
-\item
-  \textbf{WIDEn-N} --- un digipeater supportant WIDEn-N digipeatera tout
-  paquet WIDEn-N « nouveau » et décrémentera le SSID jusqu'à ce qu'il
-  atteigne \texttt{-0}. Le digipeater garde une copie ou un checksum et
-  ne re-digipeatera pas le même paquet dans un intervalle typique de 28
-  s. Réduit considérablement les doublons dans les zones où plusieurs
-  digipeaters s'entendent.
-\item
-  \textbf{GATE} --- indicatif générique pour les gateways HF-VHF. Tout
-  paquet entendu en HF via \texttt{GATE} est digipeaté localement en
-  VHF. Les réseaux locaux gardent un œil sur l'échelle
-  nationale/internationale.
+  \textbf{GATE} --- cet indicatif générique est utilisé par les
+  digipeaters passerelle HF vers VHF. Tout paquet entendu en HF via
+  \texttt{GATE} est digipeaté localement en VHF. Cela permet aux réseaux
+  locaux de garder un œil sur la situation nationale et internationale.
 \end{enumerate}
+
+{\sffamily\bfseries Superpositions de Symboles Recommandées pour les Digipeaters.}
+
+\begin{center}
+{\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|p{0.75\linewidth}|}
+\hline
+\rowcolor{gray!20}
+\bfseries Symbole & \bfseries Signification \\
+\hline
+A & Entrée digi sur fréquence alternative (typiquement 144,99 MHz) \\
+\hline
+\sout{R} & \sout{RELAY uniquement (obsolète depuis 2005)} \\
+\hline
+\sout{W} & \sout{WIDE et RELAY (obsolète depuis 2005)} \\
+\hline
+\sout{T} & \sout{PacComm RELAY, WIDE et TRACE (obsolète depuis 2005)} \\
+\hline
+\sout{N} & \sout{WIDEn-N avec NOID activé (obsolète depuis 2005 --- tous les
+    digipeaters doivent s'identifier)} \\
+\hline
+I & Le digipeater est également une IGate \\
+\hline
+S & Digi nouveau paradigme n-N avec support State SSn-N (et ID activé) \\
+\hline
+P & Digi PacComm supportant le nouveau paradigme n-N \\
+\hline
+\sout{U} & \sout{Firmware UI-DIGI (devrait être mis à niveau vers S)} \\
+\hline
+\sout{D} & \sout{DIGI\_NED (devrait être mis à niveau vers S)} \\
+\hline
+\end{tabular}
+}
+\end{center}
 \end{aprssideblock}
 
 \begin{aprssideblock}{Vues\\cartographiques}
@@ -162,4 +240,11 @@ cercle inscrit dans la vue, indépendant de l'aspect ratio. Ce rayon (en
 milles nautiques, milles terrestres ou km) est le « range scale ». Base
 commune simple pour décrire n'importe quelle vue à d'autres, quel que
 soit le médium ou le programme.
+\end{aprssideblock}
+
+\phantomsection\addcontentsline{toc}{section}{APRS Voice Alert}
+\begin{aprssideblock}{APRS Voice\\Alert}
+APRS Voice Alert permet d'entendre des transmissions vocales sur la
+fréquence APRS en utilisant une tonalité CTCSS convenue lors de
+l'émission en phonie.
 \end{aprssideblock}

@@ -1,4 +1,4 @@
-TEX = aprs101-fr.tex
+TEX = aprs12c-fr.tex
 PDF = aprs101-fr.pdf
 ENGINE = lualatex
 

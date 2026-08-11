@@ -2,24 +2,28 @@
 
 \begin{aprssideblock}{Protocoles}
 \phantomsection\addcontentsline{toc}{section}{Protocoles}\label{protocoles}
-Au niveau lien, APRS utilise le protocole AX.25 (voir référence
-\emph{Amateur Packet-Radio Link-Layer Protocol} en annexe 6),
-exclusivement en trames UI (Unnumbered Information). Cela signifie
-qu'APRS tourne en mode sans connexion : les trames sont émises sans
-attendre de réponse, et la réception à l'autre bout n'est pas garantie.
+Au niveau liaison de données, APRS utilise des trames AX.25, telles que
+définies dans \emph{AX.25 Link Access Protocol for Amateur Packet Radio}
+(voir annexe 6 pour plus de détails), exclusivement en trames UI
+(Unnumbered Information). Cela signifie qu'APRS tourne en mode sans
+connexion : les trames AX.25 sont émises sans attendre de réponse, et la
+réception à l'autre bout n'est pas garantie.
 
 À un niveau plus haut, APRS supporte un protocole de messagerie
-permettant aux utilisateurs d'envoyer des messages courts (une ligne) à
-des stations nommées, avec accusé de réception attendu.
+permettant aux utilisateurs d'envoyer des messages courts (une ligne de
+texte) à des stations nommées, et s'attend à recevoir des accusés de
+réception de ces stations.
+
+Les spécifications AX.25 et APRS n'imposent pas de type particulier de
+modem pour la couche physique.
 \end{aprssideblock}
 
 \begin{aprssideblock}{La trame\\AX.25}
 \phantomsection\addcontentsline{toc}{section}{La trame AX.25}\label{la-trame-ax.25}
 Toutes les transmissions APRS utilisent des trames AX.25 UI avec 9
-champs :
+champs de données :
 \end{aprssideblock}
 
-\vspace{8pt}
 \begin{center}
 {\scriptsize
 \setlength{\tabcolsep}{2pt}
@@ -43,23 +47,43 @@ champs :
 \tightlist
 \item
   \textbf{Flag} --- le champ Flag à chaque extrémité de la trame est la
-  séquence de bits \texttt{0x7e} qui sépare chaque trame.
+  séquence de bits \texttt{01111110} qui sépare chaque trame. Un seul
+  flag peut servir à la fois de fin d'une trame et de début de la
+  suivante. Lorsqu'il est nécessaire pour un TNC de maintenir son
+  émetteur actif sans transmettre de trames, le temps doit être rempli
+  de flags contigus.
 \item
-  \textbf{Destination Address} --- ce champ peut contenir un indicatif de
-  destination APRS ou des données APRS. Les données APRS sont encodées de
-  manière à garantir que le champ soit conforme au format d'indicatif
-  AX.25 standard (c'est-à-dire 6 caractères alphanumériques plus SSID).
-  Si le SSID est non nul, il spécifie un chemin digipeater APRS
-  générique.
+  \textbf{Destination Address} --- contrairement au packet radio, ce
+  champ n'est pas utilisé pour indiquer la destination du paquet. Il est
+  employé de multiples façons selon les différents types de données APRS.
+  Les données APRS sont encodées de manière à garantir que le champ soit
+  conforme au format d'indicatif AX.25 standard (c'est-à-dire jusqu'à 6
+  caractères alphanumériques majuscules plus SSID). Le plus souvent, il
+  sera de la forme \texttt{APxxxx} pour identifier le type de système
+  ayant généré le paquet. Si le SSID est non nul, il spécifie un chemin
+  digipeater APRS générique.
+
+  Conformément à la spécification AX.25, pour les trames UI, le bit C
+  de l'octet SSID de Destination devrait être à 1. Les applications
+  réceptrices doivent l'ignorer car cela n'a pas été fait de manière
+  cohérente.
 \item
   \textbf{Source Address} --- ce champ contient l'indicatif et le SSID
   de la station émettrice. Dans certains cas, si le SSID est non nul, le
   SSID peut spécifier un code de symbole d'affichage APRS.
+
+  Conformément à la spécification AX.25, pour les trames UI, le bit C
+  de l'octet SSID de Source devrait être à 0. Les applications
+  réceptrices doivent l'ignorer car cela n'a pas été fait de manière
+  cohérente.
 \item
   \textbf{Digipeater Addresses} --- de zéro à 8 indicatifs de
-  digipeaters peuvent être inclus dans ce champ. Note : ces adresses de
-  digipeaters peuvent être remplacées par un chemin APRS générique
-  (spécifié dans le SSID de Destination Address).
+  digipeaters peuvent être inclus dans ce champ. Il peut s'agir de noms
+  de stations réels, mais ce sont généralement des alias, de sorte qu'il
+  n'est pas nécessaire de connaître la topologie du réseau. Note : ces
+  adresses de digipeaters peuvent être remplacées par un chemin
+  digipeater APRS générique (spécifié dans le SSID de Destination
+  Address).
 \item
   \textbf{Control Field} --- ce champ est mis à \texttt{0x03} (UI-frame).
 \item
@@ -68,9 +92,55 @@ champs :
 \item
   \textbf{Information Field} --- ce champ contient davantage de données
   APRS. Le premier caractère de ce champ est l'APRS Data Type
-  Identifier, qui précise la nature des données qui suivent.
+  Identifier (DTI), qui précise la nature des données qui suivent.
 \item
   \textbf{FCS} --- le FCS est une séquence de 16 bits utilisée pour
   vérifier l'intégrité d'une trame reçue.
+\end{itemize}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Accès au canal}
+\phantomsection\addcontentsline{toc}{section}{Accès au canal}\label{acces-au-canal}
+APRS est conçu pour que de nombreuses stations partagent une fréquence
+unique et émettent à des moments imprévisibles. Il convient évidemment
+d'attendre que le canal soit libre avant d'émettre. Si tout le monde
+émettait dès que le canal se libère, il y aurait de nombreuses
+collisions. Ces collisions peuvent être minimisées en attendant un délai
+minimal, puis un délai aléatoire. Le terme technique est \emph{p}-persistent
+Carrier Sense Multiple Access (CSMA).
+
+\begin{center}
+\includegraphics[width=0.92\linewidth]{figures/CSMA.png}
+\end{center}
+
+La temporisation d'émission est déterminée par 4 paramètres portant les
+noms traditionnels et valeurs par défaut typiques suivants :
+
+\begin{aprsexample}
+\begin{tabular}{@{}l@{\hspace{1em}}l@{\hspace{1em}}l@{}}
+SLOTTIME 10 & × 10 ms par unité = 100 ms. \\
+PERSIST 63 & probabilité d'émettre après chaque SLOTTIME. \\
+TXDELAY 30 & × 10 ms par unité = 300 ms. \\
+TXTAIL 10  & × 10 ms par unité = 100 ms. \\
+\end{tabular}
+\end{aprsexample}
+
+Certaines implémentations utilisent des millisecondes plutôt que des
+unités de 10 millisecondes --- consulter la documentation si les valeurs
+par défaut fournies par l'application ne sont pas utilisées.
+
+\begin{itemize}
+\tightlist
+\item
+  Pour les trames digipeatées, l'émission doit commencer immédiatement
+  après que le canal est libre. Le fait que plusieurs digipeaters
+  émettent en même temps est intentionnel, afin de minimiser la durée
+  occupée par le même paquet. Le signal le plus fort l'emportera grâce
+  à l'effet de capture FM.
+\item
+  Pour les autres trames, SLOTTIME et PERSIST sont utilisés pour
+  générer un délai aléatoire afin de minimiser les chances que deux
+  stations différentes commencent à émettre au même moment. Le
+  processus est le suivant :
 \end{itemize}
 \end{aprssideblock}
