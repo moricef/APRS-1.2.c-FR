@@ -12,7 +12,8 @@ réinvente ses propres réglages de tableau est un chapitre à refaire.
 
 ## Source de référence
 
-- Le document de référence unique est `/home/fab2/Developpement/LoRa_APRS/APRS101.PDF`.
+- Le document de référence est `prepa_aprs101/APRS12c.pdf` (dernière version
+  non officielle). L'ancien `APRS101.PDF` (version 1.0.1, 2000) est obsolète.
 - Le projet français est `/home/fab2/Developpement/LoRa_APRS/aprs101-fr`.
 - Le PDF original ne doit jamais être modifié.
 - En cas de doute, vérifier directement le texte et la page correspondante dans l'original. Ne jamais compléter de mémoire.

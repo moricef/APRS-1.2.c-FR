@@ -1,19 +1,20 @@
 # Référence du protocole APRS en français
 
 Ce dépôt contient la traduction française en LaTeX de la spécification
-`APRS Protocol Reference — Protocol Version 1.0`, document version 1.0.1 du
-29 août 2000.
+APRS Protocol Reference.
 
-## Source anglaise de référence
+## Sources anglaises de référence
 
-La source normative unique est :
+- **Source de travail** : `prepa_aprs101/APRS12c.pdf` (dernière version non
+  officielle, dans le dépôt).
+- **Source historique** : `prepa_aprs101/APRS101.PDF` (APRS Protocol Reference
+  version 1.0.1, 29 août 2000) — conservée pour archivage mais **obsolète**
+  pour le travail de traduction.
 
-`/home/fab2/Developpement/LoRa_APRS/APRS101.PDF`
-
-Elle se trouve hors de ce dépôt et ne doit jamais être modifiée. Le texte, les
-tableaux, les exemples, la structure et la mise en page doivent être contrôlés
-directement dans ce PDF. Une extraction textuelle seule ne permet pas de
-reproduire correctement la disposition des pages.
+La source de travail ne doit jamais être modifiée. Le texte, les tableaux, les
+exemples, la structure et la mise en page doivent être contrôlés directement
+dans ce PDF. Une extraction textuelle seule ne permet pas de reproduire
+correctement la disposition des pages.
 
 ## Organisation
 
@@ -24,7 +25,8 @@ reproduire correctement la disposition des pages.
 - `chapters/21-appendices.tex` : annexes ;
 - `figures/` : illustrations utilisées par la traduction ;
 - `AGENTS.md` : règles impératives de travail ;
-- `STATUS.md` : état de la reprise et défauts connus.
+- `STATUS.md` : état de la reprise et défauts connus ;
+- `CONVENTIONS.md` : conventions typographiques.
 
 ## Construction et contrôle
 
@@ -40,9 +42,9 @@ sont générés et ne doivent pas être modifiés directement.
 Pour contrôler le contenu et la mise en page :
 
 ```sh
-pdftotext -layout ../APRS101.PDF prepa_aprs101/aprs101-original.txt
+pdftotext -layout prepa_aprs101/APRS12c.pdf prepa_aprs101/aprs12c-layout.txt
 pdftotext -layout aprs101-fr.pdf prepa_aprs101/aprs101-fr.txt
-pdftoppm -png -r 144 ../APRS101.PDF prepa_aprs101/aprs101-original
+pdftoppm -png -r 144 prepa_aprs101/APRS12c.pdf prepa_aprs101/aprs12c
 pdftoppm -png -r 144 aprs101-fr.pdf prepa_aprs101/aprs101-fr
 ```
 
@@ -61,8 +63,10 @@ Lire dans cet ordre :
 
 1. `AGENTS.md` ;
 2. `STATUS.md` ;
-3. la portion anglaise concernée dans `APRS101.PDF` ;
-4. le fichier français correspondant.
+3. `CONVENTIONS.md` ;
+4. les portions concernées dans `prepa_aprs101/APRS12c.pdf` ;
+5. le fichier français correspondant.
 
-Ne pas supposer que le contenu existant est fidèle. Plusieurs chapitres ont été
-produits par un modèle qui a résumé ou altéré la source malgré les consignes.
+Ne pas supposer que le contenu existant est fidèle. La traduction initiale a
+été produite par un modèle qui a résumé ou altéré la source APRS101.PDF. La
+nouvelle source APRS12c.pdf peut différer significativement de l'ancienne.

@@ -24,6 +24,7 @@ informations suivantes :
 \setlength{\tabcolsep}{6pt}
 \setlength{\extrarowheight}{4pt}
 \renewcommand{\arraystretch}{1.6}
+\setlength{\arrayrulewidth}{0.75pt}
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}|l|l|l|l|}
 \hline
 \multicolumn{4}{|>{\columncolor{gray!20}}l|}{\bfseries\itshape Generic APRS Information Field}\\
@@ -196,15 +197,16 @@ différents types possibles d'APRS Data et d'APRS Data Extension.
 \end{aprssideblock}
 
 \begin{center}
-{\small
+{\footnotesize
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{2.10}
+\renewcommand{\arraystretch}{1.2}
 \setlength{\arrayrulewidth}{0.75pt}
 \begin{tabular}{|>{\columncolor{gray!20}\raggedleft\arraybackslash\bfseries}m{0.15\linewidth}|>{\raggedright\arraybackslash}m{0.38\linewidth}|>{\raggedright\arraybackslash}m{0.38\linewidth}|}
 \hline
 \rowcolor{gray!20}
  & \multicolumn{1}{c|}{\bfseries\itshape Possible APRS Data} & \multicolumn{1}{c|}{\bfseries\itshape Possible APRS Data Extension} \\
 \hline
+
 Position &
 Time (DHM or HMS)\newline
 Lat/long coordinates\newline

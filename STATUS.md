@@ -1,5 +1,31 @@
 # État de la traduction et point de reprise
 
+## ⚠ Nouvelle source — 9 août 2026
+
+La source de référence passe de `APRS101.PDF` (APRS Protocol Reference 1.0.1,
+29 août 2000) à **`prepa_aprs101/APRS12c.pdf`** (dernière version non
+officielle).
+
+**Tout le travail antérieur est à revérifier.** Les chapitres 1 à 10 avaient
+été restaurés phrase par phrase contre APRS101.PDF ; ils doivent être
+recontrôlés contre APRS12c.pdf. Les chapitres 11 à 21 et les annexes
+n'avaient pas encore été audités.
+
+L'historique détaillé ci-dessous (sections « Travail déjà effectué »,
+« Chapitre 5 », « Chapitre 6 », « Point de reprise », « Carte des dégâts »)
+documente ce qui a été fait sur l'ancienne source et reste valable comme
+référence de méthode. Le contenu lui-même doit être revérifié.
+
+Avant toute reprise :
+1. Extraire `prepa_aprs101/APRS12c.pdf` avec `pdftotext -layout` dans
+   `prepa_aprs101/aprs12c-layout.txt`.
+2. Relever la structure : nombre de chapitres, pagination, table des matières.
+3. Comparer avec `prepa_aprs101/APRS101-layout.txt` (ancienne source).
+
+---
+
+## Historique (source APRS101.PDF, août 2026)
+
 ## État général
 
 Le projet compile et contient une traduction de toutes les parties du document,

@@ -20,14 +20,14 @@ cotisations et ne possède aucun actif.
 
 Membres actuels de l'APRS Working Group :
 
-\begin{tabular}{@{}lll@{}}
-John Ackermann, & N8UR & Administrative Chair \& représentant TAPR \\
-Bob Bruninga, & WB4APR & Technical Chair, fondateur d'APRS \\
-Brent Hildebrand, & KH2Z & Auteur de APRS+SA \\
-Stan Horzepa, & WA1LOU & Secrétaire \\
-Mike Musick, & N0QBF & Auteur de pocketAPRS \\
-Keith Sproul, & WU2Z & Co-auteur de WinAPRS/MacAPRS/X-APRS \\
-Mark Sproul, & KB2ICI & Co-auteur de WinAPRS/MacAPRS/X-APRS \\
+\begin{tabular}{@{}l@{\hspace{1.6em}}l@{}}
+John Ackermann, N8UR & Administrative Chair \& représentant TAPR \\
+Bob Bruninga, WB4APR & Technical Chair, fondateur d'APRS \\
+Brent Hildebrand, KH2Z & Auteur de APRS+SA \\
+Stan Horzepa, WA1LOU & Secrétaire \\
+Mike Musick, N0QBF & Auteur de pocketAPRS \\
+Keith Sproul, WU2Z & Co-auteur de WinAPRS/MacAPRS/X-APRS \\
+Mark Sproul, KB2ICI & Co-auteur de WinAPRS/MacAPRS/X-APRS \\
 \end{tabular}
 \end{aprssideblock}
 
@@ -49,24 +49,29 @@ référence du protocole APRS, le numéro de version du document est un
 numéro à 3 parties \texttt{P.p.D} (pour une version approuvée) ou à 4
 parties \texttt{P.p.Dd} (pour un brouillon) :
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{P} : version majeure du protocole APRS
-\item
-  \texttt{p} : version mineure du protocole APRS
-\item
-  \texttt{D} : release du document
-\item
-  \texttt{d} : lettre du brouillon
-\end{itemize}
+\begingroup
+\setlength{\arrayrulewidth}{0.75pt}
+
+\par\noindent
+\begin{tblr}{
+  colspec={Q[c,b,2.2cm] Q[c,b,2.2cm] Q[c,b,2.2cm] Q[c,b,2.2cm]},
+  row{1-3}={bg=gray!20, font=\bfseries},
+  hlines, vlines,
+}
+\SetCell[c=4]{c} Numéro de Version du Document & & & \\
+\SetCell[c=2]{c} Version du Protocole APRS & & \SetCell[r=2]{c} Publication du Document & \SetCell[r=2]{c} Brouillon \\
+Publication Majeure & Publication Mineure & & \\
+P. & p. & D. & d. \\
+\end{tblr}
+\par
+\endgroup
 
 Ainsi, par exemple :
 
 \begin{itemize}
 \tightlist
 \item
-  « 1.2.3 » = release 3 du document couvrant la version 1.2 du protocole
+  « 1.2.3 » = publication 3 du document couvrant la version 1.2 du protocole
   APRS.
 \item
   « 1.2.3c » = brouillon « c » de ce document.
@@ -80,21 +85,24 @@ Voir Annexe 7.
 
 \phantomsection\addcontentsline{toc}{section}{Conventions du document}
 \begin{aprssideblock}{Conventions\\du document}
+Ce document utilise les conventions suivantes :
+
 \begin{itemize}
 \tightlist
 \item
-  Police \texttt{Courier} : caractères ASCII dans les données APRS.
+  \makebox[8em][l]{Police \texttt{Courier}} caractères ASCII dans les
+  données APRS.
 \item
-  \texttt{V} : caractère espace ASCII.
+  \makebox[8em][l]{\lit{~}} caractère espace ASCII.
 \item
-  \texttt{…} (ellipse) : zéro ou plusieurs caractères.
+  \makebox[8em][l]{\texttt{…} (ellipse)} zéro ou plusieurs caractères.
 \item
-  \texttt{/\$} : symbole de la table de symboles primaire.
+  \makebox[8em][l]{\texttt{/\$}} symbole de la table de symboles primaire.
 \item
-  \texttt{\textbackslash{}\$} : symbole de la table de symboles
-  alternative.
+  \makebox[8em][l]{\texttt{\textbackslash{}\$}} symbole de la table de
+  symboles alternative.
 \item
-  \texttt{0x} : hexadécimal (ex. \texttt{0x1d}).
+  \makebox[8em][l]{\texttt{0x}} hexadécimal (ex. \texttt{0x1d}).
 \item
   Tous les indicatifs sont supposés avoir un SSID \texttt{-0} sauf
   mention contraire.
@@ -188,10 +196,10 @@ l'implémentant.
 
 \clearpage
 
-\section*{STRUCTURE DE CETTE
+\section*{LA STRUCTURE DE CETTE
 SPÉCIFICATION}\label{structure-de-cette-spuxe9cification}
-\markboth{STRUCTURE DE CETTE SPÉCIFICATION}{STRUCTURE DE CETTE SPÉCIFICATION}
-\addcontentsline{toc}{tocmain}{STRUCTURE DE CETTE SPÉCIFICATION}
+\markboth{La Structure de cette Spécification}{La Structure de cette Spécification}
+\addcontentsline{toc}{tocmain}{LA STRUCTURE DE CETTE SPÉCIFICATION}
 
 \begin{aprsbodyblock}
 Cette spécification décrit les exigences globales pour développer un
@@ -306,5 +314,3 @@ Voici le plan des chapitres :
   \textbf{Références} --- pointeurs vers d'autres documents pertinents.
 \end{list}
 \end{aprsbodyblock}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
