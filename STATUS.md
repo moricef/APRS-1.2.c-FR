@@ -258,7 +258,7 @@ en marge (`aprssideblock`).
 | `06-time-position` | 22–27 | 310 | 0 | 20 | **Revu 13/08** |
 | `07-data-extensions` | 27–31 | 362 | 0 | 16 | **Revu 13/08** |
 | `08-position-df-reports` | 32–35 | 380 | 0 | 4 | **Revu 13/08** |
-| `09-compressed-position` | 36–41 | 517 | 0 | 22 | À vérifier |
+| `09-compressed-position` | 36–41 | 517 | 0 | 22 | **Revu 13/08** |
 | `10-mic-e` | 42–56 | 1015 | 0 | 48 | À vérifier |
 | `11-objects-items` | 57–61 | 212 | 0 | 0 | **Non audité** |
 | `12-weather` | 62–67 | 235 | 0 | 0 | **Non audité** |
@@ -274,7 +274,7 @@ en marge (`aprssideblock`).
 
 ### Vérification APRS12c — 13 août 2026
 
-Chapitres 4, 5, 6, 7 et 8 revérifiés contre APRS12c, section par section.
+Chapitres 4, 5, 6, 7, 8 et 9 revérifiés contre APRS12c, section par section.
 
 - **Ch4** : ajout de la section « Alternate Nets », note d'obsolescence de
   l'adresse « APRS », et les deux notes d'édition APRS12c (« Peut-on supprimer
@@ -296,6 +296,8 @@ Chapitres 4, 5, 6, 7 et 8 revérifiés contre APRS12c, section par section.
   cette limite de 43 caractères… » (après la limite de 43 caractères) et
   « L'envoi de données GPS brutes est déconseillé… » (avant le format NMEA
   brut).
+- **Ch9** : section « Trackers » rétablie (au lieu de « Nouveaux trackers »),
+  et suppression de la section « Anciens trackers » (supprimée dans APRS12c).
 
 ### Nouvelles sections APRS12c dans des chapitres existants
 

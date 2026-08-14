@@ -112,8 +112,8 @@ T    & est l'indicateur du type de compression.
 \begingroup
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.35}
-\sffamily\fontsize{7.7}{8.7}\selectfont
+\renewcommand{\arraystretch}{1.6}
+\sffamily\fontsize{10}{12}\selectfont
 \begin{tabular}{|>{\centering\arraybackslash}m{0.10\linewidth}|>{\centering\arraybackslash}m{0.18\linewidth}|>{\centering\arraybackslash}m{0.18\linewidth}|>{\centering\arraybackslash}m{0.12\linewidth}|>{\centering\arraybackslash}m{0.22\linewidth}|>{\centering\arraybackslash}m{\dimexpr0.20\linewidth-12\tabcolsep-7\arrayrulewidth\relax}|}
 \hline
 \multicolumn{6}{|l|}{\bfseries\itshape Compressed Position Data} \\
@@ -283,8 +283,8 @@ L'octet \chNineProto{T} n'a pas de signification si l'octet
 \begingroup
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.25}
-\sffamily\fontsize{7.2}{8.1}\selectfont
+\renewcommand{\arraystretch}{1.6}
+\sffamily\fontsize{10}{12}\selectfont
 \begin{tabular}{|
   >{\centering\arraybackslash}m{0.135\linewidth}|
   >{\centering\arraybackslash}m{0.135\linewidth}|
@@ -295,18 +295,17 @@ L'octet \chNineProto{T} n'a pas de signification si l'octet
 \multicolumn{5}{|l|}{\bfseries\itshape Format de l'octet Compression Type (T)} \\
 \hline
 \makebox[0pt][r]{Bit:\hspace{1.2em}}\makebox[\linewidth][c]{7} & 6 & 5 &
-\makebox[\linewidth][s]{4\hfill\rule[-1.45ex]{\arrayrulewidth}{3.5ex}\hfill 3} &
-\makebox[\linewidth][s]{2\hfill\rule[-1.45ex]{\arrayrulewidth}{3.5ex}\hfill
-1\hfill\rule[-1.45ex]{\arrayrulewidth}{3.5ex}\hfill 0} \\
+\makebox[\linewidth][s]{\hfil 4\hfil\rule[-1.3ex]{\arrayrulewidth}{4.5ex}\hfil 3\hfil} &
+\makebox[\linewidth][s]{\hfil 2\hfil\rule[-1.3ex]{\arrayrulewidth}{4.5ex}\hfil
+1\hfil\rule[-1.3ex]{\arrayrulewidth}{4.5ex}\hfil 0\hfil} \\
 \hline
-\rowcolor{gray!20}
-\itshape Non utilisé &
-\itshape Non utilisé &
-\bfseries\itshape GPS Fix &
-\bfseries\itshape NMEA Source &
-\bfseries\itshape Compression Origin \\
+\multicolumn{1}{|>{\columncolor{gray!20}\centering\arraybackslash}m{0.135\linewidth}|}{\itshape Non utilisé} &
+\multicolumn{1}{>{\columncolor{gray!20}\centering\arraybackslash}m{0.135\linewidth}|}{\itshape Non utilisé} &
+\multicolumn{1}{>{\columncolor{gray!20}\centering\arraybackslash}m{0.15\linewidth}|}{\bfseries\itshape GPS Fix} &
+\multicolumn{1}{>{\columncolor{gray!20}\centering\arraybackslash}m{0.17\linewidth}|}{\bfseries\itshape NMEA Source} &
+\multicolumn{1}{>{\columncolor{gray!20}\centering\arraybackslash}m{\dimexpr0.41\linewidth-10\tabcolsep-6\arrayrulewidth\relax}|}{\bfseries\itshape Compression Origin} \\
 \hline
-\makebox[0pt][r]{Valeur:\hspace{1.2em}}0 &
+\makebox[0pt][r]{Valeur:\hspace{3em}}0 &
 0 &
 {\raggedright 0 = ancien (dernier)\newline 1 = courant\par} &
 {\raggedright 0 0 = autre\newline 0 1 = GLL\newline 1 0 = GGA\newline 1 1 = RMC\par} &
@@ -350,7 +349,7 @@ ainsi :
 \begin{center}
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.35}
+\renewcommand{\arraystretch}{1.6}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \chNineProto{/} & \chNineProto{YYYY} & \chNineProto{XXXX} &
@@ -397,8 +396,8 @@ s'effectue comme suit :
 \end{itemize}
 \end{aprssideblock}
 
-\phantomsection\addcontentsline{toc}{section}{Nouveaux trackers}
-\begin{aprssideblock}{Nouveaux trackers}
+\phantomsection\addcontentsline{toc}{section}{Trackers}
+\begin{aprssideblock}{Trackers}
 Le firmware d'un tracker peut compresser directement les données GPS au
 format APRS compressé. Il utilise alors le Data Type Indicator \lit{!}, qui
 indique que la position est en temps réel et que le tracker n'est pas doté de
@@ -408,36 +407,23 @@ Si le Position Report n'est pas en temps réel, le Data Type Indicator \lit{/}
 peut être utilisé à la place, afin d'inclure l'heure du dernier fix.
 \end{aprssideblock}
 
-\phantomsection\addcontentsline{toc}{section}{Anciens trackers}
-\begin{aprssideblock}{Anciens trackers}
-Certains digipeaters peuvent convertir en format de données compressé les
-chaînes NMEA brutes provenant de trackers existants, avant de les retransmettre.
-
-Ces digipeaters compressent les données si la Destination Address du tracker
-est \chNineProto{GPS}. (\textbf{Note :} il s'agit de l'adresse à 3 lettres
-\chNineProto{GPS}, et non de \chNineProto{GPS*}.)
-
-Les trackers qui ne veulent pas que leurs paquets soient modifiés par le réseau
-APRS utilisent n'importe quelle autre APRS Destination Address générique
-valide.
-\end{aprssideblock}
-
 \phantomsection\addcontentsline{toc}{section}{Formats de rapports compressés}
 \begin{aprssideblock}{Formats de rapports compressés}
 Les données compressées sont contenues dans le champ Information AX.25, dans
 les formats suivants :
 \end{aprssideblock}
 
+\par\medskip
 \begingroup
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.35}
-\sffamily\fontsize{7.5}{8.5}\selectfont
+\renewcommand{\arraystretch}{1.6}
+\sffamily\fontsize{10}{12}\selectfont
 \begin{center}
 \begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.055\textwidth+2pt\relax}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.085\textwidth}|>{\centering\arraybackslash}m{0.18\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.315\textwidth-16\tabcolsep-9\arrayrulewidth-2pt\relax}|}
-\hline
-\multicolumn{8}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format de Position Report Lat/Long compressé --- sans timestamp} \\
-\hline
+\hhline{|--------|}
+\multicolumn{8}{|>{\columncolor{gray!20}}l|}{\hspace*{-\tabcolsep}\vrule width \arrayrulewidth\hspace{\tabcolsep}\hspace{0.6em}\bfseries\itshape Format de Position Report Lat/Long compressé --- sans timestamp} \\
+\hhline{|--------|}
 \chNineHead{\lit{!} or \lit{=}} &
 \chNineHead{Sym\\Table\\ID} &
 \chNineHeadCode{Comp\\Lat}{YYYY} &
@@ -479,8 +465,8 @@ les formats suivants :
 \begingroup
 \setlength{\arrayrulewidth}{0.6pt}
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.35}
-\sffamily\fontsize{7.3}{8.3}\selectfont
+\renewcommand{\arraystretch}{1.6}
+\sffamily\fontsize{10}{12}\selectfont
 \begin{center}
 \begin{tabular}{|>{\centering\arraybackslash}m{\dimexpr0.05\textwidth+4pt\relax}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.065\textwidth}|>{\centering\arraybackslash}m{0.075\textwidth}|>{\centering\arraybackslash}m{0.17\textwidth}|>{\centering\arraybackslash}m{0.065\textwidth}|>{\centering\arraybackslash}m{\dimexpr0.30\textwidth-18\tabcolsep-10\arrayrulewidth-4pt\relax}|}
 \hline
