@@ -126,8 +126,9 @@ Les codes PHG sont indiqués dans le tableau ci-dessous :
 \chsevengraycell Power & 0 & 1 & 4 & 9 & 16 & 25 & 36 & 49 & 64 & 81 & \chsevengraycell watts \\
 \hline
 \chsevengraycell Height & 10 & 20 & 40 & 80 & 160 & 320 & 640 & 1280 & 2560 & 5120 & \chsevengraycell feet \\
+\chsevengraycell & 3 & 6.1 & 12.2 & 24.4 & 48.8 & 97.5 & 195.1 & 390.1 & 780.3 & 1560 & \chsevengraycell meters \\
 \hline
-\chsevengraycell Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \chsevengraycell dB \\
+\chsevengraycell Gain & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & \chsevengraycell dBi \\
 \hline
 \chsevengraycell Directivity & omni & \chsevendircell{45}{NE} & \chsevendircell{90}{E} & \chsevendircell{135}{SE} & \chsevendircell{180}{S} & \chsevendircell{225}{SW} & \chsevendircell{270}{W} & \chsevendircell{315}{NW} & \chsevendircell{360}{N} & \chsevengraycell & \chsevengraycell deg \\
 \hline
@@ -147,8 +148,8 @@ satellites. Par exemple :
 
 \begin{aprsexample}
 \begin{tabular}{@{}l@{\hspace{0.8em}}>{\raggedright\arraybackslash}p{0.84\linewidth}@{}}
-\lit{:} & est le code de hauteur pour 10240 pieds (environ 1.9 miles). \\
-\lit{;} & est le code de hauteur pour 20480 pieds (environ 3.9 miles), et ainsi de suite.
+\lit{:} & est le code de hauteur pour 10240 pieds (environ 3.1 km). \\
+\lit{;} & est le code de hauteur pour 20480 pieds (environ 36.2 km), et ainsi de suite.
 \end{tabular}
 \end{aprsexample}
 
@@ -163,11 +164,30 @@ Voici un exemple d'APRS Data Extension PHG :
 \begin{tabular}{@{}l@{\hspace{1.2em}}>{\raggedright\arraybackslash}p{0.69\linewidth}@{}}
 \texttt{PHG5132} & signifie une puissance de 25 watts, \\
 & une hauteur d'antenne de 20 pieds au-dessus du terrain moyen local, \\
-& un gain d'antenne de 3 dB, \\
+& un gain d'antenne de 3 dBi, \\
 & et un gain maximal orienté plein est.
 \end{tabular}
 \end{aprsexample}
 \end{aprsbodyblock}
+
+\begin{aprssideblock}{Sondes PHGR}
+\phantomsection\addcontentsline{toc}{section}{Sondes PHGR}\label{phgr-probes}
+La version 1.2 ajoute une nouvelle variante avec un caractère
+supplémentaire suivi d'un caractère \lit{/} obligatoire. Ce caractère
+supplémentaire indique le nombre de balises par heure. Pour les nombres
+supérieurs à 9, « A » représente 10, et ainsi de suite. Cela permet à
+une station en écoute de mesurer la fiabilité de réception d'une station
+donnée, en comptant le nombre de balises entendues en direct,
+c'est-à-dire sans passer par des digipeaters. Cette nouvelle forme viole
+la règle selon laquelle les Data Extensions font toujours 7 caractères.
+
+Par exemple :
+
+\begin{aprsexample}
+\texttt{PHG72604/} \exgap signifie 4 par heure. Si 3 ont été entendues en
+une heure, la réception de cette station serait de 75\%.
+\end{aprsexample}
+\end{aprssideblock}
 
 \begin{aprssideblock}{Tracé du cercle\\de portée}
 \phantomsection\addcontentsline{toc}{section}{Tracé du cercle de portée}\label{range-circle-plot}
@@ -206,9 +226,12 @@ de la station un cercle de portée de 8 miles de rayon, décalé de
 2.7 miles (c'est-à-dire un tiers de 8 miles) vers l'est.
 
 \textbf{Note :} en l'absence de données PHG, les stations sont supposées
-fonctionner avec 10 watts sur une antenne omnidirectionnelle de 3 dB à
+fonctionner avec 10 watts sur une antenne omnidirectionnelle de 3 dBi à
 20 pieds, ce qui donne un cercle de portée de 6 miles de rayon, centré
 sur la station.
+
+Pour plus de détails :
+\textit{The Importance of PHG Range Circles \& APRS Mobile Range}
 \end{aprssideblock}
 
 \begin{aprssideblock}{Portée radio\\précalculée}
@@ -298,12 +321,16 @@ utilisateurs que le rapport est manuel.
 La valeur N n'est pas traitée, mais constitue simplement un indicateur
 supplémentaire provenant des unités DF automatiques.
 
-La portée limite la longueur de la ligne à l'échelle de la carte
-d'origine de la station émettrice. La portée vaut $2^{R}$ ; ainsi, pour
-$R=4$, elle sera de 16 miles.
+La portée (R) indique la zone d'intérêt approximative. La portée limite
+la longueur de la ligne à l'échelle de la carte d'origine de la station
+émettrice. La portée vaut $2^{R}$ ; ainsi, pour $R=4$, elle sera de
+16 miles.
 
-Q est un chiffre unique compris entre 0 et 9 et donne une indication de
-la précision du relèvement :
+L'octet Q est la QUALITÉ et constitue une mesure relative du degré
+d'incertitude dans l'azimut du faisceau. Q est un chiffre unique compris
+entre 0 et 9 et donne une indication de la précision du relèvement. Il
+est préférable de l'interpréter comme une LARGEUR DE FAISCEAU
+(BEAMWIDTH), comme suit :
 
 \begin{flushleft}
 {\sffamily\fontsize{8.5}{10}\selectfont
@@ -343,6 +370,9 @@ la précision du relèvement :
 \end{tabular}
 }
 \end{flushleft}
+
+Voir les documents originaux DF.TXT et PROTOCOL.TXT pour plus
+d'informations.
 \end{aprssideblock}
 
 \begin{aprsbodyblock}

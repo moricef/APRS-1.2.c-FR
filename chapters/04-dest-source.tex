@@ -195,6 +195,8 @@ Ce format est maintenant obsolète.
 
 \begin{aprssideblock}{Adresses génériques\\de destination APRS}
 \phantomsection\addcontentsline{toc}{section}{Adresses génériques de destination APRS}\label{adresses-guxe9nuxe9riques-de-destination-aprs}
+\emph{\textcolor{red}{Peut-on supprimer ceci pour désencombrer un peu ?}}
+
 APRS utilise les adresses génériques de type beacon suivantes :
 
 \begin{center}
@@ -233,6 +235,22 @@ l'événement spécial.
 
 Les adresses \lit{TEL} et \lit{TLM} sont utilisées par les stations de
 télémétrie.
+
+L'utilisation de \guillemotleft{}APRS\guillemotright{} dans le champ
+destination est obsolète. Utilisez un numéro de version logiciel
+\texttt{AP}xxxx comme expliqué précédemment.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Alternate\\Nets}
+\phantomsection\addcontentsline{toc}{section}{Alternate Nets}\label{alternate-nets}
+Toute autre adresse de destination non incluse dans la liste générique
+spécifique ou les autres catégories mentionnées ci-dessus peut être
+utilisée dans des Alternate Nets (ALTNETs) par des groupes d'individus à
+des fins spéciales. Ils peuvent ainsi utiliser l'infrastructure APRS
+pour diverses expérimentations sans encombrer les cartes et les listes
+des autres stations APRS. Seules les stations utilisant la même adresse
+ALTNET devraient voir leurs données.
+\emph{\textcolor{red}{Hein ? Peut-on développer ou simplifier ?}}
 \end{aprssideblock}
 
 \begin{aprssideblock}{SSID de Source\\Address\\pour spécifier\\les symboles}

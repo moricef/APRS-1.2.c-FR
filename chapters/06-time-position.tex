@@ -95,13 +95,13 @@ messagerie APRS :
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.3}
 \noindent\hfill
-\begin{tabular}{|>{\bfseries\itshape}p{0.60\linewidth}|>{\centering\arraybackslash}p{0.15\linewidth}|>{\centering\arraybackslash}p{0.15\linewidth}|}
-\cline{2-3}
+\begin{tabular}{@{}|>{\bfseries\itshape}p{0.60\linewidth}|>{\centering\arraybackslash}p{0.15\linewidth}|>{\centering\arraybackslash}p{0.15\linewidth}|@{}}
+\hhline{~--}
 \multicolumn{1}{c|}{} & \cellcolor{gray!20}\bfseries\itshape No APRS Messaging & \cellcolor{gray!20}\bfseries\itshape With APRS Messaging \\
 \hline
-(Current/real-time)\hfill Report without timestamp & \lit{!} & \lit{=} \\
+ \cellcolor{gray!20}(Current/real-time)\hfill Report without timestamp & \lit{!} & \lit{=} \\
 \hline
-(Old/non-real-time)\hfill Report with timestamp & \lit{/} & \lit{@} \\
+ \cellcolor{gray!20}(Old/non-real-time)\hfill Report with timestamp & \lit{/} & \lit{@} \\
 \hline
 \end{tabular}
 }
@@ -198,7 +198,7 @@ latitude au degré le plus proche.
 \end{aprsexample}
 
 Le niveau d'ambiguïté spécifié dans la latitude s'applique
-automatiquement à la longitude également --- il n'est pas nécessaire
+automatiquement à la longitude également --- il est possible mais pas nécessaire
 d'inclure des caractères \lit{~} dans la longitude.
 
 Par exemple, les coordonnées :
@@ -222,6 +222,68 @@ Coin sud-est : & 49° 3.00′ N, 72° 1.00′ W \\
 Coin sud-ouest : & 49° 3.00′ N, 72° 1.99′ W \\
 \end{tabular}
 \end{aprsexample}
+\end{aprssideblock}
+
+\begin{aprssideblock}{Affichage de\\l'ambiguïté}
+\phantomsection\addcontentsline{toc}{section}{Affichage de l'ambiguïté}\label{affichage-de-lambiguuxe9}
+Puisque toutes les positions en APRS ne sont pas connues avec la même
+précision, un attribut important de tous les symboles APRS est la
+possibilité d'afficher les quatre plages d'ambiguïté de 0,1, 1, 10 et
+60 milles nautiques. On remarque que l'objet nommé GUESSED ci-dessus
+n'est pas affiché avec un symbole, mais avec un cercle. Cela vient de ce
+que cette station émet ou a été saisie avec une ambiguïté de
+1/10\textsuperscript{e} de mille sur sa position. Le symbole de la
+station apparaît bien aux échelles de carte larges, mais dès que l'on
+zoome en dessous de l'échelle à laquelle la taille de l'ambiguïté est
+supérieure à la «~taille~» du symbole, le symbole disparaît afin qu'il
+n'y ait aucune mauvaise interprétation de la part de l'observateur
+laissant croire à une précision là où il n'y en a pas. Ces plages
+d'ambiguïté sont transmises exactement comme une position écrite. Si une
+position n'est connue qu'au degré le plus proche (60 nm), seuls les
+degrés sont envoyés. Si la position n'est connue qu'à la minute la plus
+proche, seuls les degrés et les minutes entières sont transmis. Et ainsi
+de suite jusqu'aux dixièmes de minute. Si tous les chiffres sont connus,
+alors la position transmet la pleine précision inhérente à APRS, soit le
+1/100\textsuperscript{e} de mille nautique le plus proche, soit environ
+60 pieds.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Ambiguité dans\\la spécification}
+\phantomsection\addcontentsline{toc}{section}{Ambiguité dans la spécification}\label{ambiguituxe9-dans-la-spuxe9cification}
+Il y a eu beaucoup de confusion au sujet de l'ambiguïté de position en
+raison de la mauvaise formulation de la spécification, qui peut être
+interprétée à tort comme impliquant une troncature des chiffres et une
+boîte d'ambiguïté lat/long. Il ne s'agit pas d'une troncature ni d'une
+boîte. Le champ de position en APRS est un champ textuel, pas un champ
+numérique. On doit placer dans ce champ, par inclusion, uniquement les
+chiffres que l'émetteur souhaite que le récepteur utilise. De plus, la
+spécification laisse entendre que cela résulte en une boîte d'ambiguïté.
+C'est incorrect, car cela impliquerait des tailles d'imprécision très
+différentes à l'équateur et aux pôles. Il est clair que l'intention de
+l'ambiguïté de position était une distance en milles nautiques, puisque
+l'ambiguïté était définie uniquement dans le champ LATITUDE, où les
+chiffres correspondent effectivement aux milles nautiques. Et ils
+donnent bien la même aire circulaire partout sur terre.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Affichage de\\l'ambiguïté de\\position}
+\phantomsection\addcontentsline{toc}{section}{Affichage de l'ambiguïté de position}\label{affichage-de-lambiguuxe9-de-position}
+Le tracé recommandé de l'ambiguïté de position est montré ci-dessus pour
+GUESSED. C'est-à-dire un cercle dont le rayon est l'ambiguïté, centré
+sur la position donnée (pas centré dans une boîte de LAT/LONG). De plus,
+le symbole peut être affiché tant que la taille du symbole est
+supérieure au cercle d'ambiguïté. Mais aux zooms de résolution
+supérieure, lorsque la taille du cercle devient plus grande que la
+taille du symbole, le symbole ne doit PAS être affiché car il
+impliquerait une localisation au centre qui est incorrecte. Seul le
+cercle doit être affiché à ces zooms. En outre, la localisation
+«~centrale~» de ce cercle doit être légèrement randomisée (disons dans
+la moitié de la plage d'ambiguïté) afin que si de nombreuses stations
+transmettent la même position et la même ambiguïté, tous leurs cercles
+soient visibles. Ces cercles ne sont pas destinés à être des tailles ou
+des bords précis d'ambiguïté, mais simplement une représentation
+graphique indiquant à l'observateur que ces positions ne sont pas bien
+connues.
 \end{aprssideblock}
 
 \begin{aprssideblock}{Position nulle\\par défaut}
@@ -281,7 +343,7 @@ GGA & Global Positioning System Fix Data \\
 GLL & Geographic Position, Latitude/Longitude Data \\
 RMC & Recommended Minimum Specific GPS/Transit Data \\
 VTG & Velocity and Track Data \\
-WPT & Way Point Location \\
+WPL & Way Point Location \\
 \end{tabular}
 \end{aprsexample}
 \end{aprssideblock}
@@ -300,9 +362,14 @@ L'altitude peut être exprimée de deux manières :
 
 \textbf{Altitude in Comment Text} --- le commentaire peut contenir une
 valeur d'altitude, sous la forme \lit{/A=}\texttt{aaaaaa}, où
-\texttt{aaaaaa} est l'altitude en pieds. Par exemple :
-\texttt{/A=001234}. L'altitude peut apparaître n'importe où dans le
-commentaire.
+\texttt{aaaaaa} est l'altitude en pieds. Il doit contenir exactement
+6 chiffres. Par exemple : \texttt{/A=001234}. L'altitude peut
+apparaître n'importe où dans le commentaire.
+
+Note : bien que ne faisant pas partie du standard officiel, de
+nombreuses applications reconnaissent également les valeurs négatives
+sous la forme \lit{/A=-}\texttt{aaaaa}. Elles doivent contenir
+exactement 5 chiffres après le signe moins.
 
 \textbf{Altitude in Mic-E format} --- le champ de statut Mic-E optionnel
 peut contenir des données d'altitude. Voir chapitre 10 : Format de

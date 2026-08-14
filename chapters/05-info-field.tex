@@ -20,21 +20,16 @@ informations suivantes :
 \end{aprssideblock}
 
 \begin{aprsbodyblock}
-{\small
-\setlength{\tabcolsep}{6pt}
-\setlength{\extrarowheight}{4pt}
-\renewcommand{\arraystretch}{1.6}
 \setlength{\arrayrulewidth}{0.75pt}
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}|l|l|l|l|}
+\begin{tabular}{|c|c|c|c|}
 \hline
 \multicolumn{4}{|>{\columncolor{gray!20}}l|}{\bfseries\itshape Generic APRS Information Field}\\
 \hline
 \bfseries\itshape Data Type ID & \bfseries\itshape APRS Data & \bfseries\itshape APRS Data Extension & \bfseries\itshape Comment \\
 \hline
-\makebox[0pt][r]{Bytes:\hspace{1.2em}}1 & n & 7 & n \\
+\makebox[0pt][r]{Octets :\hspace{3.2em}}1 & n & 7 & n \\
 \hline
-\end{tabular*}
-}
+\end{tabular}
 \end{aprsbodyblock}
 
 \begin{aprssideblock}{APRS Data Type\\Identifier}
@@ -48,7 +43,7 @@ détermine le format du reste des données du champ Information, comme suit :
 {\footnotesize
 \setlength{\tabcolsep}{4pt}
 \setlength{\arrayrulewidth}{0.75pt}
-\renewcommand{\arraystretch}{1.75}
+\renewcommand{\arraystretch}{1.15}
 \noindent
 \begin{tabular}[t]{|>{\columncolor{gray!20}\centering\arraybackslash}p{26pt}|p{\dimexpr0.49\textwidth-46pt\relax}|}
 \hline
@@ -143,16 +138,7 @@ T & Telemetry data \\
 \end{tabular}
 }
 
-\Needspace*{11\baselineskip}
 \begin{aprsbodyblock}
-Note : il existe une exception à l'exigence que le Data Type Identifier soit
-le premier caractère du champ Information --- il s'agit de la Position
-without Timestamp (indiquée par le DTI \lit{!}). Le caractère \lit{!} peut
-apparaître n'importe où jusqu'à la 40\textsuperscript{e} position de
-caractère incluse dans le champ Information. Cette variabilité est
-nécessaire pour prendre en charge les digipeaters TNC X1J, qui disposent
-d'une chaîne de texte non modifiable en début de champ.
-
 Note : la radio Kenwood TM-D700 utilise le DTI \lit{\textquotesingle{}} pour
 les données Mic-E actuelles (\emph{current}). Cette radio n'utilise pas le
 DTI \lit{\textasciigrave{}}.
@@ -199,9 +185,8 @@ différents types possibles d'APRS Data et d'APRS Data Extension.
 \begin{center}
 {\footnotesize
 \setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.2}
 \setlength{\arrayrulewidth}{0.75pt}
-\begin{tabular}{|>{\columncolor{gray!20}\raggedleft\arraybackslash\bfseries}m{0.15\linewidth}|>{\raggedright\arraybackslash}m{0.38\linewidth}|>{\raggedright\arraybackslash}m{0.38\linewidth}|}
+\begin{tabular}{|>{\columncolor{gray!20}\raggedleft\arraybackslash\bfseries}m{0.15\linewidth}|>{\raggedright\arraybackslash}p{0.38\linewidth}|>{\raggedright\arraybackslash}p{0.38\linewidth}|}
 \hline
 \rowcolor{gray!20}
  & \multicolumn{1}{c|}{\bfseries\itshape Possible APRS Data} & \multicolumn{1}{c|}{\bfseries\itshape Possible APRS Data Extension} \\
@@ -314,12 +299,17 @@ les APRS Data ou l'APRS Data Extension.
 Il n'y a pas de séparateur entre les données APRS et le commentaire, sauf
 mention contraire.
 
-Le commentaire peut contenir tout caractère ASCII imprimable (à l'exception
-de \lit{\textbar{}} et \lit{\textasciitilde{}}, réservés au TNC channel
-switching).
+Le commentaire peut contenir tout caractère ASCII imprimable ou UTF-8 (à
+l'exception de \lit{\textbar{}} et \lit{\textasciitilde{}}, réservés au TNC
+channel switching).
 
-La longueur maximale du champ Comment dépend du rapport concerné --- les
-détails figurent dans la description de chaque rapport.
+Ne placez aucun retour chariot (0x0d) ni saut de ligne (0x0a) à la fin. Les
+stations IGate les supprimeront, ce qui produira un contenu légèrement
+différent.
+
+La longueur maximale, très faible et apparemment arbitraire, du champ
+Comment dépend du rapport concerné --- les détails figurent dans la
+description de chaque rapport.
 
 Dans certains cas particuliers, le champ Comment peut également contenir des
 données APRS supplémentaires :
@@ -383,6 +373,141 @@ Les quatre codes de caractère ASCII sont donc 49 (c'est-à-dire 16+33), 67
 correspondant à la chaîne ASCII \texttt{1Cmi}.
 \end{aprssideblock}
 
+\begin{aprssideblock}{APRS Precision\\and Datum Option}
+\phantomsection\addcontentsline{toc}{section}{APRS Precision and Datum Option}\label{aprs-precision-and-datum-option}
+Cette extension de la spécification APRS permet de transmettre une plus
+grande précision entre utilisateurs. Mais comme la précision sans
+l'exactitude du datum n'a pas de sens, ce format inclut également
+l'identification du datum utilisé pour obtenir cette précision.
+
+\textbf{DATUM :} le datum par défaut pour le GPS et pour APRS est WGS84. La
+spécification APRS indique que toutes les positions on-air sont présumées
+être en WGS84 sauf indication contraire. Cette \guillemotleft{}option\guillemotright{}
+documente donc deux méthodes pour \guillemotleft{}indiquer autrement\guillemotright{} :
+
+\textbf{PAR PAYS :} ou par accord local continental. Deux accords de ce type
+ont été déclarés : WGS84 en Amérique du Nord et OSGB36 au Royaume-Uni. Si
+d'autres peuvent être convenus, ils seront listés.
+
+\textbf{PAR DATUM BYTE :} le DATUM byte dans cette \guillemotleft{}PRECISION
+and DATUM Option\guillemotright{}.
+
+\textbf{FORMAT :} le format de cette option APRS Precision-and-Datum est la
+présence d'un champ de 5 octets \texttt{!DAO!} apparaissant n'importe où dans
+le champ de commentaire de position. Cette option est rétrocompatible car le
+format de base DDMM.mmN/DDDMM.mmH est conservé et sera toujours décodé par
+toutes les applications existantes. Le \texttt{!DAO!} fournit simplement la
+précision supplémentaire jusqu'à environ un pied (30~cm) et identifie
+également le datum :
+
+\begin{verbatim}
+!DAO! - longueur fixe, n'importe où dans le commentaire de position
+ D    - identifiant du datum (base-91)
+  A   - précision supplémentaire de LAtitude (base-91)
+   O  - précision supplémentaire de LOngitude (base-91)
+\end{verbatim}
+
+\textbf{RECOMMANDATION :} il est recommandé de placer cette option à la FIN
+de tout autre texte de commentaire de position. Ainsi, elle ne déplace aucun
+texte de commentaire lisible par un humain que l'on souhaiterait afficher sur
+les anciens systèmes. Cette option ajoutée peut dépasser la limite
+\guillemotleft{}visible\guillemotright{} actuelle de 57 octets de la
+spécification, puisque ces octets supplémentaires ne sont de toute façon pas
+utilisés par les systèmes existants.
+
+\textbf{PRÉCISION :} cette option offre trois degrés de précision.
+
+\begin{enumerate}
+\item \textbf{LISIBLE HUMAINEMENT, millièmes de minute.} Précis à environ
+  6 pieds (2~m) près et, étant lisible humainement, permet même aux
+  utilisateurs de D7, D700 ou de toute autre application existante de lire
+  une position à 3 décimales de minutes. Ce format est identifié si le Datum
+  byte est en majuscule.
+
+\item \textbf{BASE-91.} Ajoute une précision supplémentaire au
+  91/10\,000\textsuperscript{e} de minute près, soit environ 4 chiffres
+  fractionnaires décimaux de minute, soit environ un pied (30~cm). Ce format
+  est identifié si le datum byte est en minuscule.
+
+\item \textbf{NULL.} Si les octets A et O sont des caractères ESPACE, ils ne
+  sont présents que pour respecter le format \texttt{!DAO!} et n'impliquent
+  AUCUNE précision ajoutée. Utilisé lorsqu'on souhaite envoyer une
+  information de DATUM sans revendiquer de précision supplémentaire. Cette
+  utilisation de caractères espace pour indiquer l'absence de chiffres de
+  précision est cohérente avec le système d'ambiguïté APRS existant.
+\end{enumerate}
+
+\textbf{DATUMS :} plusieurs catégories de datums peuvent être utilisées.
+
+\textbf{PRÉDÉFINIS :} les lettres A--Z et a--z indiquent l'un des 26 datums
+courants. La casse de ces 26 lettres indique le type de précision utilisé.
+Les majuscules indiquent des chiffres décimaux lisibles pour A et O, et les
+minuscules indiquent un encodage base-91 pour A et O. Il existe 26 DATUMS
+prédéfinis. Une table des 26 datums courants sera préparée. Voici quelques
+exemples :
+
+\begin{verbatim}
+W = WGS84
+N = NAD27
+O = OSGB36
+\end{verbatim}
+
+\textbf{LOCAL CUSTOM :} pour des événements spéciaux et fermés, le DATUM
+peut être l'une des dix options définies localement. Elles sont indiquées par
+les chiffres 0 à 9. Une utilisation créative consiste, pour des événements
+fermés utilisant des cartes ou des lieux fixes, à définir les cartes par
+numéro~!
+
+\textbf{ENCODAGE BASE-91 :} le base-91 est fréquemment utilisé en APRS pour
+améliorer la résolution d'un octet sans utiliser de binaire et en
+n'utilisant que le sous-ensemble de caractères ASCII imprimables. L'usage
+exclusif de caractères ASCII imprimables présente de nombreux avantages qui
+ont été abondamment discutés par ailleurs. Le base-91 signifie simplement la
+valeur d'un octet ASCII après soustraction de 33 en décimal. Ainsi le
+caractère \guillemotleft{}\texttt{!}\guillemotright{} moins 33 donne
+\guillemotleft{}0\guillemotright{}, jusqu'au caractère
+\guillemotleft{}\texttt{\}}\guillemotright{} moins 33 qui donne la valeur
+\guillemotleft{}90\guillemotright{}.
+
+\textbf{AUTRES :} il reste 28 autres possibilités d'information de DATUM
+dans le chiffre D qui peuvent être utilisées si nécessaire.
+
+\textbf{Exemples :}
+
+\texttt{!W23!} signifie WGS84 et la majuscule indique qu'il s'agit du
+format lisible humainement au 3\textsuperscript{e} chiffre. \guillemotleft{}2\guillemotright{}
+est le troisième chiffre décimal des minutes de latitude et est lisible
+humainement. \guillemotleft{}3\guillemotright{} est le chiffre ajouté des
+minutes de longitude et est également lisible humainement.
+
+\texttt{!wAb!} signifie WGS84 mais la minuscule indique qu'il s'agit de la
+précision ajoutée au pied près. \guillemotleft{}A\guillemotright{} est le
+code base-91 pour deux chiffres supplémentaires (65 moins 33 donne
+\guillemotleft{}32\guillemotright{}) et \guillemotleft{}b\guillemotright{}
+donne deux chiffres supplémentaires de longitude (98 -- 33, soit
+\guillemotleft{}...65\guillemotright{}).
+
+\texttt{!w:\textbackslash!} serait également WGS84 mais avec
+\guillemotleft{}:\guillemotright{} et \guillemotleft{}\textbackslash\guillemotright{}
+décodant deux chiffres supplémentaires de \guillemotleft{}27\guillemotright{}
+pour la latitude et \guillemotleft{}59\guillemotright{} pour la longitude,
+au pied près environ.
+
+\textbf{CONVERSION BASE-91 :} dans le premier exemple \texttt{!W23!}
+ci-dessus, les chiffres réels sont simplement ajoutés aux LAT/LONG
+existantes, par exemple pour ajouter de la précision à DDMM.mmN/DDDMM.mmH
+et devenir équivalent à DDMM.mm2N et DDDMM.mm3H.
+
+Mais dans les deux exemples suivants \texttt{!wAb!} et \texttt{!w:\textbackslash!},
+les deux chiffres ajoutés ne peuvent pas être simplement ajoutés à la chaîne
+de position ASCII, puisqu'ils ne peuvent aller que de 00 à 90. Il faut donc
+les mettre à l'échelle pour qu'ils aillent de 00 à 99. Pour ce faire,
+multiplier les deux chiffres par 1,10. Ainsi, pour l'exemple
+\texttt{!wAb!} avec des chiffres de latitude ajoutés de 32, on multiplie
+par 1,10 pour obtenir des chiffres réels ajoutés de 35,2. La position en
+haute précision devient alors DDMM.mm352N.
+\end{aprssideblock}
+
 \begin{aprssideblock}{APRS Data\\Units}
 \phantomsection\addcontentsline{toc}{section}{APRS Data Units}\label{unituxe9s-de-donnuxe9es-aprs}
 Pour des raisons historiques, il existe un certain manque de cohérence entre
@@ -394,5 +519,7 @@ telles qu'elles sont transmises sur l'air (\emph{on-air}). Il incombe aux
 applications APRS de convertir les unités on-air en unités plus appropriées
 si nécessaire.
 
-Le datum terrestre GPS par défaut est le World Geodetic System (WGS) 1984.
+Le datum terrestre GPS par défaut est le World Geodetic System (WGS) 1984,
+mais des options continentales telles que OSG pour le Royaume-Uni sont
+acceptables.
 \end{aprssideblock}

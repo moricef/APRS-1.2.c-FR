@@ -253,11 +253,11 @@ en marge (`aprssideblock`).
 | `01-introduction` | 6–7 | 119 | 0 | 4 | À vérifier |
 | `02-design-philosophy` | 8–11 | 165 | 0 | 8 | À vérifier |
 | `03-aprs-and-ax25` | 12–14 | 76 | 0 | 6 | À vérifier |
-| `04-dest-source` | 15–19 | 266 | 0 | 18 | À vérifier |
-| `05-info-field` | 17–23 | 398 | 0 | 12 | À vérifier |
-| `06-time-position` | 22–27 | 310 | 0 | 20 | À vérifier |
-| `07-data-extensions` | 27–31 | 362 | 0 | 16 | À vérifier |
-| `08-position-df-reports` | 32–35 | 380 | 0 | 4 | À vérifier |
+| `04-dest-source` | 15–19 | 266 | 0 | 18 | **Revu 13/08** |
+| `05-info-field` | 17–23 | 398 | 0 | 12 | **Revu 13/08** |
+| `06-time-position` | 22–27 | 310 | 0 | 20 | **Revu 13/08** |
+| `07-data-extensions` | 27–31 | 362 | 0 | 16 | **Revu 13/08** |
+| `08-position-df-reports` | 32–35 | 380 | 0 | 4 | **Revu 13/08** |
 | `09-compressed-position` | 36–41 | 517 | 0 | 22 | À vérifier |
 | `10-mic-e` | 42–56 | 1015 | 0 | 48 | À vérifier |
 | `11-objects-items` | 57–61 | 212 | 0 | 0 | **Non audité** |
@@ -271,6 +271,31 @@ en marge (`aprssideblock`).
 | `19-other-packets` | 99 | 27 | 0 | 0 | À vérifier |
 | `20-symbols` | 100–103 | 139 | 4 | 0 | **Non audité** |
 | `21-appendices` | 105–127 | 889 | 0 | 0 | **À réécrire** |
+
+### Vérification APRS12c — 13 août 2026
+
+Chapitres 4, 5, 6, 7 et 8 revérifiés contre APRS12c, section par section.
+
+- **Ch4** : ajout de la section « Alternate Nets », note d'obsolescence de
+  l'adresse « APRS », et les deux notes d'édition APRS12c (« Peut-on supprimer
+  ceci… », « Hein ? Peut-on développer ou simplifier ? ») rendues en rouge
+  comme l'original.
+- **Ch5** : ajout de la section « APRS Precision and Datum Option » (`!DAO!`),
+  compléments au Comment Field et aux APRS Data Units, simplification du
+  premier tableau (libellé « Octets : » sorti du tableau).
+- **Ch6** : ajout des trois sous-sections d'ambiguïté, correction WPT→WPL,
+  altitude « exactement 6 chiffres » + valeurs négatives, et filet supérieur
+  du tableau DTI restauré (`\cline` → `\hhline{~--}`, sinon masqué par
+  `\cellcolor`).
+- **Ch7** : ajout de la section « Sondes PHGR » (`PHGR "probes"`), ligne
+  « meters » et unité « dBi » dans le tableau PHG, exemple de hauteur en km,
+  « Pour plus de détails : The Importance of PHG Range Circles & APRS Mobile
+  Range », et compléments Bearing/NRQ (zone d'intérêt, QUALITÉ/BEAMWIDTH,
+  renvoi DF.TXT/PROTOCOL.TXT).
+- **Ch8** : ajout des deux notes d'édition APRS12c : « Pourquoi ? D'où vient
+  cette limite de 43 caractères… » (après la limite de 43 caractères) et
+  « L'envoi de données GPS brutes est déconseillé… » (avant le format NMEA
+  brut).
 
 ### Nouvelles sections APRS12c dans des chapitres existants
 
