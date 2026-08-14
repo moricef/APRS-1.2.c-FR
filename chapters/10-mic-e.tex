@@ -15,9 +15,9 @@
 \chTenToc{Format des données Mic-E}
 \begin{aprssideblock}{Format des données\\Mic-E}
 Dans le format de données Mic-E, la position, le cap, la vitesse et le symbole
-d'affichage de la station, ainsi qu'un chemin de digipeaters APRS et un Mic-E
-Message Code, sont regroupés dans les champs Destination Address et Information
-AX.25.
+d'affichage de la station, ainsi qu'un chemin de digipeaters APRS et un
+commentaire de position Mic-E, sont regroupés dans les champs Destination
+Address et Information AX.25.
 
 Le champ Information peut également contenir, en option, soit des données de
 télémétrie Mic-E, soit un statut Mic-E. Le statut Mic-E peut contenir le locator
@@ -28,9 +28,11 @@ champ Digipeater Addresses et sans données de télémétrie ni texte de statut
 Mic-E optionnels, un paquet Mic-E complet ne comporte que 25 octets (hors FCS
 et flags).
 
-Le format de données Mic-E n'est pas seulement utilisé dans le Microphone
-Encoder ; il l'est aussi dans le PIC Encoder et dans les radios Kenwood TH-D7
-et TM-D700.
+Le format de données Mic-E n'est pas seulement utilisé dans le
+\href{https://web.tapr.org/product_docs/Mic-E/mic-edev/mic-e.manual.pdf}{Microphone Encoder} ;
+il l'est aussi dans le
+\href{https://www.tapr.org/pdf/DCC1999-APRS-MicLite-WB4APR.pdf}{PIC Encoder} et
+dans les radios Kenwood et Yaesu.
 \end{aprssideblock}
 
 \chTenToc{Charge utile Mic-E}
@@ -44,9 +46,9 @@ Destination Address et le champ Information d'une UI-frame AX.25 standard.
 
 \begin{itemize}\chTenItems
 \item les 6 chiffres de latitude ;
-\item un identifiant de message Mic-E sur 3 bits, spécifiant l'un des 7 Standard
-  Mic-E Message Codes, l'un des 7 Custom Message Codes ou un Emergency Message
-  Code ;
+\item un commentaire de position Mic-E sur 3 bits, spécifiant l'un des
+  7 commentaires de position Standard, l'un des 7 commentaires de position
+  Custom ou un commentaire de position Emergency ;
 \item les indicateurs North/South et West/East ;
 \item l'indicateur Longitude Offset ;
 \item le code de chemin de digipeaters APRS générique.
@@ -64,9 +66,10 @@ format des adresses AX.25 standard.
 \item la longitude encodée ;
 \item le cap et la vitesse encodés ;
 \item le Symbol Code d'affichage et le Symbol Table Identifier ;
-\item un champ optionnel contenant soit des données de télémétrie Mic-E, soit
-  une chaîne de texte de statut Mic-E. La chaîne de statut peut contenir du
-  texte en clair, un locator Maidenhead ou l'altitude de la station.
+\item un champ optionnel contenant soit des données de télémétrie Mic-E
+  (désormais obsolètes), soit une chaîne de texte de statut Mic-E. La chaîne de
+  statut peut contenir du texte en clair, un locator Maidenhead ou l'altitude
+  de la station.
 \end{itemize}
 \end{aprssideblock}
 
@@ -88,9 +91,9 @@ données Mic-E, ce champ présente toutefois un format très différent :
 \multicolumn{7}{|l|}{\cellcolor{black}\textcolor{white}{\sffamily\bfseries\itshape
 Mic-E Data --- DESTINATION ADDRESS FIELD Format}} \\
 \hline
-\chTenHead{Lat Digit 1\newline + Message\newline Bit A} &
-\chTenHead{Lat Digit 2\newline + Message\newline Bit B} &
-\chTenHead{Lat Digit 3\newline + Message\newline Bit C} &
+\chTenHead{Lat Digit 1\newline + Bit A} &
+\chTenHead{Lat Digit 2\newline + Bit B} &
+\chTenHead{Lat Digit 3\newline + Bit C} &
 \chTenHead{Lat Digit 4\newline + N/S Lat\newline Indicator} &
 \chTenHead{Lat Digit 5\newline + Longitude\newline Offset} &
 \chTenHead{Lat Digit 6\newline + W/E Long\newline Indicator} &
@@ -107,7 +110,7 @@ Le champ Destination Address contient :
 \begin{itemize}\chTenItems
 \item six chiffres de latitude encodés spécifiant les degrés (chiffres 1 et 2),
   les minutes (chiffres 3 et 4) et les centièmes de minute (chiffres 5 et 6) ;
-\item un identifiant de message Mic-E sur 3 bits (bits de message A, B et C) ;
+\item un commentaire de position Mic-E sur 3 bits (bits A, B et C) ;
 \item l'indicateur de latitude North/South ;
 \item le Longitude Offset (qui ajoute 0 degré ou 100 degrés au calcul de la
   longitude dans le champ Information) ;
@@ -120,7 +123,7 @@ Le champ Destination Address contient :
 \begin{aprssideblock}{Encodage du champ\\Destination Address}
 Le tableau de la page suivante présente l'encodage des 6 premiers octets du
 champ Destination Address, pour toutes les combinaisons du chiffre de latitude,
-de l'identifiant de message Mic-E sur 3 bits (A/B/C), des indicateurs de
+du commentaire de position Mic-E sur 3 bits (A/B/C), des indicateurs de
 latitude/longitude et du Longitude Offset.
 
 L'encodage prend en charge l'ambiguïté de position.
@@ -138,7 +141,7 @@ gauche avant transmission.
 \renewcommand{\arraystretch}{1.88}
 \newcommand{\desthead}{%
 \chTenHead{\shortstack{ASCII\\Char}} & \chTenHead{\shortstack{Lat\\Digit}} &
-\chTenHead{\shortstack{Message\\A/B/C}} & \chTenHead{N/S} &
+\chTenHead{\shortstack{Position Comment\\A/B/C}} & \chTenHead{N/S} &
 \chTenHead{\shortstack{Long\\Offset}} & \chTenHead{W/E}}
 \makebox[\textwidth][c]{\hspace*{9pt}%
 \begin{tabular}{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}\hline
@@ -192,7 +195,7 @@ dans les octets d'adresse 4 à 6.
 
 Par exemple, pour une station située à une latitude de 33 degrés
 25,64 minutes nord, dans l'hémisphère ouest, avec un Longitude Offset de
-+0 degré, et transmettant les bits d'identifiant de message standard 1/0/0,
++0 degré, et transmettant les bits de commentaire de position standard 1/0/0,
 l'encodage des 6 premiers octets du champ Destination Address est le suivant :
 \end{aprsbodyblock}
 
@@ -202,7 +205,7 @@ l'encodage des 6 premiers octets du champ Destination Address est le suivant :
 \begin{tabular}{@{}|>{\columncolor{gray!20}\raggedleft\arraybackslash}p{65pt}|*{6}{>{\centering\arraybackslash}p{43.5pt}|}@{}}\cline{2-7}
 \multicolumn{1}{r|}{\makebox[0pt][r]{Destination Address Byte:\hspace{6pt}}} & \chTenGray\bfseries\itshape 1&\chTenGray\bfseries\itshape 2&\chTenGray\bfseries\itshape 3&\chTenGray\bfseries\itshape 4&\chTenGray\bfseries\itshape 5&\chTenGray\bfseries\itshape 6\\\hline
 \chTenHead{Latitude Digit}&3&3&2&5&6&4\\\hline
-\chTenHead{Message Bits}&\shortstack{Message\\Bit A\\= 1 (Std)}&\shortstack{Message\\Bit B\\= 0}&\shortstack{Message\\Bit C\\= 0}&\chTenGray&\chTenGray&\chTenGray\\\hline
+\chTenHead{Position Comment}&\shortstack{Bit A\\= 1 (Std)}&\shortstack{Bit B\\= 0}&\shortstack{Bit C\\= 0}&\chTenGray&\chTenGray&\chTenGray\\\hline
 \chTenHead{N/S Indicator}&\chTenGray&\chTenGray&\chTenGray&North&\chTenGray&\chTenGray\\\hline
 \chTenHead{Long Offset}&\chTenGray&\chTenGray&\chTenGray&\chTenGray&+0&\chTenGray\\\hline
 \chTenHead{W/E Indicator}&\chTenGray&\chTenGray&\chTenGray&\chTenGray&\chTenGray&West\\\hline
@@ -210,39 +213,40 @@ l'encodage des 6 premiers octets du champ Destination Address est le suivant :
 \end{tabular}
 \end{center}
 
-\chTenToc{Messages Mic-E}
-\begin{aprssideblock}{Messages Mic-E}
+\chTenToc{Commentaires de position Mic-E}
+\begin{aprssideblock}{Commentaires de position Mic-E}
 Les trois premiers octets du champ Destination Address contiennent trois bits
-d'identifiant de message : A, B et C. Ces bits permettent de spécifier l'un des
-15 types de message :
+de commentaire de position : A, B et C. Ces bits permettent de spécifier l'un
+des 15 types de commentaire de position :
 
 \begin{itemize}\chTenItems
-\item 7 messages Standard ;
-\item 7 messages Custom ;
-\item 1 message Emergency.
+\item 7 commentaires de position Standard ;
+\item 7 commentaires de position Custom ;
+\item 1 commentaire de position Emergency.
 \end{itemize}
 
-Pour les 7 messages Standard, un ou plusieurs bits d'identifiant de message
-valent \lit{1}, indiqués par \textit{1 (Std)} dans le tableau d'encodage du champ
-Destination Address Mic-E.
+Pour les 7 commentaires de position Standard, un ou plusieurs bits de
+commentaire de position valent \lit{1}, indiqués par \textit{1 (Std)} dans le
+tableau d'encodage du champ Destination Address Mic-E.
 
-Pour les 7 messages Custom, un ou plusieurs bits d'identifiant de message
-valent \lit{1}, indiqués par \textit{1 (Custom)} dans ce même tableau.
+Pour les 7 commentaires de position Custom, un ou plusieurs bits de
+commentaire de position valent \lit{1}, indiqués par \textit{1 (Custom)} dans ce
+même tableau.
 
-Pour le message Emergency, les trois bits d'identifiant de message valent
-\lit{0}.
+Pour le commentaire de position Emergency, les trois bits de commentaire de
+position valent \lit{0}.
 
-Le tableau suivant présente l'encodage des types de message Mic-E pour toutes
-les combinaisons des bits d'identifiant de message A/B/C :
+Le tableau suivant présente l'encodage des types de commentaire de position
+Mic-E pour toutes les combinaisons des bits de commentaire de position A/B/C :
 
 \par\medskip
-\sffamily\bfseries Types de messages Mic-E
+\sffamily\bfseries Types de commentaires de position Mic-E
 
 \smallskip
 \sffamily\normalfont
 \setlength{\tabcolsep}{2.5pt}\renewcommand{\arraystretch}{1.35}
 \begin{tabular}{|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\raggedright\arraybackslash}p{0.23\linewidth}|>{\raggedright\arraybackslash}p{0.23\linewidth}|}\hline
-\rowcolor{gray!20}\chTenHead{A}&\chTenHead{B}&\chTenHead{C}&\chTenHead{Type de message Mic-E\newline Standard}&\chTenHead{Type de message Mic-E\newline Custom}\\\hline
+\rowcolor{gray!20}\chTenHead{A}&\chTenHead{B}&\chTenHead{C}&\chTenHead{Commentaire de position\newline Standard}&\chTenHead{Commentaire de position\newline Custom}\\\hline
 1&1&1&M0: Off Duty&C0: Custom-0\\\hline
 1&1&0&M1: En Route&C1: Custom-1\\\hline
 1&0&1&M2: In Service&C2: Custom-2\\\hline
@@ -253,20 +257,21 @@ les combinaisons des bits d'identifiant de message A/B/C :
 0&0&0&\multicolumn{2}{c|}{Emergency}\\\hline
 \end{tabular}
 
-Les messages Standard et le message Emergency ont la même signification pour
-toutes les stations APRS. Les messages Custom peuvent recevoir n'importe
-quelle signification arbitraire.
+Les commentaires de position Standard et le commentaire de position Emergency
+ont la même signification pour toutes les stations APRS. Les commentaires de
+position Custom peuvent recevoir n'importe quelle signification arbitraire.
 
-\textbf{Note :} la prise en charge des messages Custom est facultative. Les
-unités Mic-E d'origine ne prennent pas en charge les messages Custom.
+\textbf{Note :} la prise en charge des commentaires de position Custom est
+facultative. Les unités Mic-E d'origine ne prennent pas en charge les
+commentaires de position Custom.
 
-\textbf{Note :} si les bits d'identifiant de message A/B/C contiennent un
-mélange de \lit{1} Standard et de \lit{1} Custom, le type de message est
-« unknown ».
+\textbf{Note :} si les bits de commentaire de position A/B/C contiennent un
+mélange de \lit{1} Standard et de \lit{1} Custom, le type de commentaire de
+position est « unknown ».
 \end{aprssideblock}
 
 \begin{aprsbodyblock}
-Quelques exemples d'encodage du type de message :
+Quelques exemples d'encodage du type de commentaire de position :
 
 \begin{center}
 \small\sffamily
@@ -275,8 +280,8 @@ Quelques exemples d'encodage du type de message :
 \begin{tabular}{|>{\columncolor{gray!20}\centering\arraybackslash}p{0.22\linewidth}|>{\centering\arraybackslash}p{0.31\linewidth}|>{\centering\arraybackslash}p{0.14\linewidth}|>{\raggedright\arraybackslash}p{0.18\linewidth}|}\hline
 \rowcolor{gray!20}
 \chTenHead{3 premiers octets de la\newline Destination Address}&
-\chTenHead{Bits d'identifiant de\newline message A/B/C}&
-\chTenHead{Type de\newline message}&\chTenHead{Message}\\\hline
+\chTenHead{Bits de commentaire de\newline position A/B/C}&
+\chTenHead{Type de\newline commentaire de position}&\chTenHead{Signification}\\\hline
 \ttfamily S32&Standard 1 / 0 / 0&Standard&M3: Returning\\\hline
 \ttfamily F2D&Custom 1 / 0 / Custom 1&Custom&C2: Custom-2\\\hline
 \ttfamily 234&0 / 0 / 0&Emergency&Emergency\\\hline
@@ -312,7 +317,7 @@ Le format du champ Information est le suivant :
 \makebox[\textwidth][c]{\hspace*{11.5pt}%
 \begin{tabular}{@{}|>{\centering\arraybackslash}p{31.5pt}|*{3}{>{\centering\arraybackslash}p{32pt}|}*{3}{>{\centering\arraybackslash}p{34.5pt}|}>{\centering\arraybackslash}p{39pt}|>{\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{110.5pt}|@{}}\hline
 \multicolumn{10}{|l|}{\cellcolor{gray!20}\sffamily\bfseries\itshape Mic-E Data --- INFORMATION FIELD Format}\\\hline
-\chTenHead{Data\newline Type\newline ID}&\multicolumn{3}{c|}{\chTenHead{Longitude}}&\multicolumn{3}{c|}{\chTenHead{Speed and Course}}&\chTenHead{Symbol\newline Code}&\chTenHead{Sym\newline Table\newline ID}&\begin{tabular}{@{}>{\centering\arraybackslash}p{104pt}@{}}\chTenHead{Mic-E Telemetry Data}\\\hline\cellcolor{gray!20}\chTenHead{Mic-E Status Text}\end{tabular}\\\cline{2-7}
+\chTenHead{Data\newline Type\newline ID}&\multicolumn{3}{c|}{\chTenHead{Longitude}}&\multicolumn{3}{c|}{\chTenHead{Speed and Course}}&\chTenHead{Symbol\newline Code}&\chTenHead{Sym\newline Table\newline ID}&\begin{tabular}{@{}>{\centering\arraybackslash}p{104pt}@{}}\chTenHead{Mic-E Telemetry Data (obsolete)}\\\hline\cellcolor{gray!20}\chTenHead{Mic-E Status Text}\end{tabular}\\\cline{2-7}
 &\ttfamily d+28&\ttfamily m+28&\ttfamily h+28&\ttfamily SP+28&\ttfamily DC+28&\ttfamily SE+28&&&\\\hline
 \multicolumn{1}{r}{\makebox[0pt][r]{Bytes:\hspace{1em}}}1&1&1&1&1&1&1&1&1&n\\\hline
 \end{tabular}%
@@ -327,17 +332,20 @@ Identifier, la longitude, la vitesse, le cap et les données de symbole.
 L'APRS Data Type Identifier est l'un des suivants :
 
 \begin{tabular}{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
-\lit{`} & données GPS actuelles (mais non utilisées dans les radios Kenwood
+\lit{`} & données GNSS actuelles (mais non utilisées dans les radios Kenwood
 TM-D700) ; \\
-\lit{'} & anciennes données GPS (ou données GPS actuelles dans les radios
+\lit{'} & anciennes données GNSS (ou données GNSS actuelles dans les radios
 Kenwood TM-D700) ; \\
-\texttt{0x1c} & données GPS actuelles (unités beta Rev. 0 uniquement) ; \\
-\texttt{0x1d} & anciennes données GPS (unités beta Rev. 0 uniquement).
+\texttt{0x1c} & données GNSS actuelles (obsolète --- unités beta Rev. 0
+uniquement) ; \\
+\texttt{0x1d} & anciennes données GNSS (obsolète --- unités beta Rev. 0
+uniquement).
 \end{tabular}
 
 \textbf{\underline{NOTE IMPORTANTE :}} comme expliqué en détail ci-dessous, certains
-octets du champ Information sont des caractères ASCII non imprimables. Dans
-certaines circonstances (configuration incorrecte du TNC ou logiciel
+octets du champ Information sont des caractères ASCII non imprimables.
+L'utilisation de caractères non imprimables rend le dépannage plus difficile.
+Dans certaines circonstances (configuration incorrecte du TNC ou logiciel
 inapproprié, par exemple), certains de ces caractères non imprimables peuvent
 être supprimés, ce qui fait paraître le champ Information plus court qu'il ne
 l'est réellement. Cela entraîne un décodage incorrect. En particulier, si le
@@ -415,9 +423,9 @@ Le tableau montre que l'encodage est divisé en quatre parties distinctes :
   Offset est de +0 degré.
 \item \underline{100--109 degrés} : \lit{d+28} est compris entre 108 et 117 en
   décimal, ce qui correspond aux caractères ASCII \lit{l} (lettre « L »
-  minuscule) à \lit{DEL}, et le Longitude Offset est de +100 degrés.
-\item \underline{110--179 degrés} : \lit{d+28} est compris entre 38 et 127 en
-  décimal (ce qui correspond aux caractères ASCII \lit{\&} à \lit{DEL}) et le
+  minuscule) à \lit{u}, et le Longitude Offset est de +100 degrés.
+\item \underline{110--179 degrés} : \lit{d+28} est compris entre 38 et 107 en
+  décimal (ce qui correspond aux caractères ASCII \lit{\&} à \lit{k}) et le
   Longitude Offset est de +100 degrés.
 \end{itemize}
 
@@ -795,7 +803,7 @@ sont décodées comme suit :
 
 \begin{itemize}\chTenItems
 \item \lit{`} est l'APRS Data Type Identifier d'un paquet Mic-E contenant des
-  données GPS actuelles.
+  données GNSS actuelles.
 \item \lit{(} est l'octet \lit{d+28}. Le caractère \texttt{(} a la valeur 40
   en décimal. Soustraire 28 donne 12. Le Longitude Offset (dans la Destination
   Address) est de +100 degrés ; la longitude vaut donc $100 + 12 = 112$ degrés.
@@ -847,10 +855,10 @@ ci-dessus, les deux derniers chiffres de la longitude calculée sont ignorés :
 la longitude vaut donc 112 degrés 7 minutes.
 \end{aprssideblock}
 
-\chTenToc{Données de télémétrie Mic-E}
-\begin{aprssideblock}{Données de\\télémétrie Mic-E}
-Le champ Information peut contenir, en option, soit des valeurs de télémétrie
-Mic-E, soit du texte de statut Mic-E.
+\chTenToc{Données de télémétrie Mic-E (obsolètes)}
+\begin{aprssideblock}{Données de télémétrie\\Mic-E (obsolètes)}
+Ce format est désormais obsolète et remplacé par le format de télémétrie
+Base 91 Comment décrit dans le chapitre Télémétrie.
 
 Si l'octet qui suit le Symbol Table Identifier est l'un des caractères
 Telemetry Flag (\lit{`}, \lit{'}, ou \texttt{0x1d}), des données de
@@ -861,7 +869,7 @@ télémétrie suivent :
 \small\sffamily\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.88}
 \makebox[\textwidth][c]{\hspace*{5pt}%
 \begin{tabular}{|>{\centering\arraybackslash}p{0.14\textwidth}|*{5}{>{\centering\arraybackslash}p{0.045\textwidth}|}}\hline
-\multicolumn{6}{|l|}{\sffamily\bfseries\itshape Données de télémétrie Mic-E optionnelles}\\\hline
+\multicolumn{6}{|l|}{\sffamily\bfseries\itshape Données de télémétrie Mic-E optionnelles (obsolètes)}\\\hline
 \rowcolor{gray!20}\chTenHead{Telemetry\newline Flag}&\multicolumn{5}{c|}{\chTenHead{Canaux de données de télémétrie}}\\\hline
 \chTenHead{F}&\chTenHead{Ch 1}&\chTenHead{Ch 2}&\chTenHead{Ch 3}&\chTenHead{Ch 4}&\chTenHead{Ch 5}\\\hline
 \multicolumn{1}{r}{\makebox[0pt][r]{Bytes:\hspace{1em}}}1&1/2&1/2&1/2&1/2&1/2\\\hline
@@ -901,48 +909,69 @@ Par exemple, si les données de télémétrie sont \lit{'7200007100}, le caract�
 
 \chTenToc{Texte de statut Mic-E}
 \begin{aprssideblock}{Texte de statut Mic-E}
-À la place des données de télémétrie, le paquet peut inclure du texte de statut
-Mic-E. Le texte de statut peut avoir toute longueur tenant dans le reste du
-champ Information.
+Le paquet peut inclure du texte de statut Mic-E. Le texte de statut peut avoir
+toute longueur tenant dans le reste du champ Information. (Pourquoi ne pas
+simplement l'appeler « commentaire », par cohérence avec les autres formats de
+rapports de position et d'objets ?)
 
 Le texte de statut Mic-E ne doit pas commencer par \lit{`}, \lit{'}, ou
 \texttt{0x1d}, faute de quoi il serait confondu avec des données de
-télémétrie.
+télémétrie [désormais obsolètes].
 
 Il est possible d'inclure une position au format APRS standard dans le champ de
-texte de statut Mic-E. Une position appropriée amènera le logiciel d'affichage
-APRS à remplacer toutes les données de position encodées par le Mic-E. Cela est
-utile lorsqu'un Mic-E est utilisé sans récepteur GPS.
+texte de statut Mic-E. \emph{\textcolor{red}{Hein ???}} Une position appropriée amènera le
+logiciel d'affichage APRS à remplacer toutes les données de position encodées
+par le Mic-E. Cela est utile lorsqu'un Mic-E est utilisé sans récepteur GNSS.
+\emph{\textcolor{red}{Hein ???}}
 
-\textbf{Note :} les radios Kenwood insèrent automatiquement un code de type
-spécial au début de la chaîne de texte de statut (c'est-à-dire au 10e caractère
-du champ Information) :
+Le champ de texte Mic-E peut aussi contenir n'importe quel champ commentaire de
+position normal, tel que PHG.
+
+Pour se distinguer du dispositif MIC-E d'origine, les premières radios Kenwood
+inséraient automatiquement un code de préfixe au début de la chaîne de texte de
+statut (c'est-à-dire au 10e caractère du champ Information) :
 
 \begin{tabular}{@{}ll@{}}
 Kenwood TH-D7: & \lit{>}\\
 Kenwood TM-D700: & \lit{]}
 \end{tabular}
 
-Ces caractères ne doivent pas être confondus avec l'APRS Data Type Identifier
-qui apparaît au début des rapports.
-
-Il est prévu que d'autres appareils compatibles Mic-E reçoivent à l'avenir
-leurs propres codes de type.
-
-\textbf{Note :} lorsque les radios Kenwood reçoivent le statut, elles ne
-peuvent afficher qu'un petit nombre de caractères de texte :
+Les modèles Kenwood ultérieurs ont conservé le même préfixe, pour indiquer un
+portatif ou un mobile, puis ont ajouté un caractère de suffixe unique au texte :
 
 \begin{tabular}{@{}ll@{}}
-Kenwood TH-D7: & 20 caractères\\
-Kenwood TM-D700: & 28 caractères
+Kenwood TH-D72: & \lit{>} \ldots \lit{=}\\
+Kenwood TH-D74: & \lit{>} \ldots \lit{\textasciicircum}\\
+Kenwood TH-D75: & \lit{>} \ldots \lit{\&}\\
+Kenwood TM-D710: & \lit{]} \ldots \lit{=}
 \end{tabular}
 
-\textbf{Note :} la radio Kenwood TM-D700 utilise l'apostrophe \lit{'} au lieu
-de l'accent grave \lit{`} comme APRS Data Type Identifier pour représenter les
-données GPS actuelles. Une méthode suggérée pour détecter cette situation
-consiste à examiner les premier et dixième caractères du champ Information :
-s'ils sont respectivement \lit{'} et \lit{]}, le paquet provient presque
-certainement d'un TM-D700.
+Les dispositifs d'autres fabricants utilisaient un caractère de préfixe
+différent :
+\lit{`} indique qu'un système est capable de messagerie, ou
+\lit{'} indique qu'un système n'est pas capable de messagerie (par exemple un
+tracker). Un suffixe de deux caractères indique le fabricant et le modèle.
+Exemples :
+
+\begin{tabular}{@{}ll@{}}
+Yaesu FT2D: & \lit{`} \ldots \lit{\_(} (messagerie)\\
+Yaesu FT3D: & \lit{`} \ldots \lit{\_0}\\
+Yaesu FT5D: & \lit{`} \ldots \lit{\_3}\\
+Byonics TinyTrack 3: & \lit{'} \ldots \lit{|3} (sans messagerie)\\
+Byonics TinyTrack 4: & \lit{'} \ldots \lit{|4}
+\end{tabular}
+
+Les applications d'affichage APRS doivent supprimer tout préfixe et suffixe
+supplémentaire avant d'afficher le texte. Si vous voyez quelque chose comme
+« \lit{\_3} » à la fin du texte de statut (commentaire), c'est parce que
+l'application n'a pas supprimé le type de dispositif comme elle aurait dû.
+
+Plutôt que d'utiliser des identifiants de dispositif codés en dur, il est
+fortement recommandé que les applications lisent un fichier à l'exécution.
+Lorsque de nouveaux modèles sont ajoutés, seul ce fichier doit être mis à jour,
+plutôt que de modifier le code et de publier une nouvelle version. Des fichiers
+lisibles par machine, avec les derniers identifiants de dispositif, sont
+disponibles à l'adresse \url{https://github.com/aprsorg/aprs-deviceid}.
 \end{aprssideblock}
 
 \chTenToc{Locator Maidenhead dans le champ de texte de statut Mic-E}
@@ -990,6 +1019,10 @@ Quelques exemples :
 \aprsorigtexttt{>"4T\}}\\
 \aprsorigtexttt{]"4T\}}
 \end{tabular}
+
+L'altitude optionnelle doit être placée en premier après l'octet de type
+Mic-E. Noter que cela vient après tout caractère de préfixe d'identifiant de
+dispositif.
 \end{aprssideblock}
 
 \chTenToc{Données Mic-E dans les réseaux non APRS}
