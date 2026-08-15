@@ -260,7 +260,7 @@ en marge (`aprssideblock`).
 | `08-position-df-reports` | 32–35 | 380 | 0 | 4 | **Revu 13/08** |
 | `09-compressed-position` | 36–41 | 517 | 0 | 22 | **Revu 13/08** |
 | `10-mic-e` | 42–56 | 1015 | 0 | 48 | **Revu 13/08** |
-| `11-objects-items` | 57–61 | 212 | 0 | 0 | **Non audité** |
+| `11-objects-items` | 57–61 | 212 | 0 | 0 | **Revu 15/08** |
 | `12-weather` | 62–67 | 235 | 0 | 0 | **Non audité** |
 | `13-telemetry` | 68–70 | 152 | 0 | 0 | **Non audité** |
 | `14-messages` | 71–76 | 171 | 0 | 0 | **Non audité** |
@@ -274,7 +274,7 @@ en marge (`aprssideblock`).
 
 ### Vérification APRS12c — 13 août 2026
 
-Chapitres 4, 5, 6, 7, 8, 9 et 10 revérifiés contre APRS12c, section par section.
+Chapitres 4, 5, 6, 7, 8, 9, 10 et 11 revérifiés contre APRS12c, section par section.
 
 - **Ch4** : ajout de la section « Alternate Nets », note d'obsolescence de
   l'adresse « APRS », et les deux notes d'édition APRS12c (« Peut-on supprimer
@@ -302,6 +302,9 @@ Chapitres 4, 5, 6, 7, 8, 9 et 10 revérifiés contre APRS12c, section par sectio
   GPS → GNSS, télémétrie marquée obsolète, correction des plages de longitude
   (l à u, 38–107 & à k), et section « Texte de statut » enrichie (préfixes/
   suffixes d'appareils Kenwood/Yaesu/Byonics, notes d'édition en rouge).
+- **Ch11** : chapitre condensé réécrit phrase par phrase ; facteur d'échelle
+  Area Objects corrigé (`/100` → `/1500`, renvoi `areaobjects.txt`), ajouts
+  APRS12c (`!DAO!`, « not recommended » sur RF, note Comment 36/43).
 
 ### Nouvelles sections APRS12c dans des chapitres existants
 

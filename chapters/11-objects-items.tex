@@ -1,212 +1,432 @@
 \chapter[RAPPORTS D'OBJETS ET D'ITEMS]{Rapports d'Objets et d'Items}\label{rapports-dobjets-et-ditems}
 
-\section{Objets et Items}\label{objets-et-items}
+\newcommand{\chElevenHead}[1]{\shortstack{\sffamily\bfseries\itshape #1}}
+\newcommand{\chElevenDataExtHead}{%
+  \makebox[\linewidth][c]{%
+  \begin{tabular}{@{}>{\centering\arraybackslash\sffamily\bfseries\itshape}p{\dimexpr\linewidth+2\tabcolsep\relax}@{}}
+  Course/Speed \\
+  \hline
+  Power/Height/Gain/Dir \\
+  \hline
+  Radio Range \\
+  \hline
+  DF Signal Strength \\
+  \hline
+  Area Object
+  \end{tabular}}%
+}
+\newcommand{\chElevenBytes}[1]{%
+  \makebox[0pt][r]{Bytes:\hspace{1.2em}}%
+  \makebox[\linewidth][c]{#1}%
+}
+\newcommand{\chElevenExampleText}[1]{{\rmfamily\small #1}}
 
+\begin{aprssideblock}{Objets et Items}
 Toute station APRS peut reporter manuellement la position d'une entité
-APRS (autre station, phénomène météo, etc.), pour les cas où l'entité ne
-peut pas reporter sa propre position.
+APRS (par exemple une autre station ou un phénomène météorologique). Cela
+est prévu pour les cas où l'entité n'est pas capable de reporter sa propre
+position.
 
-Deux types :
-
-\begin{itemize}
-\tightlist
-\item
-  \textbf{Object Reports} --- position, timestamp optionnel, extensions
-  possibles. Prévu pour tracer des objets mobiles (spatial, orages,
-  coureurs marathon sans tracker).
-\item
-  \textbf{Item Reports} --- position, pas de timestamp. Extensions
-  possibles. Prévu pour des choses inanimées ponctuellement postées
-  (checkpoints marathon, postes de secours). Traitement similaire aux
-  Objects sinon.
-\end{itemize}
-
-Objets et items distincts par leurs noms. Recommandation : afficher
-l'indicatif de la station émettrice à côté.
-
-\section{Remplacer un Object / Item}\label{remplacer-un-object-item}
-
-N'importe quelle station peut reprendre la responsabilité en émettant un
-nouveau rapport avec le même nom. La station d'origine cessera d'émettre
-quand elle verra un rapport entrant d'une autre station avec le même
-nom.
-
-\section{Tuer un Object / Item}\label{tuer-un-object-item}
-
-Émettre un nouveau rapport avec un caractère de « kill » suivant le nom.
-Retirer l'affichage, conserver les données en interne.
-
-\section{Format Object Report}\label{format-object-report}
-
-Nom fixe 9 caractères, ASCII imprimable, sensible à la casse.
+APRS fournit deux types de rapport pour cela :
 
 \begin{itemize}
 \tightlist
 \item
-  DTI \texttt{;} = Object Report.
+  \textbf{Object Reports}
 \item
-  Après le nom : \texttt{*} (live) ou \texttt{\_} (killed).
-\item
-  Un Object a toujours un timestamp.
+  \textbf{Item Reports}
 \end{itemize}
 
-\textbf{Avec lat/long} :
+Les Object Reports spécifient la position d'un Object, peuvent avoir un
+timestamp optionnel, et peuvent inclure des informations de cap/vitesse ou
+d'autres données étendues. Les Object Reports sont prévus principalement
+pour tracer la position d'objets mobiles (par exemple les engins spatiaux,
+les orages, les coureurs de marathon sans tracker).
 
+Les Item Reports spécifient la position d'un Item, mais ne peuvent pas
+avoir de timestamp. Bien que les Item Reports puissent aussi inclure des
+données de cap/vitesse ou d'autres données étendues, ils sont réellement
+prévus pour des choses inanimées qui sont occasionnellement postées sur
+une carte (par exemple les points de contrôle de marathon ou les postes de
+secours). Sinon, ils sont traités de la même manière que les Object
+Reports.
+
+Les Objects se distinguent les uns des autres par des noms d'Object
+différents. De même, les Items se distinguent les uns des autres par des
+noms d'Item différents.
+
+\textbf{Recommandation d'implémentation :} lorsqu'un Object/Item APRS est
+affiché à l'écran, l'indicatif de la station qui envoie le rapport doit
+être associé à l'Object/Item.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Remplacer un\\Object / Item}
+Un précepte fondamental d'APRS est que n'importe quelle station peut
+reprendre la responsabilité du report d'un Object ou d'un Item APRS, en
+transmettant simplement un nouveau rapport portant le même nom
+d'Object/Item.
+
+Le rapport de remplacement peut spécifier l'emplacement existant ou un
+nouvel emplacement. La station d'origine cessera de transmettre le rapport
+d'Object/Item lorsqu'elle verra un rapport entrant portant le même nom
+provenant d'une autre station.
+\end{aprssideblock}
+
+\begin{aprssideblock}{Tuer un\\Object / Item}
+Pour tuer un Object/Item, une station transmet un nouveau rapport
+d'Object/Item, avec un caractère de « kill » suivant le nom de
+l'Object/Item.
+
+\textbf{Recommandation d'implémentation :} lorsqu'un Object/Item est tué,
+il doit être retiré de l'affichage à l'écran. Cependant, les données
+associées à l'Object/Item doivent être conservées en interne au cas où
+elles seraient nécessaires ultérieurement.
+\end{aprssideblock}
+
+\par\noindent{\sffamily\bfseries Additional Amplifying Comments about Objects}\par
+
+\begin{aprssideblock}{Format Object\\Report}
+Un Object Report possède un champ de nom d'Object fixe de 9 caractères,
+qui peut être constitué de n'importe quels caractères ASCII imprimables, y
+compris des espaces incorporés. Des espaces de fin sont utilisés pour
+rendre le champ large de 9 caractères. Ceux-ci ne font pas partie du nom.
+Les noms d'Object sont sensibles à la casse.
+
+Le \lit{;} est l'APRS Data Type Identifier d'un Object Report, et un
+\lit{*} ou un \lit{\_} sépare le nom d'Object du reste du rapport :
+\lit{*} indique un Object vivant. \lit{\_} est le caractère de « kill »
+d'Object.
+
+La position peut être au format lat/long ou lat/long compressé, et le
+rapport peut aussi contenir des données étendues. Les Objects compressés
+ne sont pas recommandés sur RF en raison d'incompatibilités. Pour une
+précision de 1 pied, utiliser le format \lit{!DAO!}. Un Object a toujours
+un timestamp. Le champ Commentaire peut contenir n'importe quelle donnée
+APRS appropriée (voir la section Champ Commentaire du chapitre 5 : Données
+APRS dans le champ Information AX.25).
+
+(Pourquoi le champ Commentaire est-il limité à 36 ou 43 caractères ? Le
+chapitre 3 indique que la partie Information peut comporter jusqu'à 256
+caractères.)
+
+APRS 1.1 : la version compressée n'est pas recommandée.
+\end{aprssideblock}
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.5}
+\sffamily\fontsize{7.5}{8.5}\selectfont
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{0.11\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.10\textwidth}|>{\centering\arraybackslash}m{0.08\textwidth}|>{\centering\arraybackslash}m{0.08\textwidth}|>{\centering\arraybackslash}m{0.08\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.14\textwidth}|>{\centering\arraybackslash}m{0.13\textwidth}|}
 \hline
-\textbf{Champ} & \lit{;} & Object Name & \lit{*} ou \lit{\_} & Time DHM/HMS & Lat & Sym Tbl ID & Long & Symbol Code \\
+\multicolumn{10}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format Object Report --- avec position Lat/Long}\\
 \hline
-\textbf{Octets} & 1 & 9 & 1 & 7 & 8 & 1 & 9 & 1 \\
+\chElevenHead{\lit{;}} & \chElevenHead{Object\\Name} & \chElevenHead{\lit{*} ou\\\lit{\_}} & \chElevenHead{Time\\DHM /\\HMS} & \chElevenHead{Lat} & \chElevenHead{Sym\\Table\\ID} & \chElevenHead{Long} & \chElevenHead{Symbol\\Code} & \chElevenDataExtHead & \cellcolor{gray!20}\chElevenHead{Comment\\(max 36 avec ext,\\43 sans)} \\
+\hline
+\chElevenBytes{1} & 9 & 1 & 7 & 8 & 1 & 9 & 1 & 7 & 0--36/43 \\
+\hline
+\multicolumn{10}{|p{0.96\linewidth}|}{%
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.62\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}@{}}
+  \aprsorigtexttt{;LEADER   *092345z4903.50N/07201.75W>088/036} &
+  \chElevenExampleText{un Object vivant. À 2345 heures zulu le 9 du mois, le
+  « Leader » était dans la voiture à 49°3'30''N/72°1'45''W, cap 88 degrés à
+  36 knots.} \\
+  \aprsorigtexttt{;LEADER   \_092345z4903.50N/07201.75W>088/036} &
+  \chElevenExampleText{le même Object, maintenant tué.} \\
+  \end{tabular}
+  \vspace{0.25em}
+} \\
 \hline
 \end{tabular}
 \end{center}
-\noindent + Data Extension (0 ou 7 octets) + Comment (0-43 sans ext, 0-36 avec)
+\endgroup
 
-Exemples : -
-\texttt{;LEADER\ \ \ *092345z4903.50N/07201.75W\textgreater{}088/036}
---- live Object, à 2345z le 9, « Leader » en voiture à
-49°3'30''N/72°1'45''W, cap 88°, 36 knots. -
-\texttt{;LEADER\ \ \ \_092345z4903.50N/07201.75W\textgreater{}088/036}
---- même Object, killed.
-
-\textbf{Avec position compressée} :
-
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.5}
+\sffamily\fontsize{7.5}{8.5}\selectfont
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{0.13\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.10\textwidth}|>{\centering\arraybackslash}m{0.20\textwidth}|>{\centering\arraybackslash}m{0.30\textwidth}|}
 \hline
-\textbf{Champ} & \lit{;} & Object Name & \lit{*} ou \lit{\_} & Time & Compressed Position \\
+\multicolumn{6}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format Object Report --- avec position Lat/Long compressée --- non recommandé}\\
 \hline
-\textbf{Octets} & 1 & 9 & 1 & 7 & 13 \\
+\chElevenHead{\lit{;}} & \chElevenHead{Object\\Name} & \chElevenHead{\lit{*} ou\\\lit{\_}} & \chElevenHead{Time\\DHM /\\HMS} & \chElevenHead{Compressed Position\\Data} & \cellcolor{gray!20}\chElevenHead{Comment} \\
+\hline
+\chElevenBytes{1} & 9 & 1 & 7 & 13 & 0--36/43 \\
+\hline
+\multicolumn{6}{|p{0.96\linewidth}|}{%
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemple}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.62\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}@{}}
+  \aprsorigtexttt{;LEADER   *092345z/5L!!<*e7>7P[} &
+  \chElevenExampleText{le « Leader » était dans la voiture à 49°30'00''N/72°45'00''W, cap 88 degrés à 36,2 knots.} \\
+  \end{tabular}
+  \vspace{0.25em}
+} \\
 \hline
 \end{tabular}
 \end{center}
-\noindent + Comment
+\endgroup
 
-Ex :
-\texttt{;LEADER\ \ \ *092345z/5L!!\textless{}*e7\textgreater{}7P{[}} ---
-49°30'00''N / 72°45'00''W, 88°, 36.2 knots.
+\begin{aprssideblock}{Format Item Report\\(non recommandé)}
+Un Item Report possède un nom d'Item de longueur variable, de 3 à
+9 caractères. Le nom peut être constitué de n'importe quels caractères
+ASCII imprimables, y compris des espaces incorporés, sauf \lit{!} ou
+\lit{\_} car ils sont les terminateurs de champ. Les noms d'Item sont
+sensibles à la casse. Noter que le champ de nom est de longueur variable,
+contrairement aux objects, où il est fixe.
 
-\section{Format Item Report}\label{format-item-report}
+Le \lit{)} est l'APRS Data Type Identifier d'un Item Report, et un
+\lit{!} ou un \lit{\_} sépare le nom d'Item du reste du rapport :
+\lit{!} indique un Item vivant. \lit{\_} est le caractère de « kill »
+d'Item.
 
-Nom variable 3-9 caractères, ASCII imprimable sauf \texttt{!} ou
-\texttt{\_}. Sensible à la casse.
+La position peut être au format lat/long ou lat/long compressé. Il n'y a
+pas de prévision de timestamp. Le rapport peut aussi contenir des données
+étendues. Le champ Commentaire peut contenir n'importe quelle donnée APRS
+appropriée (voir la section Champ Commentaire du chapitre 5 : Données APRS
+dans le champ Information AX.25).
 
-\begin{itemize}
-\tightlist
+APRS 1.1 : le format Item n'est pas recommandé sur RF en raison
+d'incompatibilités.
+\end{aprssideblock}
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.5}
+\sffamily\fontsize{7.5}{8.5}\selectfont
+\begin{center}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{0.11\textwidth}|>{\centering\arraybackslash}m{0.06\textwidth}|>{\centering\arraybackslash}m{0.08\textwidth}|>{\centering\arraybackslash}m{0.08\textwidth}|>{\centering\arraybackslash}m{0.08\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.14\textwidth}|>{\centering\arraybackslash}m{0.13\textwidth}|}
+\hline
+\multicolumn{9}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format Item Report --- avec position Lat/Long --- non recommandé}\\
+\hline
+\chElevenHead{\lit{)}} & \chElevenHead{Item\\Name} & \chElevenHead{\lit{!} ou\\\lit{\_}} & \chElevenHead{Lat} & \chElevenHead{Sym\\Table\\ID} & \chElevenHead{Long} & \chElevenHead{Symbol\\Code} & \chElevenDataExtHead & \cellcolor{gray!20}\chElevenHead{Comment\\(max 36 avec ext,\\43 sans)} \\
+\hline
+\chElevenBytes{1} & 3--9 & 1 & 8 & 1 & 9 & 1 & 7 & 0--36/43 \\
+\hline
+\multicolumn{9}{|p{0.96\linewidth}|}{%
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemples}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.41\linewidth}@{}}
+  \aprsorigtexttt{)AID\#2!4903.50N/07201.75WA} &
+  \chElevenExampleText{la First Aid Station \#2 est à 49°3'30''N/72°1'45''W.
+  (\lit{/A} est le symbole de Aid Station).} \\
+  \aprsorigtexttt{)G/WB4APR!53VV.VVN\textbackslash002VV.VVWd} &
+  \chElevenExampleText{une station DX rare « quelque part en Angleterre ».
+  (\lit{\textbackslash d} est le symbole de DX Spot).} \\
+  \aprsorigtexttt{)AID\#2\_4903.50N/07201.75WA} &
+  \chElevenExampleText{la First Aid Station a fermé.} \\
+  \end{tabular}
+  \vspace{0.25em}
+} \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.5}
+\sffamily\fontsize{7.5}{8.5}\selectfont
+\begin{center}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.05\textwidth}|>{\centering\arraybackslash}m{0.13\textwidth}|>{\centering\arraybackslash}m{0.07\textwidth}|>{\centering\arraybackslash}m{0.20\textwidth}|>{\centering\arraybackslash}m{0.30\textwidth}|}
+\hline
+\multicolumn{5}{|>{\columncolor{gray!20}}l|}{\hspace{0.6em}\bfseries\itshape Format Item Report --- avec position Lat/Long compressée --- non recommandé}\\
+\hline
+\chElevenHead{\lit{)}} & \chElevenHead{Item\\Name} & \chElevenHead{\lit{!} ou\\\lit{\_}} & \chElevenHead{Compressed Position\\Data} & \cellcolor{gray!20}\chElevenHead{Comment} \\
+\hline
+\chElevenBytes{1} & 3--9 & 1 & 13 & 0--36/43 \\
+\hline
+\multicolumn{5}{|p{0.96\linewidth}|}{%
+  \vspace{0.25em}
+  {\rmfamily\underline{Exemple}}
+
+  \vspace{0.25em}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.41\linewidth}@{}}
+  \aprsorigtexttt{)MOBIL!\textbackslash5L!!<*e79 sT} &
+  \chElevenExampleText{la Mobil Gas Station est à 49°30'00''N/72°45'00''W.
+  (\lit{\textbackslash 9} est le symbole de Gas Station).} \\
+  \end{tabular}
+  \vspace{0.25em}
+} \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup
+
+\begin{aprssideblock}{Area Objects}
+En utilisant le symbole \lit{\textbackslash l} (c'est-à-dire le symbole de la
+lettre « L » minuscule de l'Alternate Symbol Table), il est possible de
+définir des objects cercle, ligne, ellipse, triangle et boîte dans toutes
+les couleurs, ouverts ou remplis, de toute taille allant de 60 pieds à
+100 miles. Ces Objects sont utiles pour les événements en temps réel, comme
+une recherche et sauvetage, ou l'ajout d'une route ou d'un itinéraire
+spécial pour un événement spécial.
+
+Le format d'Object est spécifié comme une APRS Data Extension de
+7 caractères \texttt{Tyy/Cxx} placée immédiatement après le Symbol Code
+\lit{l}. Par exemple :
+\aprsorigtexttt{;OBJECT   *ddmm.hhN\textbackslash dddmm.hhW l Tyy/Cxx}
+
+où :
+\texttt{T} est le type de forme de l'object. \texttt{/C} est la couleur de
+l'object. \texttt{yy} est la racine carrée de (l'offset de latitude en
+degrés / 1500). \texttt{xx} est la racine carrée de (l'offset de longitude
+en degrés / 1500).
+
+À la réception :
+offset\_en\_degrés = (offset\_dans\_le\_paquet\textsuperscript{2}) / 1500
+
+\textbf{NOTE :} cette spécification avait à l'origine un facteur d'échelle
+de 100. \url{http://www.aprs.org/aprs11/areaobjects.txt} contient la
+correction pour le porter à 1500. Toutes les applications modernes
+vérifiées utilisent 1500.
+\end{aprssideblock}
+
+\begingroup
+\setlength{\arrayrulewidth}{0.6pt}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.4}
+\sffamily\fontsize{8.5}{9.5}\selectfont
+\begin{center}
+\begin{tabular}{|>{\centering\arraybackslash}m{0.12\textwidth}|>{\raggedright\arraybackslash}p{0.32\textwidth}|>{\centering\arraybackslash}m{0.12\textwidth}|>{\raggedright\arraybackslash}p{0.32\textwidth}|}
+\hline
+\rowcolor{gray!20}\bfseries T & \bfseries Type d'object & \bfseries T & \bfseries Type d'object \\
+\hline
+0 & Open circle & 5 & Color-filled circle \\
+\hline
+1 & Line (offset : down/right) & 6 & Line (offset : down/left) \\
+\hline
+2 & Open ellipse & 7 & Color-filled ellipse \\
+\hline
+3 & Open triangle & 8 & Color-filled triangle \\
+\hline
+4 & Open box & 9 & Color-filled box \\
+\hline
+\end{tabular}
+
+\medskip
+
+\begin{tabular}{|>{\centering\arraybackslash}m{0.18\textwidth}|>{\raggedright\arraybackslash}p{0.30\textwidth}|>{\centering\arraybackslash}m{0.18\textwidth}|}
+\hline
+\rowcolor{gray!20}\bfseries /C & \bfseries Couleur & \bfseries Intensité \\
+\hline
+/0 & Black & High \\
+\hline
+/1 & Blue & High \\
+\hline
+/2 & Green & High \\
+\hline
+/3 & Cyan & High \\
+\hline
+/4 & Red & High \\
+\hline
+/5 & Violet & High \\
+\hline
+/6 & Yellow & High \\
+\hline
+/7 & Gray & High \\
+\hline
+/8 & Black & Low \\
+\hline
+/9 & Blue & Low \\
+\hline
+/10 & Green & Low \\
+\hline
+/11 & Cyan & Low \\
+\hline
+/12 & Red & Low \\
+\hline
+/13 & Violet & Low \\
+\hline
+/14 & Yellow & Low \\
+\hline
+/15 & Gray & Low \\
+\hline
+\end{tabular}
+\end{center}
+\endgroup
+
+\begin{aprsbodyblock}
+\begin{itemize}\tightlist
 \item
-  DTI \texttt{)} = Item Report.
+  Les triangles sont toujours des triangles isocèles, orientés
+  verticalement, et les points de référence sont le sommet supérieur et le
+  coin inférieur droit.
 \item
-  Après le nom : \texttt{!} (live) ou \texttt{\_} (killed).
+  Les cercles sont définis par une boîte carrée référencée par le coin
+  supérieur gauche et le centre.
 \item
-  Pas de timestamp.
+  Les lignes sont référencées par leur extrémité supérieure.
 \end{itemize}
 
-\textbf{Avec lat/long} :
+La position de « référence d'offset » de l'object est le coin supérieur
+gauche de l'object, et les offsets sont la distance depuis le coin
+inférieur droit (ou le centre d'un cercle) jusqu'à cette position de
+« référence d'offset ». (Une exception est le cas particulier de la ligne
+de type 6, qui est tracée vers le bas et vers la gauche.)
 
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
-\hline
-\textbf{Champ} & \lit{)} & Item Name & \lit{!} ou \lit{\_} & Lat & Sym Tbl ID & Long & Symbol Code \\
-\hline
-\textbf{Octets} & 1 & 3-9 & 1 & 8 & 1 & 9 & 1 \\
-\hline
-\end{tabular}
-\end{center}
-\noindent + Data Extension (0 ou 7 octets) + Comment (0-43 sans ext, 0-36 avec)
+Voici quelques exemples de rapports de position d'Object. Les offsets de
+latitude et de longitude valent chacun 4 minutes = 4/60 degré = 100/1500 de
+degré), donc yy = xx = √100 = 10.
+\end{aprsbodyblock}
 
-Exemples : - \texttt{)AID\ \#2!4903.50N/07201.75WA} --- First Aid
-Station \#2 à 49°3'30''N/72°1'45''W (\texttt{/A} = Aid Station). -
-\texttt{)G/WB4APR!53VV.VVN\textbackslash{}002VV.VVWd} --- rare DX
-(\texttt{\textbackslash{}d} = DX Spot). -
-\texttt{)AID\ \#2\_4903.50N/07201.75WA} --- station fermée.
+\begin{aprsexample}
+\aprsorigtexttt{;SEARCH   *092345z4903.50N\textbackslash 07201.75W l 710/310}
 
-\textbf{Avec position compressée} :
+\chElevenExampleText{une ellipse remplie cyan haute intensité, yy=10, xx=10}
 
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\textbf{Champ} & \lit{)} & Item Name & \lit{!} ou \lit{\_} & Compressed Position \\
-\hline
-\textbf{Octets} & 1 & 3-9 & 1 & 13 \\
-\hline
-\end{tabular}
-\end{center}
-\noindent + Comment
+\aprsorigtexttt{;SEARCH   *092345z4903.50N\textbackslash 07201.75W l 8101310}
 
-Ex : \texttt{)MOBIL!\textbackslash{}5L!!\textless{}*e79\ sT} --- Mobil
-Gas Station (\texttt{\textbackslash{}9} = Gas Station).
+\chElevenExampleText{un triangle rempli violet basse intensité, yy=10, xx=10}
+\end{aprsexample}
 
-\section{Area Objects}\label{area-objects}
+\begin{aprssideblock}{Area Objects\\(suite)}
+En outre, avec l'option ligne (Type 1 et Type 6), il est possible de
+spécifier un « corridor » de chaque côté de la ligne centrale. La largeur
+du corridor (en miles) de chaque côté de la ligne est spécifiée dans le
+texte du commentaire, entre \texttt{\{\}}. Par exemple :
+\aprsorigtexttt{;FLIGHTPTH*4903.50N\textbackslash 07201.75W l 610/310\{100\}}
 
-Avec le symbole \texttt{\textbackslash{}l} (« L » minuscule de la table
-alternative), on définit cercles, lignes, ellipses, triangles et boîtes,
-colorés ou non, remplis ou vides, de 60 pieds à 100 miles.
+une ligne cyan haute intensité, avec un corridor de 100 miles de chaque
+côté.
 
-Format : extension 7 caractères \texttt{Tyy/Cxx} juste après le Symbol
-Code \texttt{l}.
+\textbf{Note :} l'option de remplissage de couleur doit être utilisée avec
+précaution, car un object rempli de couleur masquera les informations
+affichées en dessous.
+\end{aprssideblock}
 
-\begin{itemize}
-\tightlist
-\item
-  \texttt{T} = type d'objet (0-9).
-\item
-  \texttt{/C} = code couleur.
-\item
-  \texttt{yy} = √(offset latitude en 1/100 degré).
-\item
-  \texttt{xx} = √(offset longitude en 1/100 degré).
-\end{itemize}
+\begin{aprssideblock}{Signpost Objects / Items}
+Les Signpost Objects/Items (avec le symbole \lit{\textbackslash m})
+s'affichent comme une boîte jaune portant une superposition de 1 à
+3 caractères. La superposition est spécifiée en plaçant les 1 à
+3 caractères entre accolades dans le champ commentaire. Ainsi, un panneau
+avec \{55\} apparaîtra comme un panneau portant 55. Par exemple :
+\aprsorigtexttt{)I91 3N!4903.50N\textbackslash 07201.75Wm\{55\}}
 
-Types :
+Cela a été conçu à l'origine pour afficher la vitesse du trafic devant des
+appareils de mesure de vitesse, mais peut servir à toute fin.
 
-\begin{longtable}[]{@{}llll@{}}
-\toprule\noalign{}
-T & Type & T & Type \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-0 & Open circle & 5 & Filled circle \\
-1 & Line (down/right) & 6 & Line (down/left) \\
-2 & Open ellipse & 7 & Filled ellipse \\
-3 & Open triangle & 8 & Filled triangle \\
-4 & Open box & 9 & Filled box \\
-\end{longtable}
+\textbf{Recommandation d'implémentation :} les panneaux ne doivent afficher
+aucun indicatif ni nom, et pour éviter l'encombrement, ne doivent être
+affichés qu'à courte portée.
+\end{aprssideblock}
 
-Couleurs (\texttt{/0}-\texttt{/9} haute intensité,
-\texttt{10}-\texttt{15} basse) : Noir, Bleu, Vert, Cyan, Rouge, Violet,
-Jaune, Gris.
-
-La lat/long est le coin haut-gauche. Offsets vers le bas (yy) et vers la
-droite (xx). Exception Type 6 : bas-gauche.
-
-Exemples (offsets 1 degré = 100/100 → yy=xx=√100=10) : -
-\texttt{;SEARCH\ \ \ *092345z4903.50N\textbackslash{}07201.75Wl710/310}
---- ellipse cyan haute intensité. -
-\texttt{;SEARCH\ \ \ *092345z4903.50N\textbackslash{}07201.75Wl8101310}
---- triangle violet basse intensité.
-
-Pour les lignes (Type 1/6), corridor de chaque côté, largeur en miles
-entre \texttt{\{\}} dans le commentaire :
-
-\texttt{;FLIGHTPTH*4903.50N\textbackslash{}07201.75Wl610/310\{100\}} ---
-ligne cyan haute intensité, corridor 100 miles.
-
-Attention : les objets remplis masquent les infos en dessous.
-
-\section{Signpost Objects / Items}\label{signpost-objects-items}
-
-Symbole \texttt{\textbackslash{}m}. Panneau jaune avec overlay 1-3
-caractères entre \texttt{\{\}} dans le commentaire. Ex :
-\texttt{)I91\ 3N!4903.50N\textbackslash{}07201.75Wm\{55\}} → panneau
-\texttt{55}.
-
-Ne pas afficher l'indicatif de la station. Afficher seulement à courte
-portée pour éviter l'encombrement.
-
-\section{Format Object obsolète}\label{format-object-obsoluxe8te}
-
-Certaines stations émettent des Object reports sans DTI \texttt{;}.
-Format obsolète. À interpréter comme Status Report.
-
+\begin{aprssideblock}{Format Object obsolète}
+Certaines stations transmettent des rapports d'Object sans l'APRS Data
+Type Identifier \lit{;}. Ce format est obsolète. Certains logiciels
+peuvent encore décoder de telles données comme un Object, mais elles
+doivent désormais être interprétées comme un Status Report.
+\end{aprssideblock}
