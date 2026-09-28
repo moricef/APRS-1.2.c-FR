@@ -36,16 +36,16 @@ Depuis la racine du dépôt :
 make
 ```
 
-Le résultat est `aprs101-fr.pdf`. Les fichiers auxiliaires et le PDF compilé
+Le résultat est `aprs12c-fr.pdf`. Les fichiers auxiliaires et le PDF compilé
 sont générés et ne doivent pas être modifiés directement.
 
 Pour contrôler le contenu et la mise en page :
 
 ```sh
 pdftotext -layout prepa_aprs101/APRS12c.pdf prepa_aprs101/aprs12c-layout.txt
-pdftotext -layout aprs101-fr.pdf prepa_aprs101/aprs101-fr.txt
+pdftotext -layout aprs12c-fr.pdf prepa_aprs101/aprs101-fr.txt
 pdftoppm -png -r 144 prepa_aprs101/APRS12c.pdf prepa_aprs101/aprs12c
-pdftoppm -png -r 144 aprs101-fr.pdf prepa_aprs101/aprs101-fr
+pdftoppm -png -r 144 aprs12c-fr.pdf prepa_aprs101/aprs101-fr
 ```
 
 Le contrôle doit porter sur les pages correspondantes, visuellement et phrase

@@ -1,5 +1,5 @@
 TEX = aprs12c-fr.tex
-PDF = aprs101-fr.pdf
+PDF = aprs12c-fr.pdf
 ENGINE = lualatex
 
 all: $(PDF)
