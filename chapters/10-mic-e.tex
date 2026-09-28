@@ -2,6 +2,7 @@
 
 \begingroup
 \setlength{\arrayrulewidth}{0.6pt}
+\renewcommand{\lit}[1]{\begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut\bfseries\aprsorigtexttt{#1}}\endgroup}
 
 \newcommand{\chTenToc}[1]{\phantomsection\addcontentsline{toc}{section}{#1}}
 \newcommand{\chTenHead}[1]{{\sffamily\bfseries\itshape #1}}
@@ -9,7 +10,7 @@
 \newcommand{\chTenBlack}[1]{\cellcolor{black}\textcolor{white}{\bfseries #1}}
 \newfontfamily{\chTenSpaceFont}{FreeSans}
 \newcommand{\chTenSpace}{\begingroup\chTenSpaceFont ⎵\endgroup}
-\newcommand{\chTenLitSpace}{\begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut\chTenSpaceFont ⎵}\endgroup}
+\newcommand{\chTenLitSpace}{\begingroup\setlength{\fboxsep}{1pt}\colorbox{APRSMarkerYellow}{\strut\bfseries\chTenSpaceFont ⎵}\endgroup}
 \newcommand{\chTenItems}{\setlength{\itemsep}{0.35em}\setlength{\parskip}{0pt}}
 
 \chTenToc{Format des données Mic-E}
@@ -19,9 +20,8 @@ d'affichage de la station, ainsi qu'un chemin de digipeaters APRS et un
 commentaire de position Mic-E, sont regroupés dans les champs Destination
 Address et Information AX.25.
 
-Le champ Information peut également contenir, en option, soit des données de
-télémétrie Mic-E, soit un statut Mic-E. Le statut Mic-E peut contenir le locator
-Maidenhead et l'altitude de la station.
+Le champ Information peut également contenir, en option, un statut Mic-E. Le
+statut Mic-E peut contenir le locator Maidenhead et l'altitude de la station.
 
 Les paquets Mic-E peuvent être très courts. Au minimum, sans indicatifs dans le
 champ Digipeater Addresses et sans données de télémétrie ni texte de statut
@@ -86,7 +86,7 @@ données Mic-E, ce champ présente toutefois un format très différent :
 \renewcommand{\arraystretch}{1.75}
 \footnotesize\sffamily
 \hspace*{15pt}%
-\begin{tabular}{@{}|*{7}{>{\centering\arraybackslash}p{0.1215\textwidth}|}@{}}
+\begin{tabular}[t]{@{}|*{7}{>{\centering\arraybackslash}p{0.1215\textwidth}|}@{}}
 \hline
 \multicolumn{7}{|l|}{\cellcolor{black}\textcolor{white}{\sffamily\bfseries\itshape
 Mic-E Data --- DESTINATION ADDRESS FIELD Format}} \\
@@ -132,19 +132,22 @@ Les caractères ASCII indiqués dans le tableau sont décalés d'un bit vers la
 gauche avant transmission.
 \end{aprssideblock}
 
+\needspace{22\baselineskip}
 \begin{center}
 \sffamily\bfseries Encodage du champ Destination Address Mic-E (octets 1--6)
 
 \medskip
 \footnotesize\sffamily\normalfont
 \setlength{\tabcolsep}{2pt}
-\renewcommand{\arraystretch}{1.88}
+\renewcommand{\arraystretch}{1.33}
 \newcommand{\desthead}{%
-\chTenHead{\shortstack{ASCII\\Char}} & \chTenHead{\shortstack{Lat\\Digit}} &
-\chTenHead{\shortstack{Position Comment\\A/B/C}} & \chTenHead{N/S} &
+\rule{0pt}{30pt}\chTenHead{\shortstack{ASCII\\Char}} &
+\chTenHead{\shortstack{Lat\\Digit}} &
+\chTenHead{\shortstack{Position \\Comment\\A/B/C}} & \chTenHead{N/S} &
 \chTenHead{\shortstack{Long\\Offset}} & \chTenHead{W/E}}
 \makebox[\textwidth][c]{\hspace*{9pt}%
-\begin{tabular}{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}\hline
+\begin{tabular}[t]{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}
+\cline{2-6}
 \multicolumn{1}{r|}{Byte:} & 1--6 & 1--3 & 4 & 5 & 6 \\
 \hline\rowcolor{gray!20}\desthead\\\hline
 0&0&0&South&+0&East\\\hline
@@ -166,7 +169,8 @@ F&5&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
 G&6&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
 \end{tabular}
 \hspace{10.5pt}%
-\begin{tabular}{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}\hline
+\begin{tabular}[t]{@{}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{51.5pt}|>{\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{38pt}|>{\centering\arraybackslash}p{32pt}|@{}}
+\cline{2-6}
 \multicolumn{1}{r|}{Byte:} & 1--6 & 1--3 & 4 & 5 & 6 \\
 \hline\rowcolor{gray!20}\desthead\\\hline
 H&7&1 (Custom)&\chTenGray&\chTenGray&\chTenGray\\\hline
@@ -202,10 +206,15 @@ l'encodage des 6 premiers octets du champ Destination Address est le suivant :
 \begin{center}
 \small\sffamily
 \setlength{\tabcolsep}{3pt}\renewcommand{\arraystretch}{1.75}
-\begin{tabular}{@{}|>{\columncolor{gray!20}\raggedleft\arraybackslash}p{65pt}|*{6}{>{\centering\arraybackslash}p{43.5pt}|}@{}}\cline{2-7}
+\setlength{\arrayrulewidth}{0.75pt}
+\begin{tabular}[t]{@{}|
+  >{\columncolor{gray!20}\raggedleft\arraybackslash}p{65pt}|
+  *{6}{>{\centering\arraybackslash}p{43.5pt}|}
+  @{}}
+\hhline{~|------|}
 \multicolumn{1}{r|}{\makebox[0pt][r]{Destination Address Byte:\hspace{6pt}}} & \chTenGray\bfseries\itshape 1&\chTenGray\bfseries\itshape 2&\chTenGray\bfseries\itshape 3&\chTenGray\bfseries\itshape 4&\chTenGray\bfseries\itshape 5&\chTenGray\bfseries\itshape 6\\\hline
 \chTenHead{Latitude Digit}&3&3&2&5&6&4\\\hline
-\chTenHead{Position Comment}&\shortstack{Bit A\\= 1 (Std)}&\shortstack{Bit B\\= 0}&\shortstack{Bit C\\= 0}&\chTenGray&\chTenGray&\chTenGray\\\hline
+\chTenHead{Position Comment}&\vspace{3pt}\shortstack{Bit A\\= 1 (Std)}&\vspace{3pt}\shortstack{Bit B\\= 0}&\vspace{3pt}\shortstack{Bit C\\= 0}&\chTenGray&\chTenGray&\chTenGray\\\hline
 \chTenHead{N/S Indicator}&\chTenGray&\chTenGray&\chTenGray&North&\chTenGray&\chTenGray\\\hline
 \chTenHead{Long Offset}&\chTenGray&\chTenGray&\chTenGray&\chTenGray&+0&\chTenGray\\\hline
 \chTenHead{W/E Indicator}&\chTenGray&\chTenGray&\chTenGray&\chTenGray&\chTenGray&West\\\hline
@@ -245,7 +254,7 @@ Mic-E pour toutes les combinaisons des bits de commentaire de position A/B/C :
 \smallskip
 \sffamily\normalfont
 \setlength{\tabcolsep}{2.5pt}\renewcommand{\arraystretch}{1.35}
-\begin{tabular}{|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\raggedright\arraybackslash}p{0.23\linewidth}|>{\raggedright\arraybackslash}p{0.23\linewidth}|}\hline
+\begin{tabular}[t]{!{\vrule width 1pt}>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{15pt}|>{\raggedright\arraybackslash}p{0.23\linewidth}|>{\raggedright\arraybackslash}p{0.23\linewidth}|}\hline
 \rowcolor{gray!20}\chTenHead{A}&\chTenHead{B}&\chTenHead{C}&\chTenHead{Commentaire de position\newline Standard}&\chTenHead{Commentaire de position\newline Custom}\\\hline
 1&1&1&M0: Off Duty&C0: Custom-0\\\hline
 1&1&0&M1: En Route&C1: Custom-1\\\hline
@@ -277,7 +286,7 @@ Quelques exemples d'encodage du type de commentaire de position :
 \small\sffamily
 \setlength{\tabcolsep}{3.5pt}\renewcommand{\arraystretch}{1.70}
 \makebox[\linewidth][c]{\hspace*{-13.5pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\centering\arraybackslash}p{0.22\linewidth}|>{\centering\arraybackslash}p{0.31\linewidth}|>{\centering\arraybackslash}p{0.14\linewidth}|>{\raggedright\arraybackslash}p{0.18\linewidth}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\centering\arraybackslash}p{0.22\linewidth}|>{\centering\arraybackslash}p{0.31\linewidth}|>{\centering\arraybackslash}p{0.14\linewidth}|>{\raggedright\arraybackslash}p{0.18\linewidth}|}\hline
 \rowcolor{gray!20}
 \chTenHead{3 premiers octets de la\newline Destination Address}&
 \chTenHead{Bits de commentaire de\newline position A/B/C}&
@@ -313,13 +322,19 @@ Le format du champ Information est le suivant :
 \end{aprssideblock}
 
 \begin{center}
-\footnotesize\sffamily\setlength{\tabcolsep}{1.5pt}\renewcommand{\arraystretch}{1.60}
+\footnotesize\sffamily\setlength{\tabcolsep}{1.5pt}\renewcommand{\arraystretch}{1.40}
 \makebox[\textwidth][c]{\hspace*{11.5pt}%
-\begin{tabular}{@{}|>{\centering\arraybackslash}p{31.5pt}|*{3}{>{\centering\arraybackslash}p{32pt}|}*{3}{>{\centering\arraybackslash}p{34.5pt}|}>{\centering\arraybackslash}p{39pt}|>{\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{110.5pt}|@{}}\hline
+\begin{tabular}[t]{@{}|>{\centering\arraybackslash}p{31.5pt}|*{3}{>{\centering\arraybackslash}p{32pt}|}*{3}{>{\centering\arraybackslash}p{34.5pt}|}>{\centering\arraybackslash}p{39pt}|>{\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{110.5pt}|@{}}\hline
 \multicolumn{10}{|l|}{\cellcolor{gray!20}\sffamily\bfseries\itshape Mic-E Data --- INFORMATION FIELD Format}\\\hline
-\chTenHead{Data\newline Type\newline ID}&\multicolumn{3}{c|}{\chTenHead{Longitude}}&\multicolumn{3}{c|}{\chTenHead{Speed and Course}}&\chTenHead{Symbol\newline Code}&\chTenHead{Sym\newline Table\newline ID}&\begin{tabular}{@{}>{\centering\arraybackslash}p{104pt}@{}}\chTenHead{Mic-E Telemetry Data (obsolete)}\\\hline\cellcolor{gray!20}\chTenHead{Mic-E Status Text}\end{tabular}\\\cline{2-7}
-&\ttfamily d+28&\ttfamily m+28&\ttfamily h+28&\ttfamily SP+28&\ttfamily DC+28&\ttfamily SE+28&&&\\\hline
-\multicolumn{1}{r}{\makebox[0pt][r]{Bytes:\hspace{1em}}}1&1&1&1&1&1&1&1&1&n\\\hline
+\multirow{2}{31.5pt}{\centering\chTenHead{Data\newline Type\newline ID}}&
+\multicolumn{3}{c|}{\chTenHead{Longitude}}&
+\multicolumn{3}{c|}{\chTenHead{Speed and Course}}&
+\multirow{2}{39pt}{\centering\chTenHead{Symbol\newline Code}}&
+\multirow{2}{32pt}{\centering\chTenHead{Sym\newline Table\newline ID}}&
+\cellcolor{gray!20}\chTenHead{Mic-E Telemetry Data (obsolete)}\\
+\hhline{|~|---|---|~|~|-|}
+&\ttfamily d+28&\ttfamily m+28&\ttfamily h+28&\ttfamily SP+28&\ttfamily DC+28&\ttfamily SE+28&&&\cellcolor{gray!20}\chTenHead{Mic-E Status Text}\\\hline
+\makebox[0pt][r]{Bytes:\hspace{1.2em}}\makebox[\linewidth][c]{1}&1&1&1&1&1&1&1&1&n\\\hline
 \end{tabular}%
 \hspace*{-11.5pt}}
 \end{center}
@@ -331,7 +346,7 @@ Identifier, la longitude, la vitesse, le cap et les données de symbole.
 
 L'APRS Data Type Identifier est l'un des suivants :
 
-\begin{tabular}{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
+\begin{tabular}[t]{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
 \lit{`} & données GNSS actuelles (mais non utilisées dans les radios Kenwood
 TM-D700) ; \\
 \lit{'} & anciennes données GNSS (ou données GNSS actuelles dans les radios
@@ -368,7 +383,7 @@ Offset est de +100 degrés) :
 \footnotesize\sffamily\normalfont
 \setlength{\tabcolsep}{5pt}\renewcommand{\arraystretch}{1.61}
 \hspace*{-7pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{25pt}|>{\centering\arraybackslash}p{25.5pt}|>{\centering\arraybackslash}p{32pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{25pt}|>{\centering\arraybackslash}p{25.5pt}|>{\centering\arraybackslash}p{32pt}|}\hline
 \rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Deg}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{d+28}&\chTenHead{\shortstack{Long\\Offset}}\\\hline
 0&v&118&\lit{+100}\\\hline
 1&w&119&\lit{+100}\\\hline
@@ -388,7 +403,7 @@ Offset est de +100 degrés) :
 98&\textasciitilde&126&+0\\\hline
 99&\chTenBlack{DEL}&127&+0\\\hline
 \end{tabular}\hspace{35pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{25pt}|>{\centering\arraybackslash}p{25.5pt}|>{\centering\arraybackslash}p{32pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{32pt}|>{\centering\arraybackslash}p{25pt}|>{\centering\arraybackslash}p{25.5pt}|>{\centering\arraybackslash}p{32pt}|}\hline
 \rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Deg}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{d+28}&\chTenHead{\shortstack{Long\\Offset}}\\\hline
 100&l&108&+100\\\hline
 101&m&109&+100\\\hline
@@ -459,7 +474,7 @@ de longitude, dans la plage 0--59 minutes :
 \footnotesize\sffamily\normalfont
 \setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.60}
 \hspace*{-3pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
 \rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Mins}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\\hline
 0&X&88\\\hline
 1&Y&89\\\hline
@@ -472,7 +487,7 @@ de longitude, dans la plage 0--59 minutes :
 8&\aprsorigtexttt{`}&96\\\hline
 9&a&97\\\hline
 \end{tabular}\hspace{28pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
 \rowcolor{gray!20}\rule{0pt}{25pt}\chTenHead{\shortstack{Long\\Mins}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\\hline
 10&\& &38\\\hline
 11&\aprsorigtexttt{'}&39\\\hline
@@ -540,7 +555,7 @@ La vitesse et le cap encodés sont répartis entre les trois octets comme suit :
 \small\sffamily\renewcommand{\arraystretch}{1.50}
 \setlength{\tabcolsep}{3pt}
 \makebox[\linewidth][c]{\hspace*{-8pt}%
-\begin{tabular}{|>{\centering\arraybackslash}p{0.29\linewidth}|>{\centering\arraybackslash}p{0.34\linewidth}|>{\centering\arraybackslash}p{0.27\linewidth}|}\hline
+\begin{tabular}[t]{|>{\centering\arraybackslash}p{0.29\linewidth}|>{\centering\arraybackslash}p{0.34\linewidth}|>{\centering\arraybackslash}p{0.27\linewidth}|}\hline
 \rowcolor{gray!20}\multicolumn{2}{|c|}{\chTenHead{Vitesse}}&\chTenHead{Cap}\\\hline
 \chTenHead{Vitesse encodée\newline (centaines/dizaines de knots)}&
 \chTenHead{Unités de vitesse encodées et\newline cap encodé (centaines de degrés)}&
@@ -563,13 +578,13 @@ knots, conformément au tableau suivant :
 \smallskip\footnotesize\sffamily\normalfont
 \setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.65}
 \hspace*{-9.5pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{0.1495\linewidth}|>{\centering\arraybackslash}p{0.09\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.11\linewidth}|>{\centering\arraybackslash}p{0.065\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.065\linewidth}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{0.1495\linewidth}|>{\centering\arraybackslash}p{0.09\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.11\linewidth}|>{\centering\arraybackslash}p{0.065\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.065\linewidth}|}\hline
 \rowcolor{gray!20}\rule{0pt}{16pt}\chTenHead{Vitesse\newline knots}&\multicolumn{2}{c|}{\chTenHead{ASCII Char}}&\multicolumn{2}{c|}{\chTenHead{SP+28}}\\\hline
 0--9&\ttfamily l&\chTenBlack{0x1c}&108&28\\\hline
 10--19&\ttfamily m&\chTenBlack{0x1d}&109&29\\\hline
 20--29&\ttfamily n&\chTenBlack{0x1e}&110&30\\\hline
 30--39&\ttfamily o&\chTenBlack{0x1f}&111&31\\\hline
-40--49&\ttfamily p&\ttfamily V&112&32\\\hline
+40--49&\ttfamily p&&112&32\\\hline
 50--59&\ttfamily q&\ttfamily !&113&33\\\hline
 60--69&\ttfamily r&\aprsorigtexttt{"}&114&34\\\hline
 70--79&\ttfamily s&\ttfamily \#&115&35\\\hline
@@ -586,7 +601,7 @@ knots, conformément au tableau suivant :
 180--189&\ttfamily \textasciitilde&\ttfamily .&126&46\\\hline
 190--199&\chTenBlack{DEL}&\ttfamily /&127&47\\\hline
 \end{tabular}\hspace{20.5pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{0.1495\linewidth}|>{\centering\arraybackslash}p{0.11\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.065\linewidth}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{0.1495\linewidth}|>{\centering\arraybackslash}p{0.11\linewidth}|>{\columncolor{gray!20}\centering\arraybackslash}p{0.065\linewidth}|}\hline
 \rowcolor{gray!20}\rule{0pt}{16pt}\chTenHead{Vitesse\newline knots}&\chTenHead{ASCII\newline Char}&\chTenHead{SP+28}\\\hline
 200--209&\ttfamily 0&48\\\hline
 210--219&\ttfamily 1&49\\\hline
@@ -640,9 +655,9 @@ encodé en centaines de degrés :
 \smallskip\footnotesize\sffamily\normalfont
 \setlength{\tabcolsep}{2pt}\renewcommand{\arraystretch}{1.63}
 \hspace*{14.535pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{38pt}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{45pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{32.5pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{38pt}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{45pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{31.5pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{32.5pt}|}\hline
 \rowcolor{gray!20}\chTenHead{Knots\newline (units)}&\chTenHead{Course\newline (deg)}&\multicolumn{2}{c|}{\chTenHead{ASCII Char}}&\multicolumn{2}{c|}{\chTenHead{DC+28}}\\[-1.6pt]\hline
-0&0--99&\ttfamily V&\chTenBlack{0x1c}&32&28\\\hline
+0&0--99&&\chTenBlack{0x1c}&32&28\\\hline
 0&100--199&\ttfamily !&\chTenBlack{0x1d}&33&29\\\hline
 0&200--299&\aprsorigtexttt{"}&\chTenBlack{0x1e}&34&30\\\hline
 0&300--360&\ttfamily \#&\chTenBlack{0x1f}&35&31\\\hline
@@ -663,7 +678,7 @@ encodé en centaines de degrés :
 4&200--299&\ttfamily J&\ttfamily F&74&70\\\hline
 4&300--360&\ttfamily K&\ttfamily G&75&71\\\hline
 \end{tabular}\hspace{13.5pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{38pt}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{45pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{23.5pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{34.5pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{38pt}|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{45pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{23.5pt}|>{\centering\arraybackslash}p{23.5pt}|>{\columncolor{gray!20}\centering\arraybackslash}p{34.5pt}|}\hline
 \rowcolor{gray!20}\chTenHead{Knots\newline (units)}&\chTenHead{Course\newline (deg)}&\multicolumn{2}{c|}{\chTenHead{ASCII Char}}&\multicolumn{2}{c|}{\chTenHead{DC+28}}\\[-1.6pt]\hline
 5&0--99&\ttfamily R&\ttfamily N&82&78\\\hline
 5&100--199&\ttfamily S&\ttfamily O&83&79\\\hline
@@ -716,13 +731,13 @@ L'octet \lit{SE+28} contient les dizaines et unités de degrés encodées du cap
 \smallskip\footnotesize\sffamily\normalfont
 \setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.68}
 \hspace*{-3pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
 \rowcolor{gray!20}\chTenHead{\shortstack{Course\\(deg)}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\[7pt]\hline
 0&\chTenBlack{0x1c}&28\\\hline
 1&\chTenBlack{0x1d}&29\\\hline
 2&\chTenBlack{0x1e}&30\\\hline
 3&\chTenBlack{0x1f}&31\\\hline
-4&V&32\\\hline
+4&&32\\\hline
 5&!&33\\\hline
 6&\aprsorigtexttt{"}&34\\\hline
 7&\#&35\\\hline
@@ -734,7 +749,7 @@ L'octet \lit{SE+28} contient les dizaines et unités de degrés encodées du cap
 13&)&41\\\hline
 14&*&42\\\hline
 \end{tabular}\hspace{28pt}%
-\begin{tabular}{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
+\begin{tabular}[t]{|>{\columncolor{gray!20}\bfseries\centering\arraybackslash}p{33pt}|>{\centering\arraybackslash}p{26pt}|>{\centering\arraybackslash}p{26.5pt}|}\hline
 \rowcolor{gray!20}\chTenHead{\shortstack{Long\\Mins}}&\chTenHead{\shortstack{ASCII\\Char}}&\chTenHead{m+28}\\[7pt]\hline
 15&+&43\\\hline
 16&,&44\\\hline
@@ -866,13 +881,13 @@ télémétrie suivent :
 \end{aprssideblock}
 
 \begin{center}
-\small\sffamily\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.88}
+\small\sffamily\setlength{\tabcolsep}{4.5pt}\renewcommand{\arraystretch}{1.45}
 \makebox[\textwidth][c]{\hspace*{5pt}%
-\begin{tabular}{|>{\centering\arraybackslash}p{0.14\textwidth}|*{5}{>{\centering\arraybackslash}p{0.045\textwidth}|}}\hline
+\begin{tabular}[t]{|>{\centering\arraybackslash}p{0.09\textwidth}|*{5}{>{\centering\arraybackslash}p{0.055\textwidth}|}}\hline
 \multicolumn{6}{|l|}{\sffamily\bfseries\itshape Données de télémétrie Mic-E optionnelles (obsolètes)}\\\hline
 \rowcolor{gray!20}\chTenHead{Telemetry\newline Flag}&\multicolumn{5}{c|}{\chTenHead{Canaux de données de télémétrie}}\\\hline
-\chTenHead{F}&\chTenHead{Ch 1}&\chTenHead{Ch 2}&\chTenHead{Ch 3}&\chTenHead{Ch 4}&\chTenHead{Ch 5}\\\hline
-\multicolumn{1}{r}{\makebox[0pt][r]{Bytes:\hspace{1em}}}1&1/2&1/2&1/2&1/2&1/2\\\hline
+F&Ch 1&Ch 2&Ch 3&Ch 4&Ch 5\\\hline
+\makebox[0pt][r]{Bytes:\hspace{1.2em}}\makebox[\linewidth][c]{1}&1/2&1/2&1/2&1/2&1/2\\\hline
 \end{tabular}%
 \hspace*{-5pt}}
 \end{center}
@@ -880,7 +895,7 @@ télémétrie suivent :
 \begin{aprsbodyblock}
 Le Telemetry Flag F est l'un des suivants :
 
-\begin{tabular}{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
+\begin{tabular}[t]{@{}>{\ttfamily}p{0.07\linewidth}p{0.86\linewidth}@{}}
 \lit{`} & 2 valeurs de télémétrie hexadécimales imprimables suivent (canaux 1
 et 3) ; \\
 \lit{'} & 5 valeurs de télémétrie hexadécimales imprimables suivent ; \\
@@ -898,7 +913,7 @@ valeur binaire de 8 bits.
 Par exemple, si les données de télémétrie sont \lit{'7200007100}, le caractère
 \lit{'} indique que 5 octets de télémétrie suivent, codés en hexadécimal :
 
-\begin{tabular}{@{}l@{}}
+\begin{tabular}[t]{@{}l@{}}
 \texttt{0x72 = 114 decimal}\\
 \texttt{0x00 = 0 decimal}\\
 \texttt{0x00 = 0 decimal}\\
@@ -931,7 +946,7 @@ Pour se distinguer du dispositif MIC-E d'origine, les premières radios Kenwood
 inséraient automatiquement un code de préfixe au début de la chaîne de texte de
 statut (c'est-à-dire au 10e caractère du champ Information) :
 
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}[t]{@{}ll@{}}
 Kenwood TH-D7: & \lit{>}\\
 Kenwood TM-D700: & \lit{]}
 \end{tabular}
@@ -939,7 +954,7 @@ Kenwood TM-D700: & \lit{]}
 Les modèles Kenwood ultérieurs ont conservé le même préfixe, pour indiquer un
 portatif ou un mobile, puis ont ajouté un caractère de suffixe unique au texte :
 
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}[t]{@{}ll@{}}
 Kenwood TH-D72: & \lit{>} \ldots \lit{=}\\
 Kenwood TH-D74: & \lit{>} \ldots \lit{\textasciicircum}\\
 Kenwood TH-D75: & \lit{>} \ldots \lit{\&}\\
@@ -953,7 +968,7 @@ différent :
 tracker). Un suffixe de deux caractères indique le fabricant et le modèle.
 Exemples :
 
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}[t]{@{}ll@{}}
 Yaesu FT2D: & \lit{`} \ldots \lit{\_(} (messagerie)\\
 Yaesu FT3D: & \lit{`} \ldots \lit{\_0}\\
 Yaesu FT5D: & \lit{`} \ldots \lit{\_3}\\
@@ -981,7 +996,7 @@ Le champ de texte de statut Mic-E peut contenir un locator Maidenhead.
 Si le locator est suivi d'un commentaire en texte clair, le premier caractère
 du texte doit être une espace. Par exemple :
 
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}[t]{@{}ll@{}}
 \aprsorigtexttt{IO91SX/G}\chTenLitSpace\aprsorigtexttt{Hello}\chTenSpace\aprsorigtexttt{world} & (depuis un Mic-E ou PIC-E)\\
 \aprsorigtexttt{>IO91SX/G}\chTenLitSpace\aprsorigtexttt{Hello}\chTenSpace\aprsorigtexttt{world} & (depuis un Kenwood TH-D7)\\
 \aprsorigtexttt{]IO91SX/G}\chTenLitSpace\aprsorigtexttt{Hello}\chTenSpace\aprsorigtexttt{world} & (depuis un Kenwood TM-D700)
@@ -1001,7 +1016,7 @@ en base 91.
 Par exemple, pour calculer les caractères \aprsorigtexttt{xxx} pour une altitude de
 200 pieds :
 
-\begin{tabular}{@{}l@{}}
+\begin{tabular}[t]{@{}l@{}}
 200 pieds = 61 mètres = 10061 mètres par rapport au datum\\
 \(10061 / 91^2 = {}\)\lit{1}, reste 1780\\
 \(1780 / 91\phantom{^2} = {}\)\lit{19}, reste \lit{51}
@@ -1014,14 +1029,16 @@ La chaîne d'altitude de 4 caractères est donc \lit{"4T\}}.
 
 Quelques exemples :
 
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}[t]{@{}ll@{}}
 \aprsorigtexttt{"4T\}}\\
 \aprsorigtexttt{>"4T\}}\\
 \aprsorigtexttt{]"4T\}}
 \end{tabular}
 
 L'altitude optionnelle doit être placée en premier après l'octet de type
-Mic-E. Noter que cela vient après tout caractère de préfixe d'identifiant de
+Mic-E.
+
+Noter que cela vient après tout caractère de préfixe d'identifiant de
 dispositif.
 \end{aprssideblock}
 
